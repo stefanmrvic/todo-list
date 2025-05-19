@@ -19,21 +19,7 @@ module.exports = {
     rules: [
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'sass-loader',
-            options: {
-              // Inject this into every file
-              // additionalData: `
-              //   @use "./abstracts/variables" as *;
-              //   @use "./abstracts/mixins" as *;
-              //   @use "./abstracts/functions" as *;
-              // `,
-            },
-          },
-        ],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.html$/i,
