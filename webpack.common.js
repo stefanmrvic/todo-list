@@ -1,6 +1,7 @@
 // webpack.config.js
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const loader = require('sass-loader');
 
 module.exports = {
   entry: './src/index.js',
@@ -18,7 +19,21 @@ module.exports = {
     rules: [
       {
         test: /\.s[ac]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              // Inject this into every file
+              // additionalData: `
+              //   @use "./abstracts/variables" as *;
+              //   @use "./abstracts/mixins" as *;
+              //   @use "./abstracts/functions" as *;
+              // `,
+            },
+          },
+        ],
       },
       {
         test: /\.html$/i,

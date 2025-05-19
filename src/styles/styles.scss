@@ -1,6 +1,23 @@
-// Import directories
-@use './abstracts/abstracts-dir';
-@use './base/base-dir';
-@use './components/components-dir';
-@use './layout/layout-dir';
-@use './pages/pages-dir';
+
+// Abstracts (globals)
+@use './abstracts/variables' as *;
+@use './abstracts/helpers';
+@use './abstracts/mixins';
+@use './abstracts/functions';
+@use './abstracts/animations';
+
+// Base styles
+@use './base/global';
+@use './base/reset';
+@use './base/typography';
+
+// Components
+@use './components/buttons';
+
+// Layout
+@use './layout/footer';
+@use './layout/header';
+@use './layout/sidenav';
+
+// Pages 
+@use './pages/home';

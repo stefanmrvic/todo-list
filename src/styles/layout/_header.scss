@@ -1,0 +1,22 @@
+header {
+    position: relative;
+    height: 60px;
+    background-color: $light-blue;
+
+    .logo {
+        display: flex;
+        padding: 20px 40px;
+
+        &__icon {
+            color: $white;
+            font-size: 25px;
+        }
+
+        &__title {
+            color: $white;
+            font-size: 25px;
+            margin-left: 7px;
+            margin-top: -2px;
+        }
+    }
+}
