@@ -1,3 +1,20 @@
-main {
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-left: 300px;
+
+    &__title {
+        display: flex;
+        margin-top: 21px;
+    }
+
+    &__icon {
+        font-size: 32px;
+        margin-right: 11px;
+    }
+
+    &__headline {
+        font-size: 32px;
+    }
 }
