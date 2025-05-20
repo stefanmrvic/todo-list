@@ -1,0 +1,35 @@
+@use '../abstracts/variables' as *;
+
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .btn {
+        display: flex;
+        font-size: 17px;
+        color: $light-gray-2;
+        display: flex;
+        width: 245px;
+        height: 45px;
+        padding: 12px 20px;
+        background-color: $white;
+        border: 1px solid $white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: inherit;
+    
+        &-icon {
+            margin-right: 8px;
+        }
+    }
+
+    .btn:hover {
+        border: 1px solid $light-blue;
+    }
+    
+    .btn.active {
+        color: $white;
+        background-color: $light-blue;
+    }
+}

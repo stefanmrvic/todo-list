@@ -1,16 +1,104 @@
-.sidenav {
+@use '../abstracts/variables' as *;
+
+aside {
     position: fixed;
-    bottom: 0;
+    top: 60px;
     left: 0;
     max-width: 300px;
+    height: 100%;
+    background-color: $light-gray-1;
+}
+
+.sidenav {
+    padding: 40px 20px;
 
     .due {
-        // &__container {
+        margin-bottom: 50px;
+    }
 
-        // }
+    .projects {
 
-        &__item {
+        &__header {
             display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border-bottom: 1px solid $light-gray-2;
+            margin-bottom: 20px;
+        }
+
+        &__title {
+            font-size: 18px;
+        }
+
+        &__add-btn {
+            position: relative;
+            color: $light-gray-2;
+            font-size: 17px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+
+            &__tooltip {
+                position: absolute;
+                top: -38px;
+                right: -5px;
+                width: 135px;
+                color: $white;
+                background-color: $light-gray-2;
+                border-radius: 5px;
+                padding: 8px;
+                font-size: 15px;
+                visibility: hidden;
+                transition: opacity 0.3s;
+                opacity: 0;
+            }
+
+            &__tooltip::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 85%;
+                margin-left: -4px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: $light-gray-2 transparent transparent transparent;
+            }
+
+            &:hover .projects__add-btn__tooltip {
+                visibility: visible;
+                opacity: 1;
+            }
+        }
+
+        &__btn__icon--2 {
+            margin-left: auto;
+        }
+
+        &__btn__icon--3 {
+            margin-right: 0;
+        }
+        
+        &__btn__icon--2:hover,
+        &__btn__icon--3:hover {
+            transform: scale(1.1);
+        }
+        
+
+        &__btn__container {
+            margin-bottom: 20px;
+        }
+    }
+
+    .footer {
+        padding-top: 10px;
+        border-top: 1px solid $light-gray-2;
+
+        &__text {
+            font-size: 15px;
+        }
+
+        a {
+            color: $light-blue;
         }
     }
 }
