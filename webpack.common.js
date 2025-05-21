@@ -1,6 +1,7 @@
 // webpack.config.js
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackFavicons = require('webpack-favicons');
 const loader = require('sass-loader');
 
 module.exports = {
@@ -12,8 +13,17 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/template.html',
+      template: './src/index.html',
     }),
+    new WebpackFavicons({
+      src: path.resolve(__dirname, 'src/assets/images/favicon.png'),
+      path: 'images',
+      background: '#000',
+      theme_color: '#000',
+      icons: {
+        favicons: true
+      }
+    })
   ],
   module: {
     rules: [

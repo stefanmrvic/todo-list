@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Project</title>
+    <title>ToDo</title>
 </head>
 <body>
     <header class="header">
@@ -124,7 +124,7 @@
     <dialog class="modal" open>
         <div class="modal__header">
             <h2 class="modal__title">Add Project</h2>
-            <i class="modal__close-btn--top fa-solid fa-xmark"></i>
+            <i class="modal__close-btn fa-solid fa-xmark"></i>
         </div>
         <div class="modal__content">
             <form method="dialog" class="modal__form">
@@ -134,7 +134,7 @@
                 </label>                
                 <label>
                     Description
-                    <input type="text" class="modal__form-description">
+                    <textarea class="modal__form-description"></textarea>
                 </label>
                 <label>
                     Due Data
@@ -150,7 +150,7 @@
                     </select>
                 </label>
                 <div class="modal__form-controls">
-                    <button class="modal__close-btn--bottom">Close</button>
+                    <button class="modal__cancel-btn">Close</button>
                     <button class="modal__add-btn">Add</button>
                 </div>
             </form>
