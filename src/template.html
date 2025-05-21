@@ -13,6 +13,7 @@
         </div>
     </header>
 
+    <!-- Sidenav Section Start -->
     <aside>
         <nav class="sidenav">
             <!-- Sort Section Start -->
@@ -75,16 +76,86 @@
             <!-- Footer Section End -->
         </nav>
     </aside>
+    <!-- Sidenav Section End -->
+
+    <!-- Main Section Start -->
     <main class="main">
-        <div class="main__title">
-            <i class="main__icon fa-solid fa-calendar-days"></i>
-            <h2 class="main__headline">All</h2>
-        </div>
+        <div class="main__container">
+            <div class="main__title">
+                <i class="main__title-icon fa-solid fa-calendar-days"></i>
+                <h2 class="main__headline">All</h2>
+            </div>
+            <!-- List of Tasks Section Start -->
+            <div class="main__tasks-title">
+                <h2 class="main__tasks-header">Tasks (<span class="main__tasks-num">0</span>)</h2>
+                <button class="main__add-btn">
+                    <span class="main__tooltip">Add New Task</span>
+                    <i class="main__add-icon fa-solid fa-circle-plus"></i>
+                </button>
+            </div>
+            <div class="main__tasks-list">
+                <div class="main__task-item">
+                    <div class="main__text">
+                        <i class="main__task-icon fa-regular fa-circle"></i>
+                        <p class="main__task-title">Do something today & kill your grandma</p>
+                    </div>
+                    <div class="main__controls">
+                        <p class="main__task-date">2025-05-25</p>
+                        <button class="main__edit-btn">
+                            <i class="btn-icon projects__icon--2 fa-regular fa-pen-to-square"></i>
+                        </button>
 
-        <div class="main__tasks">
-            <h2 class="main__title">Tasks (<span class="main__tasks-num">0</span>)</h2>
-        </div>
+                        <button class="main__delete-btn">
+                            <i class="btn-icon projects__icon--3 fa-regular fa-trash-can"></i>
+                        </button>
 
+                        <button class="main__info-btn">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- List of Tasks Section End -->
+        </div>
     </main>
+    <!-- Main Section End -->
+
+    <!-- Modal Section Start -->
+    <dialog class="modal" open>
+        <div class="modal__header">
+            <h2 class="modal__title">Add Project</h2>
+            <i class="modal__close-btn--top fa-solid fa-xmark"></i>
+        </div>
+        <div class="modal__content">
+            <form method="dialog" class="modal__form">
+                <label>
+                    Title<span class="modal__form-astrix">*</span>
+                    <input type="text" class="modal__form-title">
+                </label>                
+                <label>
+                    Description
+                    <input type="text" class="modal__form-description">
+                </label>
+                <label>
+                    Due Data
+                    <input type="date" class="modal__form-date">
+                </label>
+                <label>
+                    Priority
+                    <select id="priority" class="modal__form-priority">
+                        <option disabled selected>How important is this task?</option>
+                        <option value="low">😴 Not important at all..</option>
+                        <option value="medium">😅 A bit important</option>
+                        <option value="high">😲 Super important!</option>
+                    </select>
+                </label>
+                <div class="modal__form-controls">
+                    <button class="modal__close-btn--bottom">Close</button>
+                    <button class="modal__add-btn">Add</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+    <!-- Modal Section End -->
 </body>
 </html>

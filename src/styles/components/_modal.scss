@@ -1,0 +1,112 @@
+@use '../abstracts/variables' as *;
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -175px;
+    margin-left: -200px;
+    width: 400px;
+    //height: 350px;
+    padding: 0;
+    box-shadow: rgba(46, 46, 46, 0.2) 0px 2px 8px 0px;
+    border: none;
+    border-radius: 5px;
+    overflow: hidden;
+
+    &__header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        background-color: $light-blue;
+    }
+
+    &__title {
+        color: $white;
+        font-size: 24px;
+        padding: 20px;
+    }
+
+    &__close-btn--top {
+        color: $white;
+        font-size: 25px;
+        position: absolute;
+        top: 11px;
+        right: 20px;
+        cursor: pointer;
+    }
+
+    &__content {
+        padding: 25px 20px;
+    }
+
+    &__form-astrix {
+        color: $astrix;
+        font-weight: 100;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+
+        label {
+            color: $light-gray-2;
+        }
+
+        input,
+        select {
+            color: $light-gray-2;
+            font-size: 17px;
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px;
+            border: 1px solid $light-gray-3;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border: 1px solid $light-blue;
+        }
+    }
+
+    &__form-controls {
+        margin-left: auto;
+    }
+
+    &__close-btn--bottom,
+    &__add-btn {
+        font-size: 15px;
+        border: none;
+        padding: 10px 17px;
+        background: transparent;
+        border-radius: 3px;
+        transition: .3s;
+    }
+
+    &__close-btn--bottom {
+        color: $light-gray-2;
+        border: 1px solid $light-gray-3;
+    }
+
+    &__close-btn--bottom:hover {
+        color: $light-blue;
+        border: 1px solid $light-blue;
+    }
+
+    &__add-btn {
+        color: $white;
+        background-color: $light-blue;
+        margin-left: 10px;
+        border: 1px solid $light-blue;
+    }
+
+    &__add-btn:hover {
+        background-color: $add-btn--hover;
+        border: 1px solid transparent;
+    }
+
+
+}
