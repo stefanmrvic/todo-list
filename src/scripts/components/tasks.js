@@ -1,4 +1,6 @@
 import { createElement } from "../utils/dom";
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faCircle, faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 
 class Todo {
     constructor(title, description, due, priority) {
@@ -12,15 +14,48 @@ class Todo {
 const tasks = [];
 const testObj = new Todo('Destroy everything', 'Accomplish all of your goals', 2025, 'Very high priority nigguh!');
 
+const tasksList = document.querySelector('.main__tasks-list');
+
+tasksList.addEventListener('click', markTaskDone);
+
+function markTaskDone(e) {
+    crossOutTask(e);
+    changeTaskIcon(e);
+}
+
+function crossOutTask(e) {
+    const taskItem = e.target.closest('.main__task-item');
+    const taskItemPara = taskItem.querySelector(':scope > .main__text > .main__task-title');
+
+    taskItemPara.style.textDecoration = 
+        taskItemPara.style.textDecoration === 'line-through' ? 'none' : 'line-through';
+}
+
+function changeTaskIcon(e) {
+    const taskItem = e.target.closest('.main__task-item');
+    const taskItemIconWrapper = taskItem.querySelector(':scope > .main__text > .main__task-icon-wrapper');
+    const taskItemIcon = taskItemIconWrapper.querySelector(':scope > .main__task-icon');
+    const taskItemIconInitial = icon(faCircle);
+    const taskItemIconCheck = icon(faCircleCheck);
+    const isInitialIcon = taskItemIcon.classList.contains('fa-circle');
+    const iconToUse = isInitialIcon ? taskItemIconCheck : taskItemIconInitial;
+
+    taskItemIcon.remove();
+    taskItemIconWrapper.appendChild(iconToUse.node[0]);
+    taskItemIconWrapper.children[0].classList.add('main__task-icon');
+}
+
 function createTaskElement(obj) {
     const parent = document.querySelector('.main__tasks-list');
     const task = createElement('div', 'main__task-item');
     const textContainer = createElement('div', 'main__text');
 
+    const iconWrapper = createElement('div', 'main__task-icon-wrapper');
     const icon = createElement('i', 'main__task-icon fa-regular fa-circle');
     const title = createElement('p', 'main__task-title', obj.title);
 
-    textContainer.append(icon, title);
+    iconWrapper.append(icon);
+    textContainer.append(iconWrapper, title);
 
     const controlsContainer = createElement('div', 'main__controls');
 

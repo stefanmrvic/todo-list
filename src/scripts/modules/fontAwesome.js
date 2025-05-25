@@ -7,4 +7,5 @@ library.add(
     faCirclePlus, faTrashCan, faPenToSquare, faCircle, faCircleCheck, faCircleInfo,
     faXmark
 );
+
 dom.watch();
