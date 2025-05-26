@@ -123,39 +123,15 @@
     <!-- Main Section End -->
 
     <!-- Modal Section Start -->
-    <dialog class="modal" open>
+    <dialog class="modal">
         <div class="modal__header">
-            <h2 class="modal__title">Add Project</h2>
-            <i class="modal__close-btn fa-solid fa-xmark"></i>
+            <h2 class="modal__title"></h2>
+            <button class="modal__close-btn">
+                <i class="modal__close-btn-icon fa-solid fa-xmark"></i>
+            </button>
         </div>
         <div class="modal__content">
-            <form method="dialog" class="modal__form">
-                <label>
-                    Title<span class="modal__form-astrix">*</span>
-                    <input type="text" class="modal__form-title">
-                </label>                
-                <label>
-                    Description
-                    <textarea class="modal__form-description"></textarea>
-                </label>
-                <label>
-                    Due Data
-                    <input type="date" class="modal__form-date">
-                </label>
-                <label>
-                    Priority
-                    <select id="priority" class="modal__form-priority">
-                        <option disabled selected>How important is this task?</option>
-                        <option value="low">😴 Not important at all..</option>
-                        <option value="medium">😅 A bit important</option>
-                        <option value="high">😲 Super important!</option>
-                    </select>
-                </label>
-                <div class="modal__form-controls">
-                    <button class="modal__cancel-btn">Close</button>
-                    <button class="modal__add-btn">Add</button>
-                </div>
-            </form>
+        <!-- Dynamically populated -->
         </div>
     </dialog>
     <!-- Modal Section End -->

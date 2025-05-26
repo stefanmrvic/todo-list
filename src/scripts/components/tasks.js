@@ -1,4 +1,5 @@
-import { createElement } from "../utils/dom";
+import { createElement } from "../utils/dom.js";
+import { showAddTaskModal } from "./modal.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 
@@ -15,8 +16,12 @@ const tasks = [];
 const testObj = new Todo('Destroy everything', 'Accomplish all of your goals', 2025, 'Very high priority nigguh!');
 
 const tasksList = document.querySelector('.main__tasks-list');
+const tasksAddBtn = document.querySelector('.main__add-btn');
 
 tasksList.addEventListener('click', markTaskDone);
+tasksAddBtn.addEventListener('click', showAddTaskModal);
+
+
 
 function markTaskDone(e) {
     crossOutTask(e);
