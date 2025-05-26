@@ -1,6 +1,14 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
 
+const closeBtn = document.querySelector('.modal__close-btn');
+closeBtn.addEventListener('click', closeModal);
+
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    modal.close();  
+}
+
 export function showAddTaskModal() {
     const modal = document.querySelector('.modal');
     const modalTitle = document.querySelector('.modal__title');
@@ -121,7 +129,6 @@ function showInfoModal() {
 
 function deleteModalContent() {
     const form = document.querySelector('.modal__form');
-    
+
     if (form) form.remove();
 }
-
