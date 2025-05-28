@@ -1,8 +1,6 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
-
-const closeBtn = document.querySelector('.modal__close-btn');
-closeBtn.addEventListener('click', closeModal);
+import { addNewTask } from './tasks.js';
 
 function closeModal() {
     const modal = document.querySelector('.modal');
@@ -17,6 +15,14 @@ export function showAddTaskModal() {
     deleteModalContent();
     createAddTaskModal();
     modal.showModal();
+
+    const closeBtn = document.querySelector('.modal__close-btn');
+    const cancelBtn = document.querySelector('.modal__cancel-btn');
+    const addTaskForm = document.querySelector('.modal__form');
+
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    addTaskForm.addEventListener('submit', addNewTask);
 }
 
 function createAddTaskModal() {
@@ -29,6 +35,7 @@ function createAddTaskModal() {
     const titleAstrix = createElement('span', 'modal__form-astrix', '*');
     const titleInput = createElement('input', 'modal__form-title');
     titleInput.setAttribute('type', 'text');
+    titleInput.required = true;
     titleLabel.append(titleAstrix, titleInput);
 
     const descriptionLabel = createElement('label', null, 'Description');
@@ -44,10 +51,15 @@ function createAddTaskModal() {
     const prioritySelect = createElement('select', 'modal__form-priority');
 
     const priorityOptionPlaceholder = createElement('option', null, 'How important is this task?');
+    priorityOptionPlaceholder.value = 'placeholder';
     priorityOptionPlaceholder.disabled = true;
+    priorityOptionPlaceholder.selected = true;
     const priorityOptionLow = createElement('option', null, '😴 Not important at all..');
+    priorityOptionLow.value = 'low';
     const priorityOptionMedium = createElement('option', null, '😅 A bit important');
+    priorityOptionMedium.value = 'medium';
     const priorityOptionHigh = createElement('option', null, '😲 Super important!');
+    priorityOptionHigh.value = 'high';
 
     prioritySelect.append(priorityOptionPlaceholder, priorityOptionLow, priorityOptionMedium, priorityOptionHigh);
     priorityLabel.append(prioritySelect);

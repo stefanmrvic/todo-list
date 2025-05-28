@@ -13,15 +13,12 @@ class Todo {
 }
 
 const tasks = [];
-const testObj = new Todo('Destroy everything', 'Accomplish all of your goals', 2025, 'Very high priority nigguh!');
 
 const tasksList = document.querySelector('.main__tasks-list');
 const tasksAddBtn = document.querySelector('.main__add-btn');
 
 tasksList.addEventListener('click', markTaskDone);
 tasksAddBtn.addEventListener('click', showAddTaskModal);
-
-
 
 function markTaskDone(e) {
     crossOutTask(e);
@@ -39,15 +36,20 @@ function crossOutTask(e) {
 function changeTaskIcon(e) {
     const taskItem = e.target.closest('.main__task-item');
     const taskItemIconWrapper = taskItem.querySelector(':scope > .main__text > .main__task-icon-wrapper');
-    const taskItemIcon = taskItemIconWrapper.querySelector(':scope > .main__task-icon');
+    let taskItemIcon = taskItemIconWrapper.querySelector(':scope > .main__task-icon');
     const taskItemIconInitial = icon(faCircle);
     const taskItemIconCheck = icon(faCircleCheck);
     const isInitialIcon = taskItemIcon.classList.contains('fa-circle');
     const iconToUse = isInitialIcon ? taskItemIconCheck : taskItemIconInitial;
 
+    const priorityClassList = ['low', 'medium', 'high'];
+    const taskItemIconPriority = priorityClassList.find(p => taskItemIcon.classList.contains(p));
+
     taskItemIcon.remove();
     taskItemIconWrapper.appendChild(iconToUse.node[0]);
     taskItemIconWrapper.children[0].classList.add('main__task-icon');
+    taskItemIcon = taskItemIconWrapper.querySelector(':scope > .main__task-icon');
+    taskItemIcon.classList.add(taskItemIconPriority);
 }
 
 function createTaskElement(obj) {
@@ -77,6 +79,9 @@ function createTaskElement(obj) {
 
     controlsContainer.append(date, editBtn, editBtnIcon, deleteBtn, deleteBtnIcon, infoBtn, infoBtnIcon);
     task.append(textContainer, controlsContainer);
+
+    if (obj.priority) icon.classList.add(obj.priority);
+
     parent.append(task);
 }
 
@@ -87,4 +92,30 @@ function deleteTask(e) {
 
 function changeTaskInfo(obj) {
 
+}
+
+function addTaskToArray() {
+    const taskTitle = document.querySelector('.modal__form-title').value;
+    //const taskTitleValue = taskTitle.value;
+    const taskDescription = document.querySelector('.modal__form-description').value;
+    //const taskDescriptionValue = taskDescription.value;
+    const taskDue = document.querySelector('.modal__form-date').value;
+    //const taskDueValue = taskDue.value;
+    const taskPriority = document.querySelector('.modal__form-priority').value;
+    //const taskPriorityValue = taskPriority.value;
+
+    const newTask = new Todo(taskTitle, taskDescription, taskDue, taskPriority);
+    tasks.push(newTask);
+}
+
+function renderTasks() {
+    for (const item of tasks) {
+        createTaskElement(item);
+    }
+}
+
+// Exporting this function to pass it as callback for form "submit" event in modal.js
+export function addNewTask() {
+    addTaskToArray();
+    renderTasks();
 }
