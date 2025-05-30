@@ -9,6 +9,7 @@ class Todo {
         this.description = description;
         this.due = due;
         this.priority = priority;
+        this.id = crypto.randomUUID();
     }
 }
 
@@ -70,24 +71,37 @@ function createTaskElement(obj) {
 
     const editBtn = createElement('button', 'main__edit-btn');
     const editBtnIcon = createElement('i', 'btn-icon projects__icon--2 fa-regular fa-pen-to-square');
+    editBtn.append(editBtnIcon);
 
     const deleteBtn = createElement('button', 'main__delete-btn');
     const deleteBtnIcon = createElement('i', 'btn-icon projects__icon--3 fa-regular fa-trash-can');
+    deleteBtn.append(deleteBtnIcon);
 
     const infoBtn = createElement('button', 'main__info-btn');
     const infoBtnIcon = createElement('i', 'fa-solid fa-circle-info');
+    infoBtn.append(infoBtnIcon);
 
-    controlsContainer.append(date, editBtn, editBtnIcon, deleteBtn, deleteBtnIcon, infoBtn, infoBtnIcon);
+    controlsContainer.append(date, editBtn, deleteBtn, infoBtn);
     task.append(textContainer, controlsContainer);
+    task.setAttribute('data-id', obj.id);
 
     if (obj.priority) icon.classList.add(obj.priority);
 
     parent.append(task);
+
+    const infoTaskBtn = task.querySelector('.main__delete-btn');
+    const editTaskBtn = task.querySelector('.main__edit-btn');
+    const deleteTaskBtn = task.querySelector('.main__delete-btn');
+
+    // infoTaskBtn.addEventListener('click', sumsum);
+    // editTaskBtn.addEventListener('click', sumsum);
+    deleteTaskBtn.addEventListener('click', deleteTask);
 }
 
 function deleteTask(e) {
-    
-    e.currentTarget.closest('.main__task-item').remove();
+    const taskElement = e.target.closest('.main__task-item');
+    deleteTaskFromArray(e);
+    taskElement.remove();
 }
 
 function changeTaskInfo(obj) {
@@ -108,9 +122,38 @@ function addTaskToArray() {
     tasks.push(newTask);
 }
 
+function deleteTaskFromArray(e) {
+    const taskElement = e.target.closest('.main__task-item');
+    const taskElementID = taskElement.getAttribute('data-id');
+    let itemFound = false;
+
+    for (const task of tasks) {
+        const taskID = task.id;
+
+        if (taskID === taskElementID) {
+            taskElement.remove();
+            itemFound = true;
+        }
+    }
+
+    if (!itemFound) throw new Error('Element not found in the array!');
+}
+
 function renderTasks() {
-    for (const item of tasks) {
-        createTaskElement(item);
+    const taskElements = document.querySelectorAll('.main__task-item');
+
+    for (const task of tasks) {
+        const taskID = task.id;
+        let duplicateTask = false;
+        
+        for (const taskElement of taskElements) {
+            const taskElementID = taskElement.getAttribute('data-id');
+
+            if (taskID === taskElementID) {
+                duplicateTask = true;
+            }
+        }
+        if (!duplicateTask) createTaskElement(task);
     }
 }
 
