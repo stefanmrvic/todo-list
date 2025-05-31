@@ -1,5 +1,5 @@
 import { createElement } from "../utils/dom.js";
-import { showAddTaskModal, showDeleteTaskModal, closeModal } from "./modal.js";
+import { showAddTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 
@@ -13,7 +13,7 @@ class Todo {
     }
 }
 
-const tasks = [];
+export const tasks = [];
 
 const tasksList = document.querySelector('.main__tasks-list');
 const tasksAddBtn = document.querySelector('.main__add-btn');
@@ -89,11 +89,11 @@ function createTaskElement(obj) {
 
     parent.append(task);
 
-    const infoTaskBtn = task.querySelector('.main__delete-btn');
+    const infoTaskBtn = task.querySelector('.main__info-btn');
     const editTaskBtn = task.querySelector('.main__edit-btn');
     const deleteTaskBtn = task.querySelector('.main__delete-btn');
 
-    // infoTaskBtn.addEventListener('click', sumsum);
+    infoTaskBtn.addEventListener('click', showTaskInfoModal);
     // editTaskBtn.addEventListener('click', sumsum);
     deleteTaskBtn.addEventListener('click', showDeleteTaskModal);
 }

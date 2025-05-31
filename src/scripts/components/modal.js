@@ -1,6 +1,6 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
-import { addNewTask, deleteTask } from './tasks.js';
+import { addNewTask, deleteTask, tasks } from './tasks.js';
 
 // Exporting it to tasks.js under deleteTask()
 export function closeModal() {
@@ -132,14 +132,14 @@ function createEditTaskModal() {
     modalContent.append(form);
 }
 
-// // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
+// Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
 export function showDeleteTaskModal(e) {
     const modal = document.querySelector('.modal');
     const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Delete Task';
-
     modalHeader.classList.add('delete');
+
     deleteModalContent();
     createDeleteTaskModal(e);
     modal.showModal();
@@ -189,14 +189,73 @@ function deleteModalContent() {
     }
 }
 
-function showTaskInfoModal() {
+// Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
+export function showTaskInfoModal(e) {
     const modal = document.querySelector('.modal');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Task Info';
 
+    deleteModalContent();
+    createTaskInfoModal(e);
     modal.showModal();
+
+    const closeBtn = document.querySelector('.modal__close-btn');
+    const cancelBtn = document.querySelector('.modal__cancel-btn');
+
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
 }
 
-function createTaskInfoModal() {
+function createTaskInfoModal(e) {
+    const modalContent = document.querySelector('.modal__content');
+    
+    const task = e.target.closest('.main__task-item');
+    const taskElementID = task.getAttribute('data-id');
+    
+    for (const task of tasks) {
+        const taskID = task.id;
+
+        if (taskID === taskElementID) {
+            const infoDiv = createElement('div', 'modal__info');
+
+            const titleDiv = createElement('div', 'modal__info-container'); 
+            const titleH3 = createElement('h3', 'modal__info-title', 'Title:');
+            const titlePara = createElement('p', 'modal__info-titleText', task.title);
+            titleDiv.append(titleH3, titlePara);
+
+            const descriptionDiv = createElement('div', 'modal__info-container');
+            const descriptionH3 = createElement('h3', 'modal__info-description', 'Description:');
+            const descriptionPara = createElement('p', 'modal__info-descriptionText', task.description);
+            descriptionDiv.append(descriptionH3, descriptionPara);
+
+            const dueDiv = createElement('div', 'modal__info-container');
+            const dueH3 = createElement('h3', 'modal__info-due', 'Due date:');
+            const duePara = createElement('p', 'modal__info-dueText', task.due);
+            dueDiv.append(dueH3, duePara);
+
+            const priorityDiv = createElement('div', 'modal__info-container');
+            const priorityH3 = createElement('h3', 'modal__info-priority', 'Priority:');
+            const priorityPara = createElement('p', 'modal__info-priorityText', task.priority);
+            priorityDiv.append(priorityH3, priorityPara);
+
+            const projectDiv = createElement('div', 'modal__info-container');
+            const projectH3 = createElement('h3', 'modal__info-due', 'Project:');
+            const projectPara = createElement('p', 'modal__info-projectText', 'Example Project Nigguh');//task.project);
+            projectDiv.append(projectH3, projectPara);
+
+            infoDiv.append(titleDiv, descriptionDiv, dueDiv, priorityDiv, projectDiv)
+            modalContent.append(infoDiv);
+        }
+    } 
+    const controlsContainer = createElement('div', 'modal__form-controls');
+    const cancelBtn = createElement('button', 'modal__cancel-btn btn', 'Close');
+
+    controlsContainer.append(cancelBtn);
+    modalContent.append(controlsContainer);
+}
+
+function populateTaskInfoFields(e) {
+
+
 
 }

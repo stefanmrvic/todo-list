@@ -40,6 +40,40 @@
         padding: 25px 20px;
     }
 
+    &__info-container {
+        display: flex;
+        padding-bottom: 25px;
+    }
+
+    // Selects all .modal__info-container elements besides the 1st one
+    &__info-container:not(:first-child) {
+        padding: 20px 0;
+    }
+
+    // Selects all .modal__info-container elements besides the last one
+    &__info-container:not(:last-child) {
+        border-bottom: 1px solid $light-gray-3;
+    }
+
+    // Selects all h3 elements inside of .modal__info-container element
+    &__info-container > h3 {
+        color: $light-gray-2;
+        font-weight: 600;
+        flex-basis: 110px;
+    }
+
+    &__info-container > p {
+        color: $light-gray-2;
+        word-wrap: break-word;
+        flex-basis: calc(100% - 110px);
+        overflow-y: auto;
+    }
+
+    &__info-container > p.modal__info-descriptionText {
+        max-height: 70px;
+        overflow-y: scroll;
+    }
+
     &__form-astrix {
         color: $astrix;
         font-weight: 100;
@@ -58,6 +92,7 @@
         textarea {
             color: $light-gray-2;
             font-size: 17px;
+            font-family: inherit;
             display: block;
             width: 100%;
             padding: 10px;
@@ -65,6 +100,10 @@
             border: 1px solid $light-gray-3;
             border-radius: 3px;
             outline: none;
+        }
+
+        select:last-child {
+            margin-bottom: 40px;
         }
 
         textarea {
@@ -78,9 +117,13 @@
         }
     }
 
+    
+
     &__form-controls {
         display: flex;
         justify-content: flex-end;
+        padding-top: 20px;
+        border-top: 1px solid $light-gray-3;
     }
 
     &__cancel-btn,
@@ -139,10 +182,6 @@
 
     .delete {
         background-color: red;
-    }
-
-    .info {
-        background-color: yellow;
     }
 
     .edit {
