@@ -1,14 +1,22 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
-import { addNewTask } from './tasks.js';
+import { addNewTask, deleteTask } from './tasks.js';
 
-function closeModal() {
+// Exporting it to tasks.js under deleteTask()
+export function closeModal() {
     const modal = document.querySelector('.modal');
+    const modalHeader = document.querySelector('.modal__header');
+    const modalHeaderClasses = ['edit', 'delete', 'info'];
+    const activeClass = modalHeaderClasses.find(className => modalHeader.classList.contains(className));
+    
+    if (activeClass) modalHeader.classList.remove(activeClass);
+
     modal.close();  
 }
 
 export function showAddTaskModal() {
     const modal = document.querySelector('.modal');
+    const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Add Task';
 
@@ -73,15 +81,16 @@ function createAddTaskModal() {
     modalContent.append(form);
 }
 
-function showEditModal() {
+function showEditTaskModal() {
     const modal = document.querySelector('.modal');
+    const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Edit Task';
 
     modal.showModal();
 }
 
-function createEditModal() {
+function createEditTaskModal() {
     const modalContent = document.querySelector('.modal__content');
 
     const form = createElement('form', 'modal__form');
@@ -123,15 +132,64 @@ function createEditModal() {
     modalContent.append(form);
 }
 
-function showDeleteModal() {
+// // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
+export function showDeleteTaskModal(e) {
     const modal = document.querySelector('.modal');
+    const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Delete Task';
 
+    modalHeader.classList.add('delete');
+    deleteModalContent();
+    createDeleteTaskModal(e);
     modal.showModal();
+
+    const closeBtn = document.querySelector('.modal__close-btn');
+    const cancelBtn = document.querySelector('.modal__cancel-btn');
+
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
 }
 
-function showInfoModal() {
+function createDeleteTaskModal(e) {
+    const modalContent = document.querySelector('.modal__content');
+    const task = e.target.closest('.main__task-item');
+    const taskTitle = task.querySelector('.main__task-title'); 
+    
+    const deleteMessage = createElement('p', 'modal__text', 'Are you sure?');
+    const br1 = createElement('br', 'modal__text-br');
+    const br2 = createElement('br', 'modal__text-br');
+
+    deleteMessage.setAttribute('data-id', task.dataset.id);
+
+    deleteMessage.append(br1, br2);
+    deleteMessage.append(document.createTextNode('Task '))
+
+    const boldText = createElement('span', 'modal__text-span');
+    boldText.textContent = taskTitle.textContent;
+
+    deleteMessage.append(boldText);
+    deleteMessage.append(document.createTextNode(' will be deleted forever!'));
+
+    const controlsContainer = createElement('div', 'modal__form-controls');
+    const cancelBtn = createElement('button', 'modal__cancel-btn btn', 'Close');
+    const deleteBtn = createElement('button', 'modal__delete-btn btn', 'Delete');
+
+    controlsContainer.append(cancelBtn, deleteBtn);
+    modalContent.append(deleteMessage , controlsContainer);
+
+    deleteBtn.addEventListener('click', deleteTask);
+}
+
+function deleteModalContent() {
+    const contentNode = document.querySelector('.modal__content');
+
+    while (contentNode.lastChild) {
+        contentNode.lastChild.remove();
+    }
+}
+
+function showTaskInfoModal() {
     const modal = document.querySelector('.modal');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Task Info';
@@ -139,8 +197,6 @@ function showInfoModal() {
     modal.showModal();
 }
 
-function deleteModalContent() {
-    const form = document.querySelector('.modal__form');
+function createTaskInfoModal() {
 
-    if (form) form.remove();
 }

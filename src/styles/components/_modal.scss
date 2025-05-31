@@ -79,11 +79,13 @@
     }
 
     &__form-controls {
-        margin-left: auto;
+        display: flex;
+        justify-content: flex-end;
     }
 
     &__cancel-btn,
-    &__add-btn {
+    &__add-btn,
+    &__delete-btn {
         font-size: 15px;
         border: none;
         padding: 10px 17px;
@@ -113,6 +115,38 @@
     &__add-btn:hover {
         background-color: $add-btn--hover;
         border: 1px solid transparent;
+    }
+
+    &__delete-btn {
+        color: $white;
+        background-color: $light-red;
+        border: 1px solid $light-red;
+        margin-left: 10px;
+    }
+
+    &__delete-btn:hover {
+        background-color: $delete-btn--hover;
+        border: 1px solid transparent;
+    }
+
+    &__text {
+        margin-bottom: 25px;
+    }
+
+    &__text-span {
+        font-weight: 600;
+    }
+
+    .delete {
+        background-color: red;
+    }
+
+    .info {
+        background-color: yellow;
+    }
+
+    .edit {
+        background-color: purple;
     }
 }
 

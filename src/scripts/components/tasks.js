@@ -1,5 +1,5 @@
 import { createElement } from "../utils/dom.js";
-import { showAddTaskModal } from "./modal.js";
+import { showAddTaskModal, showDeleteTaskModal, closeModal } from "./modal.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 
@@ -95,13 +95,14 @@ function createTaskElement(obj) {
 
     // infoTaskBtn.addEventListener('click', sumsum);
     // editTaskBtn.addEventListener('click', sumsum);
-    deleteTaskBtn.addEventListener('click', deleteTask);
+    deleteTaskBtn.addEventListener('click', showDeleteTaskModal);
 }
 
-function deleteTask(e) {
-    const taskElement = e.target.closest('.main__task-item');
+// Exporting this function to pass it as callback for event listener in modal.js inside of createDeleteModal()
+export function deleteTask(e) {
     deleteTaskFromArray(e);
-    taskElement.remove();
+    deleteTaskFromDOM();
+    closeModal();
 }
 
 function changeTaskInfo(obj) {
@@ -110,33 +111,47 @@ function changeTaskInfo(obj) {
 
 function addTaskToArray() {
     const taskTitle = document.querySelector('.modal__form-title').value;
-    //const taskTitleValue = taskTitle.value;
     const taskDescription = document.querySelector('.modal__form-description').value;
-    //const taskDescriptionValue = taskDescription.value;
     const taskDue = document.querySelector('.modal__form-date').value;
-    //const taskDueValue = taskDue.value;
     const taskPriority = document.querySelector('.modal__form-priority').value;
-    //const taskPriorityValue = taskPriority.value;
 
     const newTask = new Todo(taskTitle, taskDescription, taskDue, taskPriority);
     tasks.push(newTask);
 }
 
 function deleteTaskFromArray(e) {
-    const taskElement = e.target.closest('.main__task-item');
+    const taskElement = e.currentTarget.closest('.modal__content').querySelector('.modal__text');
     const taskElementID = taskElement.getAttribute('data-id');
     let itemFound = false;
 
     for (const task of tasks) {
         const taskID = task.id;
+        const taskIndex = tasks.indexOf(task);
 
         if (taskID === taskElementID) {
-            taskElement.remove();
+            tasks.splice(taskIndex, 1);
             itemFound = true;
         }
     }
-
     if (!itemFound) throw new Error('Element not found in the array!');
+}
+
+function deleteTaskFromDOM() {
+    const taskElements = document.querySelectorAll('.main__task-item');
+
+    for (const taskElement of taskElements) {
+        const taskElementID = taskElement.dataset.id;
+        let elementExistsInArray = false;
+
+        for (const task of tasks) {
+            const taskID = task.id;
+
+            if (taskElementID === taskID) {
+                elementExistsInArray = true;
+            }
+        }
+        if (!elementExistsInArray) taskElement.remove();
+    }
 }
 
 function renderTasks() {
