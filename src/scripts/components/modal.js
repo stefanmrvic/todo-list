@@ -1,6 +1,6 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
-import { addNewTask, deleteTask, tasks } from './tasks.js';
+import { addNewTask, editTask, deleteTask, tasks } from './tasks.js';
 
 // Exporting it to tasks.js under deleteTask()
 export function closeModal() {
@@ -26,11 +26,11 @@ export function showAddTaskModal() {
 
     const closeBtn = document.querySelector('.modal__close-btn');
     const cancelBtn = document.querySelector('.modal__cancel-btn');
-    const addTaskForm = document.querySelector('.modal__form');
+    const form = document.querySelector('.modal__form');
 
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
-    addTaskForm.addEventListener('submit', addNewTask);
+    form.addEventListener('submit', addNewTask);
 }
 
 function createAddTaskModal() {
@@ -81,25 +81,63 @@ function createAddTaskModal() {
     modalContent.append(form);
 }
 
-function showEditTaskModal() {
+
+// Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
+export function showEditTaskModal(e) {
     const modal = document.querySelector('.modal');
     const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Edit Task';
-
+    
+    deleteModalContent();
+    createEditTaskModal(e);
     modal.showModal();
+    
+    const closeBtn = document.querySelector('.modal__close-btn');
+    const cancelBtn = document.querySelector('.modal__cancel-btn');
+    const form = document.querySelector('.modal__form');
+    
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    form.addEventListener('submit', editTask);
 }
 
-function createEditTaskModal() {
+function setModalState(taskElement, form) {
+    const taskElementID = taskElement.dataset.id;
+    const titleInput = form.querySelector('.modal__form-title');
+    const descriptionTextarea = form.querySelector('.modal__form-description');
+    const dueInput = form.querySelector('.modal__form-date');
+    const prioritySelect = form.querySelector('.modal__form-priority');
+
+    for (const task of tasks) {
+        const taskID = task.id;
+
+        if (taskElementID === taskID) {
+            titleInput.value = task.title;
+            descriptionTextarea.value = task.description;
+            dueInput.value = task.due;
+
+            const taskPriority = Object.keys(task.priority)[0];
+            console.log(`.modal__priority-${taskPriority}`);
+            // const priorityOption = form.querySelector(`.modal__priority-${taskPriority}`);
+            // if (priorityOption !== 'placeholder') priorityOption.selected = true;
+        }
+    }
+}
+
+function createEditTaskModal(e) {
     const modalContent = document.querySelector('.modal__content');
+    const taskElement = e.target.closest('.main__task-item');
 
     const form = createElement('form', 'modal__form');
     form.setAttribute('method', 'dialog');
+    form.setAttribute('data-id', taskElement.dataset.id);
 
     const titleLabel = createElement('label', null, 'Title');
     const titleAstrix = createElement('span', 'modal__form-astrix', '*');
     const titleInput = createElement('input', 'modal__form-title');
     titleInput.setAttribute('type', 'text');
+    titleInput.required = true;
     titleLabel.append(titleAstrix, titleInput);
 
     const descriptionLabel = createElement('label', null, 'Description');
@@ -114,22 +152,29 @@ function createEditTaskModal() {
     const priorityLabel = createElement('label', null, 'Priority');
     const prioritySelect = createElement('select', 'modal__form-priority');
 
-    const priorityOptionPlaceholder = createElement('option', null, 'How important is this task?');
+    const priorityOptionPlaceholder = createElement('option', 'modal__priority-placeholder', 'How important is this task?');
+    priorityOptionPlaceholder.value = 'placeholder';
     priorityOptionPlaceholder.disabled = true;
-    const priorityOptionLow = createElement('option', null, '😴 Not important at all..');
-    const priorityOptionMedium = createElement('option', null, '😅 A bit important');
-    const priorityOptionHigh = createElement('option', null, '😲 Super important!');
+    priorityOptionPlaceholder.selected = true;
+    const priorityOptionLow = createElement('option', 'modal__priority-low', '😴 Not important at all..');
+    priorityOptionLow.value = 'low';
+    const priorityOptionMedium = createElement('option', 'modal__priority-medium', '😅 A bit important');
+    priorityOptionMedium.value = 'medium';
+    const priorityOptionHigh = createElement('option', 'modal__priority-high', '😲 Super important!');
+    priorityOptionHigh.value = 'high';
 
     prioritySelect.append(priorityOptionPlaceholder, priorityOptionLow, priorityOptionMedium, priorityOptionHigh);
     priorityLabel.append(prioritySelect);
 
     const controlsContainer = createElement('div', 'modal__form-controls');
     const cancelBtn = createElement('button', 'modal__cancel-btn', 'Close');
-    const addBtn = createElement('button', 'modal__add-btn', 'Add');
+    const editBtn = createElement('button', 'modal__edit-btn', 'Edit');
 
-    controlsContainer.append(cancelBtn, addBtn);
+    controlsContainer.append(cancelBtn, editBtn);
     form.append(titleLabel, descriptionLabel, dueLabel, priorityLabel, controlsContainer);
     modalContent.append(form);
+
+    setModalState(taskElement, form);
 }
 
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
@@ -209,8 +254,8 @@ export function showTaskInfoModal(e) {
 function createTaskInfoModal(e) {
     const modalContent = document.querySelector('.modal__content');
     
-    const task = e.target.closest('.main__task-item');
-    const taskElementID = task.getAttribute('data-id');
+    const taskElement = e.target.closest('.main__task-item');
+    const taskElementID = taskElement.getAttribute('data-id');
     
     for (const task of tasks) {
         const taskID = task.id;
@@ -238,9 +283,10 @@ function createTaskInfoModal(e) {
 
             let priorityPara;
 
-            if (task.priority) {
-                // It captures the value of priority key of the task object
-                const priorityObjectValue = Object.values(task.priority)[0];
+            // It captures the value of priority key of the task object
+            const priorityObjectValue = Object.values(task.priority)[0];
+            
+            if (priorityObjectValue !== 'placeholder') {
                 // and then it injects that priority value as the textContent of the p element
                 priorityPara = createElement('p', 'modal__info-priorityText', priorityObjectValue);
             } else {
@@ -263,10 +309,4 @@ function createTaskInfoModal(e) {
 
     controlsContainer.append(cancelBtn);
     modalContent.append(controlsContainer);
-}
-
-function populateTaskInfoFields(e) {
-
-
-
 }

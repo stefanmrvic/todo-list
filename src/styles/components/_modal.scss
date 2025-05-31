@@ -129,7 +129,8 @@
 
     &__cancel-btn,
     &__add-btn,
-    &__delete-btn {
+    &__delete-btn,
+    &__edit-btn {
         font-size: 15px;
         border: none;
         padding: 10px 17px;
@@ -149,14 +150,16 @@
         border: 1px solid $light-blue;
     }
 
-    &__add-btn {
+    &__add-btn,
+    &__edit-btn {
         color: $white;
         background-color: $light-blue;
         margin-left: 10px;
         border: 1px solid $light-blue;
     }
 
-    &__add-btn:hover {
+    &__add-btn:hover,
+    &__edit-btn:hover {
         background-color: $add-btn--hover;
         border: 1px solid transparent;
     }
@@ -183,10 +186,6 @@
 
     .delete {
         background-color: red;
-    }
-
-    .edit {
-        background-color: purple;
     }
 }
 

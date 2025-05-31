@@ -1,5 +1,5 @@
 import { createElement } from "../utils/dom.js";
-import { showAddTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
+import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 
@@ -11,6 +11,7 @@ class Todo {
         this.id = crypto.randomUUID();
 
         const priorities = {
+            placeholder: 'How important is this task?',
             low: '😴 Not important at all..',
             medium: '😅 A bit important',
             high: '😲 Super important!',
@@ -19,7 +20,7 @@ class Todo {
         if (priority === 'low') this.priority = { low: priorities['low'] };
         else if (priority === 'medium') this.priority = { medium: priorities['medium'] };
         else if (priority === 'high') this.priority = { high: priorities['high'] };
-        else this.priority = null;
+        else this.priority = { placeholder:  priorities['placeholder']};
     }
 }
 
@@ -95,9 +96,11 @@ function createTaskElement(obj) {
     task.append(textContainer, controlsContainer);
     task.setAttribute('data-id', obj.id);
 
-    if (obj.priority) {
-        // It captures the key name of the priority property of the task object
-        const priorityObjectKey = Object.keys(obj.priority)[0];
+    
+    // It captures the key name of the priority property of the task object
+    const priorityObjectKey = Object.keys(obj.priority)[0];
+
+    if (priorityObjectKey !== 'placeholder') {
         // Depending of the priority of the task, it will put className of priority value (low, medium, or high) 
         icon.classList.add(priorityObjectKey);
     }
@@ -109,7 +112,7 @@ function createTaskElement(obj) {
     const deleteTaskBtn = task.querySelector('.main__delete-btn');
 
     infoTaskBtn.addEventListener('click', showTaskInfoModal);
-    // editTaskBtn.addEventListener('click', sumsum);
+    editTaskBtn.addEventListener('click', showEditTaskModal);
     deleteTaskBtn.addEventListener('click', showDeleteTaskModal);
 }
 
@@ -120,8 +123,105 @@ export function deleteTask(e) {
     closeModal();
 }
 
-function changeTaskInfo(obj) {
+function deleteTaskFromArray(e) {
+    const taskElement = e.currentTarget.closest('.modal__content').querySelector('.modal__text');
+    const taskElementID = taskElement.getAttribute('data-id');
+    let itemFound = false;
+    
+    for (const task of tasks) {
+        const taskID = task.id;
+        const taskIndex = tasks.indexOf(task);
+        
+        if (taskID === taskElementID) {
+            tasks.splice(taskIndex, 1);
+            itemFound = true;
+        }
+    }
+    if (!itemFound) throw new Error('Element not found in the array!');
+}
 
+function deleteTaskFromDOM() {
+    const taskElements = document.querySelectorAll('.main__task-item');
+    
+    for (const taskElement of taskElements) {
+        const taskElementID = taskElement.dataset.id;
+        let elementExistsInArray = false;
+        
+        for (const task of tasks) {
+            const taskID = task.id;
+            
+            if (taskElementID === taskID) {
+                elementExistsInArray = true;
+            }
+        }
+        if (!elementExistsInArray) taskElement.remove();
+    }
+}
+
+function editTaskInArray() {
+    const taskElement = findTaskElement();
+    const taskElementID = taskElement.getAttribute('data-id');
+
+    const taskTitle = document.querySelector('.modal__form-title').value;
+    const taskDescription = document.querySelector('.modal__form-description').value;
+    const taskDue = document.querySelector('.modal__form-date').value;
+    const taskPriority = document.querySelector('.modal__form-priority').value;
+
+    for (const task of tasks) {
+        const taskID = task.id;
+
+        if (taskElementID === taskID) {
+            task.title = taskTitle;
+            task.description = taskDescription;
+            task.due = taskDue;
+            task.priority = taskPriority;
+        }
+    }
+}
+
+function editTaskInDOM() {
+    const taskElement = findTaskElement();
+    const taskElementID = taskElement.getAttribute('data-id');
+
+    for (const task of tasks) {
+        const taskID = task.id;
+
+        if (taskElementID === taskID) {
+            const taskElementTitle = taskElement.querySelector('.main__task-title');
+            const taskElementPriority = taskElement.querySelector('.main__task-icon');
+            const taskElementDue = taskElement.querySelector('.main__task-date');
+            const taskElementPriorityClasses = ['low', 'medium', 'high'];
+            const activeClass = taskElementPriorityClasses.find(className => taskElementPriority.classList.contains(className));
+            
+            if (activeClass) taskElementPriority.classList.replace(activeClass, task.priority);
+            else taskElementPriority.classList.add(task.priority);
+
+            taskElementTitle.textContent = task.title;
+            taskElementDue.textContent = task.due;
+        }
+    }
+}
+
+function findTaskElement() {
+    const form = document.querySelector('.modal__form');
+    // To prevent losing the trace of the task item, I stamped task ID onto form so it can be traced back to the task item once the modal is open
+    const formID = form.getAttribute('data-id');
+    const taskElements = document.querySelectorAll('.main__task-item');
+
+    for (const taskElement of taskElements) {
+        const taskElementID = taskElement.dataset.id;
+
+        if (formID === taskElementID) {
+            return taskElement;
+        }
+    }
+    throw new Error('Task item not found!');
+}
+
+// Exporting this function to pass it as callback for form "submit" event in modal.js
+export function editTask() {
+    editTaskInArray();
+    editTaskInDOM();
 }
 
 function addTaskToArray() {
@@ -134,44 +234,9 @@ function addTaskToArray() {
     tasks.push(newTask);
 }
 
-function deleteTaskFromArray(e) {
-    const taskElement = e.currentTarget.closest('.modal__content').querySelector('.modal__text');
-    const taskElementID = taskElement.getAttribute('data-id');
-    let itemFound = false;
-
-    for (const task of tasks) {
-        const taskID = task.id;
-        const taskIndex = tasks.indexOf(task);
-
-        if (taskID === taskElementID) {
-            tasks.splice(taskIndex, 1);
-            itemFound = true;
-        }
-    }
-    if (!itemFound) throw new Error('Element not found in the array!');
-}
-
-function deleteTaskFromDOM() {
-    const taskElements = document.querySelectorAll('.main__task-item');
-
-    for (const taskElement of taskElements) {
-        const taskElementID = taskElement.dataset.id;
-        let elementExistsInArray = false;
-
-        for (const task of tasks) {
-            const taskID = task.id;
-
-            if (taskElementID === taskID) {
-                elementExistsInArray = true;
-            }
-        }
-        if (!elementExistsInArray) taskElement.remove();
-    }
-}
-
 function renderTasks() {
     const taskElements = document.querySelectorAll('.main__task-item');
-
+    
     for (const task of tasks) {
         const taskID = task.id;
         let duplicateTask = false;
