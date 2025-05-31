@@ -95,10 +95,12 @@ function createTaskElement(obj) {
     task.append(textContainer, controlsContainer);
     task.setAttribute('data-id', obj.id);
 
-    // It captures the key name of the priority property of the task object
-    const priorityObjectKey = Object.keys(obj.priority)[0];
-    // If the value is not null or undefined, it will put className of priority value (low, medium, or high) 
-    if (obj.priority) icon.classList.add(priorityObjectKey);
+    if (obj.priority) {
+        // It captures the key name of the priority property of the task object
+        const priorityObjectKey = Object.keys(obj.priority)[0];
+        // Depending of the priority of the task, it will put className of priority value (low, medium, or high) 
+        icon.classList.add(priorityObjectKey);
+    }
 
     parent.append(task);
 
