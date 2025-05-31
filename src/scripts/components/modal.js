@@ -235,7 +235,10 @@ function createTaskInfoModal(e) {
 
             const priorityDiv = createElement('div', 'modal__info-container');
             const priorityH3 = createElement('h3', 'modal__info-priority', 'Priority:');
-            const priorityPara = createElement('p', 'modal__info-priorityText', task.priority);
+            // It captures the value of priority key of the task object
+            const priorityObjectValue = Object.values(task.priority)[0];
+            // and then it injects that priority value as the textContent of the p element
+            const priorityPara = createElement('p', 'modal__info-priorityText', priorityObjectValue);
             priorityDiv.append(priorityH3, priorityPara);
 
             const projectDiv = createElement('div', 'modal__info-container');

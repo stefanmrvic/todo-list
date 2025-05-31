@@ -8,8 +8,18 @@ class Todo {
         this.title = title;
         this.description = description;
         this.due = due;
-        this.priority = priority;
         this.id = crypto.randomUUID();
+
+        const priorities = {
+            low: '😴 Not important at all..',
+            medium: '😅 A bit important',
+            high: '😲 Super important!',
+        }
+
+        if (priority === 'low') this.priority = { low: priorities['low'] };
+        else if (priority === 'medium') this.priority = { medium: priorities['medium'] };
+        else if (priority === 'high') this.priority = { high: priorities['high'] };
+        else this.priority = null;
     }
 }
 
@@ -85,7 +95,10 @@ function createTaskElement(obj) {
     task.append(textContainer, controlsContainer);
     task.setAttribute('data-id', obj.id);
 
-    if (obj.priority) icon.classList.add(obj.priority);
+    // It captures the key name of the priority property of the task object
+    const priorityObjectKey = Object.keys(obj.priority)[0];
+    // If the value is not null or undefined, it will put className of priority value (low, medium, or high) 
+    if (obj.priority) icon.classList.add(priorityObjectKey);
 
     parent.append(task);
 
