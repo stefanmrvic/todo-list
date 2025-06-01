@@ -14,7 +14,9 @@ export function closeModal() {
     modal.close();  
 }
 
-export function showAddTaskModal() {
+export function showAddTaskModal(e) {
+    e.stopPropagation();
+
     const modal = document.querySelector('.modal');
     const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
@@ -84,6 +86,8 @@ function createAddTaskModal() {
 
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
 export function showEditTaskModal(e) {
+    e.stopPropagation();
+
     const modal = document.querySelector('.modal');
     const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
@@ -179,6 +183,8 @@ function createEditTaskModal(e) {
 
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
 export function showDeleteTaskModal(e) {
+    e.stopPropagation();
+
     const modal = document.querySelector('.modal');
     const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
@@ -236,6 +242,8 @@ function deleteModalContent() {
 
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
 export function showTaskInfoModal(e) {
+    e.stopPropagation();
+    
     const modal = document.querySelector('.modal');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Task Info';
