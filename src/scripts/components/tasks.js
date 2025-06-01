@@ -8,19 +8,20 @@ class Todo {
         this.title = title;
         this.description = description;
         this.due = due;
+        this.priority = priority;
         this.id = crypto.randomUUID();
+    }
 
-        const priorities = {
-            placeholder: 'How important is this task?',
-            low: '😴 Not important at all..',
-            medium: '😅 A bit important',
-            high: '😲 Super important!',
-        }
+    parsePriorityToString() {
+        const priority = this.priority;
+        let str;
 
-        if (priority === 'low') this.priority = { low: priorities['low'] };
-        else if (priority === 'medium') this.priority = { medium: priorities['medium'] };
-        else if (priority === 'high') this.priority = { high: priorities['high'] };
-        else this.priority = { placeholder:  priorities['placeholder']};
+        if (priority === 'low') str = '😴 Not important at all..';
+        else if (priority === 'medium') str = '😅 A bit important';
+        else if (priority === 'high') str = '😲 Super important!';
+        else str = 'How important is this task?';
+    
+        return str;
     }
 }
 
@@ -39,7 +40,7 @@ function markTaskDone(e) {
 
 function crossOutTask(e) {
     const taskItem = e.target.closest('.main__task-item');
-    const taskItemPara = taskItem.querySelector(':scope > .main__text > .main__task-title');
+    const taskItemPara = taskItem.querySelector('.main__text > .main__task-title');
 
     taskItemPara.style.textDecoration = 
         taskItemPara.style.textDecoration === 'line-through' ? 'none' : 'line-through';
@@ -47,38 +48,38 @@ function crossOutTask(e) {
 
 function changeTaskIcon(e) {
     const taskItem = e.target.closest('.main__task-item');
-    const taskItemIconWrapper = taskItem.querySelector(':scope > .main__text > .main__task-icon-wrapper');
-    let taskItemIcon = taskItemIconWrapper.querySelector(':scope > .main__task-icon');
+    const taskItemIconWrapper = taskItem.querySelector('.main__text > .main__task-icon-wrapper');
+    let taskItemIcon = taskItemIconWrapper.querySelector('.main__task-icon');
     const taskItemIconInitial = icon(faCircle);
     const taskItemIconCheck = icon(faCircleCheck);
     const isInitialIcon = taskItemIcon.classList.contains('fa-circle');
     const iconToUse = isInitialIcon ? taskItemIconCheck : taskItemIconInitial;
 
     const priorityClassList = ['low', 'medium', 'high'];
-    const taskItemIconPriority = priorityClassList.find(p => taskItemIcon.classList.contains(p));
+    const taskItemIconPriority = priorityClassList.find(task => taskItemIcon.classList.contains(task));
 
     taskItemIcon.remove();
     taskItemIconWrapper.appendChild(iconToUse.node[0]);
     taskItemIconWrapper.children[0].classList.add('main__task-icon');
-    taskItemIcon = taskItemIconWrapper.querySelector(':scope > .main__task-icon');
+    taskItemIcon = taskItemIconWrapper.querySelector('.main__task-icon');
     taskItemIcon.classList.add(taskItemIconPriority);
 }
 
-function createTaskElement(obj) {
+function createTaskElement(task) {
     const parent = document.querySelector('.main__tasks-list');
-    const task = createElement('div', 'main__task-item');
+    const taskElement = createElement('div', 'main__task-item');
     const textContainer = createElement('div', 'main__text');
 
     const iconWrapper = createElement('div', 'main__task-icon-wrapper');
     const icon = createElement('i', 'main__task-icon fa-regular fa-circle');
-    const title = createElement('p', 'main__task-title', obj.title);
+    const title = createElement('p', 'main__task-title', task.title);
 
     iconWrapper.append(icon);
     textContainer.append(iconWrapper, title);
 
     const controlsContainer = createElement('div', 'main__controls');
 
-    const date = createElement('p', 'main__task-date', obj.due);
+    const date = createElement('p', 'main__task-date', task.due);
 
     const editBtn = createElement('button', 'main__edit-btn');
     const editBtnIcon = createElement('i', 'btn-icon projects__icon--2 fa-regular fa-pen-to-square');
@@ -93,23 +94,22 @@ function createTaskElement(obj) {
     infoBtn.append(infoBtnIcon);
 
     controlsContainer.append(date, editBtn, deleteBtn, infoBtn);
-    task.append(textContainer, controlsContainer);
-    task.setAttribute('data-id', obj.id);
+    taskElement.append(textContainer, controlsContainer);
+    taskElement.setAttribute('data-id', task.id);
 
-    
     // It captures the key name of the priority property of the task object
-    const priorityObjectKey = Object.keys(obj.priority)[0];
+    const priority = task.priority;
 
-    if (priorityObjectKey !== 'placeholder') {
+    if (priority !== 'placeholder') {
         // Depending of the priority of the task, it will put className of priority value (low, medium, or high) 
-        icon.classList.add(priorityObjectKey);
+        icon.classList.add(priority);
     }
 
-    parent.append(task);
+    parent.append(taskElement);
 
-    const infoTaskBtn = task.querySelector('.main__info-btn');
-    const editTaskBtn = task.querySelector('.main__edit-btn');
-    const deleteTaskBtn = task.querySelector('.main__delete-btn');
+    const infoTaskBtn = taskElement.querySelector('.main__info-btn');
+    const editTaskBtn = taskElement.querySelector('.main__edit-btn');
+    const deleteTaskBtn = taskElement.querySelector('.main__delete-btn');
 
     infoTaskBtn.addEventListener('click', showTaskInfoModal);
     editTaskBtn.addEventListener('click', showEditTaskModal);
@@ -192,9 +192,10 @@ function editTaskInDOM() {
             const taskElementDue = taskElement.querySelector('.main__task-date');
             const taskElementPriorityClasses = ['low', 'medium', 'high'];
             const activeClass = taskElementPriorityClasses.find(className => taskElementPriority.classList.contains(className));
+            const taskPriority = task.priority;
             
-            if (activeClass) taskElementPriority.classList.replace(activeClass, task.priority);
-            else taskElementPriority.classList.add(task.priority);
+            if (activeClass) taskElementPriority.classList.replace(activeClass, taskPriority);
+            else if (taskPriority !== 'placeholder') taskElementPriority.classList.add(taskPriority);
 
             taskElementTitle.textContent = task.title;
             taskElementDue.textContent = task.due;

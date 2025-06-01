@@ -121,10 +121,9 @@ function setModalState(taskElement, form) {
             descriptionTextarea.value = task.description;
             dueInput.value = task.due;
 
-            const taskPriority = Object.keys(task.priority)[0];
-            console.log(`.modal__priority-${taskPriority}`);
-            // const priorityOption = form.querySelector(`.modal__priority-${taskPriority}`);
-            // if (priorityOption !== 'placeholder') priorityOption.selected = true;
+            const taskPriority = task.priority;
+            const priorityOption = document.getElementById(taskPriority);
+             priorityOption.selected = true;
         }
     }
 }
@@ -160,12 +159,15 @@ function createEditTaskModal(e) {
     priorityOptionPlaceholder.value = 'placeholder';
     priorityOptionPlaceholder.disabled = true;
     priorityOptionPlaceholder.selected = true;
-    const priorityOptionLow = createElement('option', 'modal__priority-low', '😴 Not important at all..');
+    const priorityOptionLow = createElement('option', null, '😴 Not important at all..');
     priorityOptionLow.value = 'low';
-    const priorityOptionMedium = createElement('option', 'modal__priority-medium', '😅 A bit important');
+    priorityOptionLow.id = 'low';
+    const priorityOptionMedium = createElement('option', null, '😅 A bit important');
     priorityOptionMedium.value = 'medium';
-    const priorityOptionHigh = createElement('option', 'modal__priority-high', '😲 Super important!');
+    priorityOptionMedium.id = 'medium';
+    const priorityOptionHigh = createElement('option', null, '😲 Super important!');
     priorityOptionHigh.value = 'high';
+    priorityOptionHigh.id = 'high';
 
     prioritySelect.append(priorityOptionPlaceholder, priorityOptionLow, priorityOptionMedium, priorityOptionHigh);
     priorityLabel.append(prioritySelect);
@@ -243,7 +245,7 @@ function deleteModalContent() {
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
 export function showTaskInfoModal(e) {
     e.stopPropagation();
-    
+
     const modal = document.querySelector('.modal');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Task Info';
@@ -292,11 +294,12 @@ function createTaskInfoModal(e) {
             let priorityPara;
 
             // It captures the value of priority key of the task object
-            const priorityObjectValue = Object.values(task.priority)[0];
+            const priorityValue = task.priority;
+            const priorityString = task.parsePriorityToString();
             
-            if (priorityObjectValue !== 'placeholder') {
+            if (priorityValue !== 'placeholder') {
                 // and then it injects that priority value as the textContent of the p element
-                priorityPara = createElement('p', 'modal__info-priorityText', priorityObjectValue);
+                priorityPara = createElement('p', 'modal__info-priorityText', priorityString);
             } else {
                 priorityPara = createElement('p', 'modal__info-priorityText');
             }
