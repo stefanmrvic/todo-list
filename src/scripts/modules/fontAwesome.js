@@ -12,7 +12,7 @@ import {
     faVolleyball,         // #4 Project Icon
     faSackDollar,         // #5 Project Icon
     faPizzaSlice,         // #6 Project Icon
-    faSuitCaseRolling,    // #7 Project Icon
+    faSuitcaseRolling,    // #7 Project Icon
     faGift                // #8 Project Icon
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -25,14 +25,14 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 
 import {
-    faPageLines,  // #1 Project Icon
+    faPagelines,  // #1 Project Icon
 } from '@fortawesome/free-brands-svg-icons';
 
 library.add(
     faCheckDouble, faCalendarDays, faCalendarWeek, faCalendarPlus, faCalendar, 
     faCirclePlus, faTrashCan, faPenToSquare, faCircle, faCircleCheck, faCircleInfo,
-    faXmark, faPageLines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar,
-    faPizzaSlice, faSuitCaseRolling, faGift
+    faXmark, faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar,
+    faPizzaSlice, faSuitcaseRolling, faGift
 
 );
 

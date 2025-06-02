@@ -33,53 +33,41 @@ export function showAddProjectModal(e) {
 
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
-    form.addEventListener('submit', addNewTask);
+    form.addEventListener('submit', addNewProject);
 }
 
-function createAddTaskModal() {
+function createAddProjectModal() {
     const modalContent = document.querySelector('.modal__content');
 
     const form = createElement('form', 'modal__form');
     form.setAttribute('method', 'dialog');
 
+    // Title field Start //
     const titleLabel = createElement('label', null, 'Title');
     const titleAstrix = createElement('span', 'modal__form-astrix', '*');
     const titleInput = createElement('input', 'modal__form-title');
     titleInput.setAttribute('type', 'text');
     titleInput.required = true;
     titleLabel.append(titleAstrix, titleInput);
+    // Title field End //
 
-    const descriptionLabel = createElement('label', null, 'Description');
-    const descriptionTextarea = createElement('textarea', 'modal__form-description');
-    descriptionLabel.append(descriptionTextarea);
-    
-    const dueLabel = createElement('label', null, 'Due Data');
-    const dueInput = createElement('input', 'modal__form-date');
-    dueInput.setAttribute('type', 'date');
-    dueLabel.append(dueInput);
+    const iconDiv = createElement('div', 'modal__icons-container');
+    const iconBtnFlower = createElement('button', 'modal__icons-icon');
+    const iconBtnBook = createElement('button', 'modal__icons-icon');
+    const iconBtnTools = createElement('button', 'modal__icons-icon');
+    const iconBtnVolleyball = createElement('button', 'modal__icons-icon');
+    const iconBtnMoney = createElement('button', 'modal__icons-icon');
+    const iconBtnPizza = createElement('button', 'modal__icons-icon');
+    const iconBtnBackpack = createElement('button', 'modal__icons-icon');
+    const iconBtnPresent = createElement('button', 'modal__icons-icon');
 
-    const priorityLabel = createElement('label', null, 'Priority');
-    const prioritySelect = createElement('select', 'modal__form-priority');
 
-    const priorityOptionPlaceholder = createElement('option', null, 'How important is this task?');
-    priorityOptionPlaceholder.value = 'placeholder';
-    priorityOptionPlaceholder.disabled = true;
-    priorityOptionPlaceholder.selected = true;
-    const priorityOptionLow = createElement('option', null, '😴 Not important at all..');
-    priorityOptionLow.value = 'low';
-    const priorityOptionMedium = createElement('option', null, '😅 A bit important');
-    priorityOptionMedium.value = 'medium';
-    const priorityOptionHigh = createElement('option', null, '😲 Super important!');
-    priorityOptionHigh.value = 'high';
-
-    prioritySelect.append(priorityOptionPlaceholder, priorityOptionLow, priorityOptionMedium, priorityOptionHigh);
-    priorityLabel.append(prioritySelect);
 
     const controlsContainer = createElement('div', 'modal__form-controls');
     const cancelBtn = createElement('button', 'modal__cancel-btn', 'Close');
     const addBtn = createElement('button', 'modal__add-btn', 'Add');
 
     controlsContainer.append(cancelBtn, addBtn);
-    form.append(titleLabel, descriptionLabel, dueLabel, priorityLabel, controlsContainer);
+    form.append(titleLabel, controlsContainer);
     modalContent.append(form);
 }
