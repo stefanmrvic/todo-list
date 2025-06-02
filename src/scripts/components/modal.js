@@ -14,6 +14,124 @@ export function closeModal() {
     modal.close();  
 }
 
+export function showAddProjectModal() {
+    const modal = document.querySelector('.modal');
+    const modalTitle = document.querySelector('.modal__title');
+    modalTitle.textContent = 'Add Project';
+
+    deleteModalContent();
+    createAddProjectModal();
+    modal.showModal();
+
+    const closeBtn = document.querySelector('.modal__close-btn');
+    const cancelBtn = document.querySelector('.modal__cancel-btn');
+    const form = document.querySelector('.modal__form');
+
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    //form.addEventListener('submit', addNewProject);
+}
+
+function createAddProjectModal() {
+    const modalContent = document.querySelector('.modal__content');
+
+    const form = createElement('form', 'modal__form');
+    form.setAttribute('method', 'dialog');
+
+    // Title field Start //
+    const titleLabel = createElement('label', null, 'Title');
+    const titleAstrix = createElement('span', 'modal__form-astrix', '*');
+    const titleInput = createElement('input', 'modal__form-title');
+    titleInput.type = 'text';
+    titleInput.required = true;
+    titleLabel.append(titleAstrix, titleInput);
+    // Title field End //
+
+    // Icons field Start //
+    const iconsFieldset = createElement('fieldset', 'modal__icons-fieldset');
+    const iconsLegend = createElement('legend', 'modal__icons-legend', 'Icon')
+    iconsFieldset.append(iconsLegend);
+
+    const iconsContainer = createElement('label', 'modal__icons-container');
+
+    const flowerLabel = createElement('label', 'modal__icons-label');
+    const flowerInput = createElement('input', 'modal__icons-input');
+    flowerInput.type = 'radio';
+    flowerInput.name = 'icon';
+    flowerInput.value = 'flowerIcon'
+    const flowerIcon = createElement('i', 'modal__icons-icon fa-brands fa-pagelines');
+    flowerLabel.append(flowerIcon, flowerInput);
+
+    const bookLabel = createElement('label', 'modal__icons-label');
+    const bookInput = createElement('input', 'modal__icons-input');
+    bookInput.type = 'radio';
+    bookInput.name = 'icon';
+    bookInput.value = 'bookIcon';
+    const bookIcon = createElement('i', 'modal__icons-icon fa-solid fa-book');
+    bookLabel.append(bookIcon, bookInput);
+
+    const toolsLabel = createElement('label', 'modal__icons-label');
+    const toolsInput = createElement('input', 'modal__icons-input');
+    toolsInput.type = 'radio';
+    toolsInput.name = 'icon';
+    toolsInput.value = 'toolsIcon';
+    const toolsIcon = createElement('i', 'modal__icons-icon fa-solid fa-screwdriver-wrench');
+    toolsLabel.append(toolsIcon, toolsInput);
+
+    const volleyballLabel = createElement('label', 'modal__icons-label');
+    const volleyballInput = createElement('input', 'modal__icons-input');
+    volleyballInput.type = 'radio';
+    volleyballInput.name = 'icon';
+    volleyballInput.value = 'volleyballIcon';
+    const volleyballIcon = createElement('i', 'modal__icons-icon fa-solid fa-volleyball');
+    volleyballLabel.append(volleyballIcon, volleyballInput);
+
+    const moneyLabel = createElement('label', 'modal__icons-label');
+    const moneyInput = createElement('input', 'modal__icons-input');
+    moneyInput.type = 'radio';
+    moneyInput.name = 'icon';
+    moneyInput.value = 'moneyIcon';
+    const moneyIcon = createElement('i', 'modal__icons-icon fa-solid fa-sack-dollar');
+    moneyLabel.append(moneyIcon, moneyInput);
+
+    
+    const pizzaLabel = createElement('label', 'modal__icons-label');
+    const pizzaInput = createElement('input', 'modal__icons-input');
+    pizzaInput.type = 'radio';
+    pizzaInput.name = 'icon';
+    pizzaInput.value = 'pizzaIcon';
+    const pizzaIcon = createElement('i', 'modal__icons-icon fa-solid fa-pizza-slice');
+    pizzaLabel.append(pizzaIcon, pizzaInput);
+
+    const backpackLabel = createElement('label', 'modal__icons-label');
+    const backpackInput = createElement('input', 'modal__icons-input');
+    backpackInput.type = 'radio';
+    backpackInput.name = 'icon';
+    backpackInput.value = 'backpackIcon';
+    const backpackIcon = createElement('i', 'modal__icons-icon fa-solid fa-suitcase-rolling');
+    backpackLabel.append(backpackIcon, backpackInput);
+
+    const presentLabel = createElement('label', 'modal__icons-label');
+    const presentInput = createElement('input', 'modal__icons-input');
+    presentInput.type = 'radio';
+    presentInput.name = 'icon';
+    presentInput.value = 'presentIcon';
+    const presentIcon = createElement('i', 'modal__icons-icon fa-solid fa-gift');
+    presentLabel.append(presentIcon, presentInput);
+
+    iconsContainer.append(flowerLabel, bookLabel, toolsLabel, volleyballLabel, moneyLabel, pizzaLabel, backpackLabel, presentLabel)
+    iconsFieldset.append(iconsContainer);
+    // Icons field End //
+
+    const controlsContainer = createElement('div', 'modal__form-controls');
+    const cancelBtn = createElement('button', 'modal__cancel-btn', 'Close');
+    const addBtn = createElement('button', 'modal__add-btn', 'Add');
+
+    controlsContainer.append(cancelBtn, addBtn);
+    form.append(titleLabel, iconsFieldset, controlsContainer);
+    modalContent.append(form);
+}
+
 export function showAddTaskModal(e) {
     e.stopPropagation();
 
@@ -88,7 +206,6 @@ export function showEditTaskModal(e) {
     e.stopPropagation();
 
     const modal = document.querySelector('.modal');
-    const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Edit Task';
     
@@ -110,7 +227,6 @@ function setModalState(taskElement, form) {
     const titleInput = form.querySelector('.modal__form-title');
     const descriptionTextarea = form.querySelector('.modal__form-description');
     const dueInput = form.querySelector('.modal__form-date');
-    const prioritySelect = form.querySelector('.modal__form-priority');
 
     for (const task of tasks) {
         const taskID = task.id;

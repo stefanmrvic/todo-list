@@ -75,6 +75,23 @@
         overflow-y: scroll;
     }
 
+    &__icons-fieldset {
+        border: none;
+    }
+
+    &__icons-legend {
+        color: $light-gray-2;
+    }
+
+    &__icons-container {
+        display: flex;
+        margin: 5px 0;
+    }
+
+    &__icons-btn {
+        border: none;
+    }
+
     &__form-astrix {
         color: $astrix;
         font-weight: 100;
@@ -117,8 +134,6 @@
             border: 1px solid $light-blue;
         }
     }
-
-    
 
     &__form-controls {
         display: flex;
