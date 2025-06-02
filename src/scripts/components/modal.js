@@ -18,7 +18,6 @@ export function showAddTaskModal(e) {
     e.stopPropagation();
 
     const modal = document.querySelector('.modal');
-    const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
     modalTitle.textContent = 'Add Task';
 
@@ -123,7 +122,7 @@ function setModalState(taskElement, form) {
 
             const taskPriority = task.priority;
             const priorityOption = document.getElementById(taskPriority);
-             priorityOption.selected = true;
+            priorityOption.selected = true;
         }
     }
 }
