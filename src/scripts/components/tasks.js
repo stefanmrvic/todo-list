@@ -1,7 +1,7 @@
 import { createElement } from "../utils/dom.js";
 import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
-import { faCircle, faCircleCheck } from '@fortawesome/free-regular-svg-icons';
+import { faCircle, faCircleCheck } from '../modules/icons.js';
 
 class Todo {
     constructor(title, description, due, priority) {
@@ -24,6 +24,8 @@ class Todo {
         return str;
     }
 }
+
+export const projects = [];
 
 export const tasks = [];
 

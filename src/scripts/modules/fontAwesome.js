@@ -1,39 +1,27 @@
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
-import { 
-    faCheckDouble,        // Logo icon
-    faCalendarDays,       // Due #1
-    faCalendarWeek,       // Due #2
-    faCalendarPlus,       // Due #3
-    faCirclePlus,         // Add button
-    faCircleInfo,         // Task info
-    faXmark,              // Close modal
-    faBook,               // #2 Project Icon
-    faScrewdriverWrench,  // #3 Project Icon
-    faVolleyball,         // #4 Project Icon
-    faSackDollar,         // #5 Project Icon
-    faPizzaSlice,         // #6 Project Icon
-    faSuitcaseRolling,    // #7 Project Icon
-    faGift                // #8 Project Icon
-} from '@fortawesome/free-solid-svg-icons';
-
-import { 
-    faCalendar,     // Show all button
-    faTrashCan,     // Delete buttons
-    faPenToSquare,  // Change buttons
-    faCircle,       // Task item (undone)
-    faCircleCheck   // Task item (done)
-} from '@fortawesome/free-regular-svg-icons';
-
-import {
-    faPagelines,  // #1 Project Icon
-} from '@fortawesome/free-brands-svg-icons';
+import * as icon from "./icons.js";
 
 library.add(
-    faCheckDouble, faCalendarDays, faCalendarWeek, faCalendarPlus, faCalendar, 
-    faCirclePlus, faTrashCan, faPenToSquare, faCircle, faCircleCheck, faCircleInfo,
-    faXmark, faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar,
-    faPizzaSlice, faSuitcaseRolling, faGift
-
+    icon.faCheckDouble, 
+    icon.faCalendarDays, 
+    icon.faCalendarWeek, 
+    icon.faCalendarPlus, 
+    icon.faCalendar, 
+    icon.faCirclePlus, 
+    icon.faTrashCan, 
+    icon.faPenToSquare, 
+    icon.faCircle, 
+    icon.faCircleCheck, 
+    icon.faCircleInfo,
+    icon.faXmark, 
+    icon.faPagelines, 
+    icon.faBook, 
+    icon.faScrewdriverWrench, 
+    icon.faVolleyball, 
+    icon.faSackDollar,
+    icon.faPizzaSlice, 
+    icon.faSuitcaseRolling, 
+    icon.faGift
 );
 
 dom.watch();
