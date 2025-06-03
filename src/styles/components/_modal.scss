@@ -85,11 +85,39 @@
 
     &__icons-container {
         display: flex;
-        margin: 5px 0;
+        gap: 4px;
+        margin: 5px 0 20px 0;
     }
 
-    &__icons-btn {
+    &__icons-label {
+        position: relative;
+    }
+
+    input.modal__icons-input {
+        position: absolute;
+        top: -6px;
+        left: 0;
+        height: 100%;
+        appearance: none;
+        background-color: transparent;
         border: none;
+    }
+
+    input.modal__icons-input:focus {
+        border: none;
+        outline: none;
+    }
+
+    &__icons-input:checked + .modal__icons-icon {
+        color: $light-blue;
+        border: 1px solid $light-blue;
+    }
+
+    &__icons-icon {
+        font-size: 24px;
+        padding: 7px 10px;
+        border: 1px solid $light-gray-3;
+        border-radius: 5px;
     }
 
     &__form-astrix {

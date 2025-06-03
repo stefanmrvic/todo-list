@@ -52,7 +52,7 @@ function createAddProjectModal() {
     const iconsLegend = createElement('legend', 'modal__icons-legend', 'Icon')
     iconsFieldset.append(iconsLegend);
 
-    const iconsContainer = createElement('label', 'modal__icons-container');
+    const iconsContainer = createElement('div', 'modal__icons-container');
 
     const flowerLabel = createElement('label', 'modal__icons-label');
     const flowerInput = createElement('input', 'modal__icons-input');
@@ -60,7 +60,7 @@ function createAddProjectModal() {
     flowerInput.name = 'icon';
     flowerInput.value = 'flowerIcon'
     const flowerIcon = createElement('i', 'modal__icons-icon fa-brands fa-pagelines');
-    flowerLabel.append(flowerIcon, flowerInput);
+    flowerLabel.append(flowerInput, flowerIcon);
 
     const bookLabel = createElement('label', 'modal__icons-label');
     const bookInput = createElement('input', 'modal__icons-input');
@@ -68,7 +68,7 @@ function createAddProjectModal() {
     bookInput.name = 'icon';
     bookInput.value = 'bookIcon';
     const bookIcon = createElement('i', 'modal__icons-icon fa-solid fa-book');
-    bookLabel.append(bookIcon, bookInput);
+    bookLabel.append(bookInput, bookIcon);
 
     const toolsLabel = createElement('label', 'modal__icons-label');
     const toolsInput = createElement('input', 'modal__icons-input');
@@ -76,7 +76,7 @@ function createAddProjectModal() {
     toolsInput.name = 'icon';
     toolsInput.value = 'toolsIcon';
     const toolsIcon = createElement('i', 'modal__icons-icon fa-solid fa-screwdriver-wrench');
-    toolsLabel.append(toolsIcon, toolsInput);
+    toolsLabel.append(toolsInput, toolsIcon);
 
     const volleyballLabel = createElement('label', 'modal__icons-label');
     const volleyballInput = createElement('input', 'modal__icons-input');
@@ -84,7 +84,7 @@ function createAddProjectModal() {
     volleyballInput.name = 'icon';
     volleyballInput.value = 'volleyballIcon';
     const volleyballIcon = createElement('i', 'modal__icons-icon fa-solid fa-volleyball');
-    volleyballLabel.append(volleyballIcon, volleyballInput);
+    volleyballLabel.append(volleyballInput, volleyballIcon);
 
     const moneyLabel = createElement('label', 'modal__icons-label');
     const moneyInput = createElement('input', 'modal__icons-input');
@@ -92,7 +92,7 @@ function createAddProjectModal() {
     moneyInput.name = 'icon';
     moneyInput.value = 'moneyIcon';
     const moneyIcon = createElement('i', 'modal__icons-icon fa-solid fa-sack-dollar');
-    moneyLabel.append(moneyIcon, moneyInput);
+    moneyLabel.append(moneyInput, moneyIcon);
 
     
     const pizzaLabel = createElement('label', 'modal__icons-label');
@@ -101,7 +101,7 @@ function createAddProjectModal() {
     pizzaInput.name = 'icon';
     pizzaInput.value = 'pizzaIcon';
     const pizzaIcon = createElement('i', 'modal__icons-icon fa-solid fa-pizza-slice');
-    pizzaLabel.append(pizzaIcon, pizzaInput);
+    pizzaLabel.append(pizzaInput, pizzaIcon);
 
     const backpackLabel = createElement('label', 'modal__icons-label');
     const backpackInput = createElement('input', 'modal__icons-input');
@@ -109,7 +109,7 @@ function createAddProjectModal() {
     backpackInput.name = 'icon';
     backpackInput.value = 'backpackIcon';
     const backpackIcon = createElement('i', 'modal__icons-icon fa-solid fa-suitcase-rolling');
-    backpackLabel.append(backpackIcon, backpackInput);
+    backpackLabel.append(backpackInput, backpackIcon);
 
     const presentLabel = createElement('label', 'modal__icons-label');
     const presentInput = createElement('input', 'modal__icons-input');
@@ -117,7 +117,7 @@ function createAddProjectModal() {
     presentInput.name = 'icon';
     presentInput.value = 'presentIcon';
     const presentIcon = createElement('i', 'modal__icons-icon fa-solid fa-gift');
-    presentLabel.append(presentIcon, presentInput);
+    presentLabel.append(presentInput, presentIcon);
 
     iconsContainer.append(flowerLabel, bookLabel, toolsLabel, volleyballLabel, moneyLabel, pizzaLabel, backpackLabel, presentLabel)
     iconsFieldset.append(iconsContainer);
