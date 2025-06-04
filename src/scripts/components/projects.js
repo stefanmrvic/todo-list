@@ -7,8 +7,10 @@ class Project {
         this.projectIcon = projectIcon;
         this.id = crypto.randomUUID();
         this.taskList = [];
+        this.projectIconClass = determineIconClass();
 
-        determineIcon() 
+        determineIconClass() 
+        // It captures icon value eg. 'flowerIcon' and it then returns its classes
             const icon = this.icon;
 
             const icons = {
