@@ -255,7 +255,7 @@ function renderTasks() {
     }
 }
 
-// Exporting this function to pass it as callback for form "submit" event in modal.js
+// Exporting this function to pass it as callback for form "submit" event of showTasksModal() in modal.js
 export function addNewTask() {
     addTaskToArray();
     renderTasks();

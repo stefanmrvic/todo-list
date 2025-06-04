@@ -1,5 +1,6 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
+import { addNewProject } from './projects.js';
 import { addNewTask, editTask, deleteTask, tasks } from './tasks.js';
 
 // Exporting it to tasks.js under deleteTask()
@@ -29,7 +30,7 @@ export function showAddProjectModal() {
 
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
-    //form.addEventListener('submit', addNewProject);
+    form.addEventListener('submit', addNewProject);
 }
 
 function createAddProjectModal() {
@@ -58,7 +59,8 @@ function createAddProjectModal() {
     const flowerInput = createElement('input', 'modal__icons-input');
     flowerInput.type = 'radio';
     flowerInput.name = 'icon';
-    flowerInput.value = 'flowerIcon'
+    flowerInput.value = 'flowerIcon';
+    flowerInput.checked = true;
     const flowerIcon = createElement('i', 'modal__icons-icon fa-brands fa-pagelines');
     flowerLabel.append(flowerInput, flowerIcon);
 
@@ -200,7 +202,6 @@ function createAddTaskModal() {
     modalContent.append(form);
 }
 
-
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
 export function showEditTaskModal(e) {
     e.stopPropagation();
@@ -210,7 +211,7 @@ export function showEditTaskModal(e) {
     modalTitle.textContent = 'Edit Task';
     
     deleteModalContent();
-    createEditTaskModal(e);
+    createEditProjectModal(e);
     modal.showModal();
     
     const closeBtn = document.querySelector('.modal__close-btn');
@@ -222,7 +223,7 @@ export function showEditTaskModal(e) {
     form.addEventListener('submit', editTask);
 }
 
-function setModalState(taskElement, form) {
+function setEditProjectModalState(taskElement, form) {
     const taskElementID = taskElement.dataset.id;
     const titleInput = form.querySelector('.modal__form-title');
     const descriptionTextarea = form.querySelector('.modal__form-description');
@@ -243,7 +244,7 @@ function setModalState(taskElement, form) {
     }
 }
 
-function createEditTaskModal(e) {
+function createEditProjectModal(e) {
     const modalContent = document.querySelector('.modal__content');
     const taskElement = e.target.closest('.main__task-item');
 
@@ -296,6 +297,99 @@ function createEditTaskModal(e) {
     modalContent.append(form);
 
     setModalState(taskElement, form);
+}
+
+// Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
+export function showEditProjectModal(e) {
+    e.stopPropagation();
+
+    const modal = document.querySelector('.modal');
+    const modalTitle = document.querySelector('.modal__title');
+    modalTitle.textContent = 'Edit Task';
+    
+    deleteModalContent();
+    createEditProjectModal(e);
+    modal.showModal();
+    
+    const closeBtn = document.querySelector('.modal__close-btn');
+    const cancelBtn = document.querySelector('.modal__cancel-btn');
+    const form = document.querySelector('.modal__form');
+    
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    form.addEventListener('submit', editTask);
+}
+
+function setEditTaskModalState(taskElement, form) {
+    const taskElementID = taskElement.dataset.id;
+    const titleInput = form.querySelector('.modal__form-title');
+    const descriptionTextarea = form.querySelector('.modal__form-description');
+    const dueInput = form.querySelector('.modal__form-date');
+
+    for (const task of tasks) {
+        const taskID = task.id;
+
+        if (taskElementID === taskID) {
+            titleInput.value = task.title;
+            descriptionTextarea.value = task.description;
+            dueInput.value = task.due;
+
+            const taskPriority = task.priority;
+            const priorityOption = document.getElementById(taskPriority);
+            priorityOption.selected = true;
+        }
+    }
+}
+
+// Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
+export function showDeleteProjectModal(e) {
+    e.stopPropagation();
+
+    const modal = document.querySelector('.modal');
+    const modalHeader = document.querySelector('.modal__header');
+    const modalTitle = document.querySelector('.modal__title');
+    modalTitle.textContent = 'Delete Task';
+    modalHeader.classList.add('delete');
+
+    deleteModalContent();
+    createDeleteProjectModal(e);
+    modal.showModal();
+
+    const closeBtn = document.querySelector('.modal__close-btn');
+    const cancelBtn = document.querySelector('.modal__cancel-btn');
+
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+}
+
+function createDeleteProjectModal(e) {
+    const modalContent = document.querySelector('.modal__content');
+    const project = e.target.closest('.main__project-item');
+    const projectTitle = project.querySelector('.main__project-title'); 
+    
+    const deleteMessage = createElement('p', 'modal__text', 'Are you sure?');
+    const br1 = createElement('br', 'modal__text-br');
+    const br2 = createElement('br', 'modal__text-br');
+
+    deleteMessage.setAttribute('data-id', project.dataset.id);
+
+    deleteMessage.append(br1, br2);
+    deleteMessage.append(document.createTextNode('Project '))
+
+    const boldText = createElement('span', 'modal__text-span');
+    boldText.textContent = projectTitle.textContent;
+
+    deleteMessage.append(boldText);
+    deleteMessage.append(document.createTextNode(' will be deleted forever!'));
+
+    const controlsContainer = createElement('div', 'modal__form-controls');
+    const cancelBtn = createElement('button', 'modal__cancel-btn btn', 'Close');
+    const deleteBtn = createElement('button', 'modal__delete-btn btn', 'Delete');
+
+    controlsContainer.append(cancelBtn, deleteBtn);
+    modalContent.append(deleteMessage , controlsContainer);
+
+    deleteBtn.addEventListener('click', deleteProject);
 }
 
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
