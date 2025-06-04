@@ -5,7 +5,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);    
-    width: 400px;
+    min-width: 400px;
     box-shadow: rgba(46, 46, 46, 0.2) 0px 2px 8px 0px;
     border: none;
     border-radius: 5px;
@@ -101,6 +101,7 @@
         appearance: none;
         background-color: transparent;
         border: none;
+        cursor: pointer;
     }
 
     input.modal__icons-input:focus {
