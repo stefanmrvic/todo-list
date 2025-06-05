@@ -2,29 +2,28 @@ import { createElement } from "../utils/dom";
 import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from "./modal.js";
 
 class Project {
-    constructor(projectName, projectIcon) {
-        this.projectName = projectName;
-        this.projectIcon = projectIcon;
+    constructor(title, icon) {
+        this.title = title;
+        this.icon = icon;
         this.taskList = [];
         this.id = crypto.randomUUID();
-        this.projectIconClass = determineIconClass();
+        this.iconClass = this.determineIconClass();
+    }
 
-        determineIconClass() 
-        // It captures icon value eg. 'flowerIcon' and it then returns its classes
-            const icon = this.icon;
-
-            const icons = {
-                flowerIcon: 'fa-brands fa-pagelines',
-                bookIcon: 'fa-solid fa-book',
-                toolsIcon: 'fa-solid fa-screwdriver-wrench',
-                volleyballIcon: 'fa-solid fa-volleyball',
-                moneyIcon: 'fa-solid fa-sack-dollar',
-                pizzaIcon: 'fa-solid fa-pizza-slice',
-                backpackIcon: 'fa-solid fa-suitcase-rolling',
-                presentIcon: 'fa-solid fa-gift',
-            }
-
-            return icons[icon];
+    determineIconClass() {
+        // It captures icon value eg. 'flowerIcon' and then it returns its class
+        const iconValue = this.icon;
+        const icons = {
+            flowerIcon: 'fab fa-pagelines',
+            bookIcon: 'fas fa-book',
+            toolsIcon: 'fas fa-screwdriver-wrench',
+            volleyballIcon: 'fas fa-volleyball',
+            moneyIcon: 'fas fa-sack-dollar',
+            pizzaIcon: 'fas fa-pizza-slice',
+            backpackIcon: 'fas fa-suitcase-rolling',
+            presentIcon: 'fas fa-gift',
+        }
+        return icons[iconValue];
     }
 }
 
@@ -61,7 +60,7 @@ function changeSectionHeader(projectTitle, projectIconClass) {
     const sectionTitle = document.querySelector('.main__headline');
     const sectionIcon = document.querySelector('.main__title-icon');
     const headerContainer = document.querySelector('.main__title');
-    // Creates new <i> element and sets className of projectIconClass variable
+    // Creates new <svg> element and sets className of projectIconClass variable
     const newIcon = createElement('svg', projectIconClass);
     newIcon.classList.add('main__title-icon');
 
@@ -70,16 +69,44 @@ function changeSectionHeader(projectTitle, projectIconClass) {
     headerContainer.prepend(newIcon);
 }
 
+function createProjectElement(project) {
+    const parent = document.querySelector('.projects__list');
+    const projectElement = createElement('button', 'projects__item');
+
+    const projectInfo = createElement('div', 'projects__info');
+    const projectIconClass = project.determineIconClass();
+    const projectIcon = createElement('svg', `btn-icon projects__info-icon--1 ${projectIconClass}`);
+    const projectTitle = createElement('span', 'projects__info-title', project.title);
+    console.log(project.title);
+    projectInfo.append(projectIcon, projectTitle);
+
+    const projectControls = createElement('div', 'projects__controls');
+    const editProjectBtn = createElement('button', 'projects__controls-edit-btn');
+    const editProjectIcon = createElement('button', 'btn-icon projects__controls-edit-icon--2');
+    editProjectBtn.append(editProjectIcon);
+
+    const deleteProjectBtn = createElement('button', 'projects__controls-delete-btn');
+    const deleteProjectIcon = createElement('button', 'btn-icon projects__controls-icon--3');
+    deleteProjectBtn.append(deleteProjectIcon);
+    
+    projectControls.append(editProjectBtn, deleteProjectBtn);
+    projectElement.append(projectInfo, projectControls);
+    parent.append(projectElement);
+
+    // editProjectBtn.addEventListener('click', showEditProjectModal);
+    // deleteProjectBtn.addEventListener('click', showDeleteProjectModal);
+}
+
 function addProjectToArray() {
-    const projectTitle = document.querySelector('.modal__form-title').value;
-    const projectIcon = document.querySelector('.modal__form-input:checked').value;
+    const projectTitle = document.querySelector('.modal__form-title').value; 
+    const projectIcon = document.querySelector('.modal__icons-input:checked').value;
 
     const newProject = new Project(projectTitle, projectIcon);
     projects.push(newProject);
 }
 
 function renderProjects() {
-    const taskElements = document.querySelectorAll('.main__task-item');
+    const projectElements = document.querySelectorAll('.projects__item');
     
     for (const project of projects) {
         const projectID = project.id;
@@ -94,56 +121,6 @@ function renderProjects() {
         }
         if (!duplicateProject) createProjectElement(project);
     }
-}
-
-function createProjectElement(project) {
-    const parent = document.querySelector('.projects__list');
-    const projectElement = createElement('button', 'projects__item');
-    const projectIcon = createElement('svg', 'btn-icon projects__item-icon--1');
-    const projectTitle = createElement('span', 'projects__item-title', project.title);
-    projectElement.append(projectIcon, projectTitle);
-
-    const projectEditBtn = createElement('button', 'projects__item-edit-btn');
-    const projectEditIcon = createElement('button', 'btn-icon projects__item-icon--2');
-    projectEditBtn.append(projectEditIcon);
-
-    const projectDeleteBtn = createElement('button', 'projects__item-delete-btn');
-    const projectDeleteIcon = createElement('button', 'btn-icon projects__item-icon--3');
-    projectDeleteBtn.append(projectDeleteIcon);
-    
-    projectElement.append(projectDeleteBtn, projectEditBtn);
-
-
-    // Set Project Icon
-    const iconWrapper = createElement('div', 'main__project-icon-wrapper');
-    const icon = createElement('i', 'main__project-icon fa-regular fa-circle');
-    const title = createElement('p', 'main__project-title', project.title);
-
-    iconWrapper.append(icon);
-    textContainer.append(iconWrapper, title);
-
-    const controlsContainer = createElement('div', 'main__controls');
-
-    const editBtn = createElement('button', 'main__edit-btn');
-    const editBtnIcon = createElement('i', 'btn-icon projects__icon--2 fa-regular fa-pen-to-square');
-    editBtn.append(editBtnIcon);
-
-    const deleteBtn = createElement('button', 'main__delete-btn');
-    const deleteBtnIcon = createElement('i', 'btn-icon projects__icon--3 fa-regular fa-trash-can');
-    deleteBtn.append(deleteBtnIcon);
-
-    controlsContainer.append(date, editBtn, deleteBtn, infoBtn);
-    projectElement.append(textContainer, controlsContainer);
-    projectElement.setAttribute('data-id', project.id);
-
-    parent.append(projectElement);
-
-    const infoProjectBtn = projectElement.querySelector('.main__info-btn');
-    const editProjectBtn = projectElement.querySelector('.main__edit-btn');
-    const deleteProjectBtn = projectElement.querySelector('.main__delete-btn');
-
-    editProjectBtn.addEventListener('click', showEditProjectModal);
-    deleteProjectBtn.addEventListener('click', showDeleteProjectModal);
 }
 
 // Exporting this function to pass it as callback for form "submit" event of showProjectsModal() in modal.js
