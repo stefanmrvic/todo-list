@@ -26,15 +26,27 @@ class Project {
 
             return icons[icon];
     }
-
 }
 
 const projectsList = document.querySelector('.projects__list');
 const projectsAddBtn = document.querySelector('.projects__add-btn');
 
-//projectsList.addEventListener('click', selectProject);
+projectsList.addEventListener('click', selectProject);
 projectsAddBtn.addEventListener('click', showAddProjectModal);
 
+function selectProject(e) {
+    const activeProjectItem = document.querySelector('.projects__item.active');
+    const projectItem = e.target.closest('.projects__item');
+
+    if (activeProjectItem) {
+        activeProjectItem.classList.remove('active');
+        projectItem.classList.add('active');
+    } else {
+        projectItem.classList.add('active');
+    }
+
+
+}
 
 function addProjectToArray() {
     const projectTitle = document.querySelector('.modal__form-title').value;
