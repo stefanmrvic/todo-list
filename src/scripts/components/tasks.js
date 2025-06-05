@@ -122,6 +122,7 @@ function createTaskElement(task) {
 export function deleteTask(e) {
     deleteTaskFromArray(e);
     deleteTaskFromDOM();
+    updateTasksCount();
     closeModal();
 }
 
@@ -253,6 +254,14 @@ function renderTasks() {
         }
         if (!duplicateTask) createTaskElement(task);
     }
+    updateTasksCount();
+}
+
+function updateTasksCount() {
+    const tasksCountText = document.querySelector('.main__tasks-num');
+    const tasksCount = tasks.length;
+    
+    tasksCountText.textContent = tasksCount;
 }
 
 // Exporting this function to pass it as callback for form "submit" event of showTasksModal() in modal.js

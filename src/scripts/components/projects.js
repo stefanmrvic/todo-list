@@ -5,8 +5,8 @@ class Project {
     constructor(projectName, projectIcon) {
         this.projectName = projectName;
         this.projectIcon = projectIcon;
-        this.id = crypto.randomUUID();
         this.taskList = [];
+        this.id = crypto.randomUUID();
         this.projectIconClass = determineIconClass();
 
         determineIconClass() 
@@ -27,6 +27,8 @@ class Project {
             return icons[icon];
     }
 }
+
+const projects = [];
 
 const projectsList = document.querySelector('.projects__list');
 const projectsAddBtn = document.querySelector('.projects__add-btn');
@@ -95,9 +97,22 @@ function renderProjects() {
 }
 
 function createProjectElement(project) {
-    const parent = document.querySelector('.main__tasks-list');
-    const projectElement = createElement('div', 'main__project-item');
-    const textContainer = createElement('div', 'main__text');
+    const parent = document.querySelector('.projects__list');
+    const projectElement = createElement('button', 'projects__item');
+    const projectIcon = createElement('svg', 'btn-icon projects__item-icon--1');
+    const projectTitle = createElement('span', 'projects__item-title', project.title);
+    projectElement.append(projectIcon, projectTitle);
+
+    const projectEditBtn = createElement('button', 'projects__item-edit-btn');
+    const projectEditIcon = createElement('button', 'btn-icon projects__item-icon--2');
+    projectEditBtn.append(projectEditIcon);
+
+    const projectDeleteBtn = createElement('button', 'projects__item-delete-btn');
+    const projectDeleteIcon = createElement('button', 'btn-icon projects__item-icon--3');
+    projectDeleteBtn.append(projectDeleteIcon);
+    
+    projectElement.append(projectDeleteBtn, projectEditBtn);
+
 
     // Set Project Icon
     const iconWrapper = createElement('div', 'main__project-icon-wrapper');
