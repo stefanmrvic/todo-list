@@ -37,6 +37,13 @@ projectsAddBtn.addEventListener('click', showAddProjectModal);
 function selectProject(e) {
     const activeProjectItem = document.querySelector('.projects__item.active');
     const projectItem = e.target.closest('.projects__item');
+    const projectTitle = projectItem.textContent;
+    const projectIcon = projectItem.querySelector('svg');
+
+    const iconPrefix = projectIcon.getAttribute('data-prefix');
+    const iconName = projectIcon.getAttribute('data-icon');
+    const projectIconClass = `${iconPrefix} fa-${iconName}`;
+    console.log(projectIconClass);
 
     if (activeProjectItem) {
         activeProjectItem.classList.remove('active');
@@ -45,7 +52,20 @@ function selectProject(e) {
         projectItem.classList.add('active');
     }
 
+    changeSectionHeader(projectTitle, projectIconClass);
+}
 
+function changeSectionHeader(projectTitle, projectIconClass) {
+    const sectionTitle = document.querySelector('.main__headline');
+    const sectionIcon = document.querySelector('.main__title-icon');
+    const headerContainer = document.querySelector('.main__title');
+    // Creates new <i> element and sets className of projectIconClass variable
+    const newIcon = createElement('svg', projectIconClass);
+    newIcon.classList.add('main__title-icon');
+
+    sectionTitle.textContent = projectTitle;
+    if (sectionIcon) sectionIcon.remove();
+    headerContainer.prepend(newIcon);
 }
 
 function addProjectToArray() {

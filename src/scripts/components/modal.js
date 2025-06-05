@@ -61,7 +61,7 @@ function createAddProjectModal() {
     flowerInput.name = 'icon';
     flowerInput.value = 'flowerIcon';
     flowerInput.checked = true;
-    const flowerIcon = createElement('i', 'modal__icons-icon fa-brands fa-pagelines');
+    const flowerIcon = createElement('i', 'modal__icons-icon fab fa-pagelines');
     flowerLabel.append(flowerInput, flowerIcon);
 
     const bookLabel = createElement('label', 'modal__icons-label');
@@ -69,7 +69,7 @@ function createAddProjectModal() {
     bookInput.type = 'radio';
     bookInput.name = 'icon';
     bookInput.value = 'bookIcon';
-    const bookIcon = createElement('i', 'modal__icons-icon fa-solid fa-book');
+    const bookIcon = createElement('i', 'modal__icons-icon fas fa-book');
     bookLabel.append(bookInput, bookIcon);
 
     const toolsLabel = createElement('label', 'modal__icons-label');
@@ -77,7 +77,7 @@ function createAddProjectModal() {
     toolsInput.type = 'radio';
     toolsInput.name = 'icon';
     toolsInput.value = 'toolsIcon';
-    const toolsIcon = createElement('i', 'modal__icons-icon fa-solid fa-screwdriver-wrench');
+    const toolsIcon = createElement('i', 'modal__icons-icon fas fa-screwdriver-wrench');
     toolsLabel.append(toolsInput, toolsIcon);
 
     const volleyballLabel = createElement('label', 'modal__icons-label');
@@ -85,7 +85,7 @@ function createAddProjectModal() {
     volleyballInput.type = 'radio';
     volleyballInput.name = 'icon';
     volleyballInput.value = 'volleyballIcon';
-    const volleyballIcon = createElement('i', 'modal__icons-icon fa-solid fa-volleyball');
+    const volleyballIcon = createElement('i', 'modal__icons-icon fas fa-volleyball');
     volleyballLabel.append(volleyballInput, volleyballIcon);
 
     const moneyLabel = createElement('label', 'modal__icons-label');
@@ -93,7 +93,7 @@ function createAddProjectModal() {
     moneyInput.type = 'radio';
     moneyInput.name = 'icon';
     moneyInput.value = 'moneyIcon';
-    const moneyIcon = createElement('i', 'modal__icons-icon fa-solid fa-sack-dollar');
+    const moneyIcon = createElement('i', 'modal__icons-icon fas fa-sack-dollar');
     moneyLabel.append(moneyInput, moneyIcon);
 
     
@@ -102,7 +102,7 @@ function createAddProjectModal() {
     pizzaInput.type = 'radio';
     pizzaInput.name = 'icon';
     pizzaInput.value = 'pizzaIcon';
-    const pizzaIcon = createElement('i', 'modal__icons-icon fa-solid fa-pizza-slice');
+    const pizzaIcon = createElement('i', 'modal__icons-icon fas fa-pizza-slice');
     pizzaLabel.append(pizzaInput, pizzaIcon);
 
     const backpackLabel = createElement('label', 'modal__icons-label');
@@ -110,7 +110,7 @@ function createAddProjectModal() {
     backpackInput.type = 'radio';
     backpackInput.name = 'icon';
     backpackInput.value = 'backpackIcon';
-    const backpackIcon = createElement('i', 'modal__icons-icon fa-solid fa-suitcase-rolling');
+    const backpackIcon = createElement('i', 'modal__icons-icon fas fa-suitcase-rolling');
     backpackLabel.append(backpackInput, backpackIcon);
 
     const presentLabel = createElement('label', 'modal__icons-label');
@@ -118,7 +118,7 @@ function createAddProjectModal() {
     presentInput.type = 'radio';
     presentInput.name = 'icon';
     presentInput.value = 'presentIcon';
-    const presentIcon = createElement('i', 'modal__icons-icon fa-solid fa-gift');
+    const presentIcon = createElement('i', 'modal__icons-icon fas fa-gift');
     presentLabel.append(presentInput, presentIcon);
 
     iconsContainer.append(flowerLabel, bookLabel, toolsLabel, volleyballLabel, moneyLabel, pizzaLabel, backpackLabel, presentLabel)
