@@ -296,7 +296,7 @@ function createEditProjectModal(e) {
     form.append(titleLabel, descriptionLabel, dueLabel, priorityLabel, controlsContainer);
     modalContent.append(form);
 
-    setModalState(taskElement, form);
+    setEditTaskModalState(taskElement, form);
 }
 
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
