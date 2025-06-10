@@ -97,7 +97,7 @@ function createProjectElement(project) {
 
     parent.append(projectElement);
 
-    // editProjectBtn.addEventListener('click', showEditProjectModal);
+    editProjectBtn.addEventListener('click', showEditProjectModal);
     // deleteProjectBtn.addEventListener('click', showDeleteProjectModal);
 }
 
@@ -127,6 +127,14 @@ function renderProjects() {
 
         if (!duplicateProject) createProjectElement(project);
     }
+    updateProjectsCount();
+}
+
+function updateProjectsCount() {
+    const projectsCountText = document.querySelector('.projects__num');
+    const projectsCount = projects.length;
+
+    projectsCountText.textContent = projectsCount;
 }
 
 // Exporting this function to pass it as callback for form "submit" event of showProjectsModal() in modal.js

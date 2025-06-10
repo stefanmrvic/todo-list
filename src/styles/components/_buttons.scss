@@ -7,7 +7,6 @@
 
     .btn {
         display: flex;
-        justify-content: space-between;
         font-size: 17px;
         color: $light-gray-2;
         display: flex;
@@ -19,6 +18,14 @@
         border-radius: 5px;
         cursor: pointer;
         font-family: inherit;
+    }
+
+    .btn > .btn-icon {
+        margin-right: 8px;
+    }
+
+    .btn.projects__item {
+        justify-content: space-between;
     }
 
     .project-btn-icon {
