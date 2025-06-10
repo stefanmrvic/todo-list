@@ -1,6 +1,6 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
-import { addNewProject, deleteProject } from './projects.js';
+import { addNewProject, editProject, deleteProject, projects } from './projects.js';
 import { addNewTask, editTask, deleteTask, tasks } from './tasks.js';
 
 // Exporting it to tasks.js & projects.js under deleteTask()
@@ -59,41 +59,41 @@ function createAddProjectModal() {
     const flowerInput = createElement('input', 'modal__icons-input');
     flowerInput.type = 'radio';
     flowerInput.name = 'icon';
-    flowerInput.value = 'flowerIcon';
+    flowerInput.value = 'faPagelines';
     flowerInput.checked = true;
-    const flowerIcon = createElement('i', 'modal__icons-icon fab fa-pagelines');
+    const flowerIcon = createElement('svg', 'modal__icons-icon fab fa-pagelines');
     flowerLabel.append(flowerInput, flowerIcon);
 
     const bookLabel = createElement('label', 'modal__icons-label');
     const bookInput = createElement('input', 'modal__icons-input');
     bookInput.type = 'radio';
     bookInput.name = 'icon';
-    bookInput.value = 'bookIcon';
-    const bookIcon = createElement('i', 'modal__icons-icon fas fa-book');
+    bookInput.value = 'faBook';
+    const bookIcon = createElement('svg', 'modal__icons-icon fas fa-book');
     bookLabel.append(bookInput, bookIcon);
 
     const toolsLabel = createElement('label', 'modal__icons-label');
     const toolsInput = createElement('input', 'modal__icons-input');
     toolsInput.type = 'radio';
     toolsInput.name = 'icon';
-    toolsInput.value = 'toolsIcon';
-    const toolsIcon = createElement('i', 'modal__icons-icon fas fa-screwdriver-wrench');
+    toolsInput.value = 'faScrewdriverWrench';
+    const toolsIcon = createElement('svg', 'modal__icons-icon fas fa-screwdriver-wrench');
     toolsLabel.append(toolsInput, toolsIcon);
 
     const volleyballLabel = createElement('label', 'modal__icons-label');
     const volleyballInput = createElement('input', 'modal__icons-input');
     volleyballInput.type = 'radio';
     volleyballInput.name = 'icon';
-    volleyballInput.value = 'volleyballIcon';
-    const volleyballIcon = createElement('i', 'modal__icons-icon fas fa-volleyball');
+    volleyballInput.value = 'faVolleyball';
+    const volleyballIcon = createElement('svg', 'modal__icons-icon fas fa-volleyball');
     volleyballLabel.append(volleyballInput, volleyballIcon);
 
     const moneyLabel = createElement('label', 'modal__icons-label');
     const moneyInput = createElement('input', 'modal__icons-input');
     moneyInput.type = 'radio';
     moneyInput.name = 'icon';
-    moneyInput.value = 'moneyIcon';
-    const moneyIcon = createElement('i', 'modal__icons-icon fas fa-sack-dollar');
+    moneyInput.value = 'faSackDollar';
+    const moneyIcon = createElement('svg', 'modal__icons-icon fas fa-sack-dollar');
     moneyLabel.append(moneyInput, moneyIcon);
 
     
@@ -101,24 +101,24 @@ function createAddProjectModal() {
     const pizzaInput = createElement('input', 'modal__icons-input');
     pizzaInput.type = 'radio';
     pizzaInput.name = 'icon';
-    pizzaInput.value = 'pizzaIcon';
-    const pizzaIcon = createElement('i', 'modal__icons-icon fas fa-pizza-slice');
+    pizzaInput.value = 'faPizzaSlice';
+    const pizzaIcon = createElement('svg', 'modal__icons-icon fas fa-pizza-slice');
     pizzaLabel.append(pizzaInput, pizzaIcon);
 
     const backpackLabel = createElement('label', 'modal__icons-label');
     const backpackInput = createElement('input', 'modal__icons-input');
     backpackInput.type = 'radio';
     backpackInput.name = 'icon';
-    backpackInput.value = 'backpackIcon';
-    const backpackIcon = createElement('i', 'modal__icons-icon fas fa-suitcase-rolling');
+    backpackInput.value = 'faSuitcaseRolling';
+    const backpackIcon = createElement('svg', 'modal__icons-icon fas fa-suitcase-rolling');
     backpackLabel.append(backpackInput, backpackIcon);
 
     const presentLabel = createElement('label', 'modal__icons-label');
     const presentInput = createElement('input', 'modal__icons-input');
     presentInput.type = 'radio';
     presentInput.name = 'icon';
-    presentInput.value = 'presentIcon';
-    const presentIcon = createElement('i', 'modal__icons-icon fas fa-gift');
+    presentInput.value = 'faGift';
+    const presentIcon = createElement('svg', 'modal__icons-icon fas fa-gift');
     presentLabel.append(presentInput, presentIcon);
 
     iconsContainer.append(flowerLabel, bookLabel, toolsLabel, volleyballLabel, moneyLabel, pizzaLabel, backpackLabel, presentLabel)
@@ -208,7 +208,7 @@ export function showEditProjectModal(e) {
 
     const modal = document.querySelector('.modal');
     const modalTitle = document.querySelector('.modal__title');
-    modalTitle.textContent = 'Edit Task';
+    modalTitle.textContent = 'Edit Project';
     
     deleteModalContent();
     createEditProjectModal(e);
@@ -220,81 +220,129 @@ export function showEditProjectModal(e) {
     
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
-    form.addEventListener('submit', editTask);
+    form.addEventListener('submit', editProject);
 }
 
 function createEditProjectModal(e) {
     const modalContent = document.querySelector('.modal__content');
-    const taskElement = e.target.closest('.main__task-item');
+    const projectElement = e.target.closest('.projects__item');
 
     const form = createElement('form', 'modal__form');
     form.setAttribute('method', 'dialog');
-    form.setAttribute('data-id', taskElement.dataset.id);
+    
+    // Sets data-id from Project element to not lose trace when modal is being opened
+    form.setAttribute('data-id', projectElement.dataset.id);
 
+    // Title field Start //
     const titleLabel = createElement('label', null, 'Title');
     const titleAstrix = createElement('span', 'modal__form-astrix', '*');
     const titleInput = createElement('input', 'modal__form-title');
-    titleInput.setAttribute('type', 'text');
+    titleInput.type = 'text';
     titleInput.required = true;
     titleLabel.append(titleAstrix, titleInput);
+    // Title field End //
 
-    const descriptionLabel = createElement('label', null, 'Description');
-    const descriptionTextarea = createElement('textarea', 'modal__form-description');
-    descriptionLabel.append(descriptionTextarea);
+    // Icons field Start //
+    const iconsFieldset = createElement('fieldset', 'modal__icons-fieldset');
+    const iconsLegend = createElement('legend', 'modal__icons-legend', 'Icon')
+    iconsFieldset.append(iconsLegend);
+
+    const iconsContainer = createElement('div', 'modal__icons-container');
+
+    const flowerLabel = createElement('label', 'modal__icons-label');
+    const flowerInput = createElement('input', 'modal__icons-input');
+    flowerInput.type = 'radio';
+    flowerInput.name = 'icon';
+    flowerInput.value = 'faPagelines';
+    flowerInput.checked = true;
+    const flowerIcon = createElement('svg', 'modal__icons-icon fab fa-pagelines');
+    flowerLabel.append(flowerInput, flowerIcon);
+
+    const bookLabel = createElement('label', 'modal__icons-label');
+    const bookInput = createElement('input', 'modal__icons-input');
+    bookInput.type = 'radio';
+    bookInput.name = 'icon';
+    bookInput.value = 'faBook';
+    const bookIcon = createElement('svg', 'modal__icons-icon fas fa-book');
+    bookLabel.append(bookInput, bookIcon);
+
+    const toolsLabel = createElement('label', 'modal__icons-label');
+    const toolsInput = createElement('input', 'modal__icons-input');
+    toolsInput.type = 'radio';
+    toolsInput.name = 'icon';
+    toolsInput.value = 'faScrewdriverWrench';
+    const toolsIcon = createElement('svg', 'modal__icons-icon fas fa-screwdriver-wrench');
+    toolsLabel.append(toolsInput, toolsIcon);
+
+    const volleyballLabel = createElement('label', 'modal__icons-label');
+    const volleyballInput = createElement('input', 'modal__icons-input');
+    volleyballInput.type = 'radio';
+    volleyballInput.name = 'icon';
+    volleyballInput.value = 'faVolleyball';
+    const volleyballIcon = createElement('svg', 'modal__icons-icon fas fa-volleyball');
+    volleyballLabel.append(volleyballInput, volleyballIcon);
+
+    const moneyLabel = createElement('label', 'modal__icons-label');
+    const moneyInput = createElement('input', 'modal__icons-input');
+    moneyInput.type = 'radio';
+    moneyInput.name = 'icon';
+    moneyInput.value = 'faSackDollar';
+    const moneyIcon = createElement('svg', 'modal__icons-icon fas fa-sack-dollar');
+    moneyLabel.append(moneyInput, moneyIcon);
+
     
-    const dueLabel = createElement('label', null, 'Due Data');
-    const dueInput = createElement('input', 'modal__form-date');
-    dueInput.setAttribute('type', 'date');
-    dueLabel.append(dueInput);
+    const pizzaLabel = createElement('label', 'modal__icons-label');
+    const pizzaInput = createElement('input', 'modal__icons-input');
+    pizzaInput.type = 'radio';
+    pizzaInput.name = 'icon';
+    pizzaInput.value = 'faPizzaSlice';
+    const pizzaIcon = createElement('svg', 'modal__icons-icon fas fa-pizza-slice');
+    pizzaLabel.append(pizzaInput, pizzaIcon);
 
-    const priorityLabel = createElement('label', null, 'Priority');
-    const prioritySelect = createElement('select', 'modal__form-priority');
+    const backpackLabel = createElement('label', 'modal__icons-label');
+    const backpackInput = createElement('input', 'modal__icons-input');
+    backpackInput.type = 'radio';
+    backpackInput.name = 'icon';
+    backpackInput.value = 'faSuitcaseRolling';
+    const backpackIcon = createElement('svg', 'modal__icons-icon fas fa-suitcase-rolling');
+    backpackLabel.append(backpackInput, backpackIcon);
 
-    const priorityOptionPlaceholder = createElement('option', 'modal__priority-placeholder', 'How important is this task?');
-    priorityOptionPlaceholder.value = 'placeholder';
-    priorityOptionPlaceholder.disabled = true;
-    priorityOptionPlaceholder.selected = true;
-    const priorityOptionLow = createElement('option', null, '😴 Not important at all..');
-    priorityOptionLow.value = 'low';
-    priorityOptionLow.id = 'low';
-    const priorityOptionMedium = createElement('option', null, '😅 A bit important');
-    priorityOptionMedium.value = 'medium';
-    priorityOptionMedium.id = 'medium';
-    const priorityOptionHigh = createElement('option', null, '😲 Super important!');
-    priorityOptionHigh.value = 'high';
-    priorityOptionHigh.id = 'high';
+    const presentLabel = createElement('label', 'modal__icons-label');
+    const presentInput = createElement('input', 'modal__icons-input');
+    presentInput.type = 'radio';
+    presentInput.name = 'icon';
+    presentInput.value = 'faGift';
+    const presentIcon = createElement('svg', 'modal__icons-icon fas fa-gift');
+    presentLabel.append(presentInput, presentIcon);
 
-    prioritySelect.append(priorityOptionPlaceholder, priorityOptionLow, priorityOptionMedium, priorityOptionHigh);
-    priorityLabel.append(prioritySelect);
+    iconsContainer.append(flowerLabel, bookLabel, toolsLabel, volleyballLabel, moneyLabel, pizzaLabel, backpackLabel, presentLabel)
+    iconsFieldset.append(iconsContainer);
+    // Icons field End //
 
     const controlsContainer = createElement('div', 'modal__form-controls');
     const cancelBtn = createElement('button', 'modal__cancel-btn', 'Close');
     const editBtn = createElement('button', 'modal__edit-btn', 'Edit');
 
     controlsContainer.append(cancelBtn, editBtn);
-    form.append(titleLabel, descriptionLabel, dueLabel, priorityLabel, controlsContainer);
+    form.append(titleLabel, iconsFieldset, controlsContainer);
     modalContent.append(form);
 
-    setEditProjectModalState(taskElement, form);
+    setEditProjectModalState(projectElement, form);
 }
 
-function setEditProjectModalState(taskElement, form) {
-    const taskElementID = taskElement.dataset.id;
-    const titleInput = form.querySelector('.modal__form-title');
-    const descriptionTextarea = form.querySelector('.modal__form-description');
-    const dueInput = form.querySelector('.modal__form-date');
+function setEditProjectModalState(projectElement, form) {
+    const projectElementID = projectElement.dataset.id;
 
-    for (const task of tasks) {
-        const taskID = task.id;
+    for (const project of projects) {
+        const projectID = project.id;
 
-        if (taskElementID === taskID) {
-            titleInput.value = task.title;
-            descriptionTextarea.value = task.description;
-            dueInput.value = task.due;
+        if (projectElementID === projectID) {
+            const titleInput = form.querySelector('.modal__form-title');
+            const projectIcon = project.icon;
+            const iconInput = form.querySelector(`.modal__icons-input[value="${projectIcon}"]`);
 
-            const taskPriority = task.priority;
-            const priorityOption = document.getElementById(taskPriority);
-            priorityOption.selected = true;
+            titleInput.value = project.title;
+            iconInput.checked = true;
         }
     }
 }
@@ -391,7 +439,7 @@ function setEditTaskModalState(taskElement, form) {
 
             const taskPriority = task.priority;
             const priorityOption = document.getElementById(taskPriority);
-            
+
             // If priority has been set to the task, it will select that priority when displaying edit modal
             if (priorityOption) priorityOption.selected = true;
         }

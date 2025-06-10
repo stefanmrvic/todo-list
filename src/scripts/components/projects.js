@@ -1,5 +1,7 @@
 import { createElement } from "../utils/dom";
 import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from "./modal.js";
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift} from '../modules/icons.js';
 
 class Project {
     constructor(title, icon) {
@@ -14,20 +16,20 @@ class Project {
         // It captures icon value eg. 'flowerIcon' and then it returns its class
         const iconValue = this.icon;
         const icons = {
-            flowerIcon: 'fab fa-pagelines',
-            bookIcon: 'fas fa-book',
-            toolsIcon: 'fas fa-screwdriver-wrench',
-            volleyballIcon: 'fas fa-volleyball',
-            moneyIcon: 'fas fa-sack-dollar',
-            pizzaIcon: 'fas fa-pizza-slice',
-            backpackIcon: 'fas fa-suitcase-rolling',
-            presentIcon: 'fas fa-gift',
+            faPagelines: 'fab fa-pagelines',
+            faBook: 'fas fa-book',
+            faScrewdriverWrench: 'fas fa-screwdriver-wrench',
+            faVolleyball: 'fas fa-volleyball',
+            faSackDollar: 'fas fa-sack-dollar',
+            faPizzaSlice: 'fas fa-pizza-slice',
+            faSuitcaseRolling: 'fas fa-suitcase-rolling',
+            faGift: 'fas fa-gift',
         }
         return icons[iconValue];
     }
 }
 
-const projects = [];
+export const projects = [];
 
 const projectsList = document.querySelector('.projects__list');
 const projectsAddBtn = document.querySelector('.projects__add-btn');
@@ -97,7 +99,7 @@ function createProjectElement(project) {
 
     parent.append(projectElement);
 
-    //editProjectBtn.addEventListener('click', showEditProjectModal);
+    editProjectBtn.addEventListener('click', showEditProjectModal);
     deleteProjectBtn.addEventListener('click', showDeleteProjectModal);
 }
 
@@ -107,7 +109,6 @@ function addProjectToArray() {
 
     const newProject = new Project(projectTitle, projectIcon);
     projects.push(newProject);
-
 }
 
 function renderProjects() {
@@ -170,6 +171,100 @@ function deleteProjectFromDOM() {
         }
         if (!elementExistsInArray) projectElement.remove();
     }
+}
+
+function editProjectInArray() {
+    const projectElement = findProjectElement();
+    const projectElementID = projectElement.getAttribute('data-id');
+
+    const projectTitle = document.querySelector('.modal__form-title').value;
+    const projectIcon = document.querySelector('.modal__icons-input:checked').value;
+
+    for (const project of projects) {
+        const projectID = project.id;
+
+        if (projectElementID === projectID) {
+            project.title = projectTitle;
+            project.icon = projectIcon;
+        }
+    }
+}
+
+function editProjectInDOM() {
+    const projectElement = findProjectElement();
+    const projectElementID = projectElement.getAttribute('data-id');
+
+    for (const project of projects) {
+        const projectID = project.id;
+
+        if (projectElementID === projectID) {
+            const projectElementInfoContainer = projectElement.querySelector('.projects__info');
+            const projectElementTitle = projectElement.querySelector('.projects__info-title');
+            const projectElementIcon = projectElement.querySelector('.project-btn-icon');
+            const newProjectElementIcon = determineIcon(project);
+            newProjectElementIcon.classList.add('project-btn-icon');
+            
+            projectElementTitle.textContent = project.title;
+            projectElementIcon.remove();
+            projectElementInfoContainer.prepend(newProjectElementIcon);
+        }
+    }
+}
+
+function determineIcon(project) {
+    const projectIcon = project.icon;
+    let newIcon;
+
+    switch (projectIcon) {
+        case 'faPagelines':
+            newIcon = icon(faPagelines).node[0];
+            break;
+        case 'faBook':
+            newIcon = icon(faBook).node[0];
+            break;
+        case 'faScrewdriverWrench':
+            newIcon = icon(faScrewdriverWrench).node[0];
+            break;
+        case 'faVolleyball':
+            newIcon = icon(faVolleyball).node[0];
+            break;
+        case 'faSackDollar':
+            newIcon = icon(faSackDollar).node[0];
+            break;
+        case 'faPizzaSlice':
+            newIcon = icon(faPizzaSlice).node[0];
+            break;
+        case 'faSuitcaseRolling':
+            newIcon = icon(faSuitcaseRolling).node[0];
+            break;
+        case 'faGift':
+            newIcon = icon(faGift).node[0];
+            break;
+    }
+
+    return newIcon;
+}
+
+function findProjectElement() {
+    const form = document.querySelector('.modal__form');
+    // To prevent losing the trace of the task item, I stamped task ID onto form so it can be traced back to the task item once the modal is open
+    const formID = form.getAttribute('data-id');
+    const projectElements = document.querySelectorAll('.projects__item');
+
+    for (const projectElement of projectElements) {
+        const projectElementID = projectElement.dataset.id;
+
+        if (formID === projectElementID) {
+            return projectElement;
+        }
+    }
+    throw new Error('Project item not found!');
+}
+
+// Exporting this function to pass it as callback for form "submit" event in modal.js
+export function editProject() {
+    editProjectInArray();
+    editProjectInDOM();
 }
 
 // Exporting this function to pass it as callback for form "submit" event of showProjectsModal() in modal.js
