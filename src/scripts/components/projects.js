@@ -56,10 +56,10 @@ function selectProject(e) {
         projectItem.classList.add('active');
     }
 
-    changeSectionHeader(projectTitle, projectIconClass);
+    changeTasksSectionHeader(projectTitle, projectIconClass);
 }
 
-function changeSectionHeader(projectTitle, projectIconClass) {
+function changeTasksSectionHeader(projectTitle, projectIconClass) {
     const sectionTitle = document.querySelector('.main__headline');
     const sectionIcon = document.querySelector('.main__title-icon');
     const headerContainer = document.querySelector('.main__title');
@@ -97,8 +97,8 @@ function createProjectElement(project) {
 
     parent.append(projectElement);
 
-    editProjectBtn.addEventListener('click', showEditProjectModal);
-    // deleteProjectBtn.addEventListener('click', showDeleteProjectModal);
+    //editProjectBtn.addEventListener('click', showEditProjectModal);
+    deleteProjectBtn.addEventListener('click', showDeleteProjectModal);
 }
 
 function addProjectToArray() {
@@ -137,8 +137,52 @@ function updateProjectsCount() {
     projectsCountText.textContent = projectsCount;
 }
 
+function deleteProjectFromArray(e) {
+    const projectElement = e.currentTarget.closest('.modal__content').querySelector('.modal__text');
+    const projectElementID = projectElement.getAttribute('data-id');
+    let itemFound = false;
+    
+    for (const project of projects) {
+        const projectID = project.id;
+        const projectIndex = projects.indexOf(project);
+        
+        if (projectID === projectElementID) {
+            projects.splice(projectIndex, 1);
+            itemFound = true;
+        }
+    }
+    if (!itemFound) throw new Error('Element not found in the array!');
+}
+
+function deleteProjectFromDOM() {
+    const projectElements = document.querySelectorAll('.projects__item');
+    
+    for (const projectElement of projectElements) {
+        const projectElementID = projectElement.dataset.id;
+        let elementExistsInArray = false;
+        
+        for (const project of projects) {
+            const projectID = project.id;
+            
+            if (projectElementID === projectID) {
+                elementExistsInArray = true;
+            }
+        }
+        if (!elementExistsInArray) projectElement.remove();
+    }
+}
+
+// Exporting this function to pass it as callback for form "submit" event of showProjectsModal() in modal.js
+export function deleteProject(e) {
+    deleteProjectFromArray(e);
+    deleteProjectFromDOM();
+    updateProjectsCount();
+    closeModal();
+}
+
 // Exporting this function to pass it as callback for form "submit" event of showProjectsModal() in modal.js
 export function addNewProject() {
     addProjectToArray();
     renderProjects();
 }
+

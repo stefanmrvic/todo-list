@@ -1,9 +1,9 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
-import { addNewProject } from './projects.js';
+import { addNewProject, deleteProject } from './projects.js';
 import { addNewTask, editTask, deleteTask, tasks } from './tasks.js';
 
-// Exporting it to tasks.js under deleteTask()
+// Exporting it to tasks.js & projects.js under deleteTask()
 export function closeModal() {
     const modal = document.querySelector('.modal');
     const modalHeader = document.querySelector('.modal__header');
@@ -348,7 +348,7 @@ export function showDeleteProjectModal(e) {
     const modal = document.querySelector('.modal');
     const modalHeader = document.querySelector('.modal__header');
     const modalTitle = document.querySelector('.modal__title');
-    modalTitle.textContent = 'Delete Task';
+    modalTitle.textContent = 'Delete Project';
     modalHeader.classList.add('delete');
 
     deleteModalContent();
@@ -364,8 +364,8 @@ export function showDeleteProjectModal(e) {
 
 function createDeleteProjectModal(e) {
     const modalContent = document.querySelector('.modal__content');
-    const project = e.target.closest('.main__project-item');
-    const projectTitle = project.querySelector('.main__project-title'); 
+    const project = e.target.closest('.projects__item');
+    const projectTitle = project.querySelector('.projects__info-title'); 
     
     const deleteMessage = createElement('p', 'modal__text', 'Are you sure?');
     const br1 = createElement('br', 'modal__text-br');
