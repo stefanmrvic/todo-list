@@ -203,7 +203,7 @@ function createAddTaskModal() {
 }
 
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
-export function showEditTaskModal(e) {
+export function showEditProjectModal(e) {
     e.stopPropagation();
 
     const modal = document.querySelector('.modal');
@@ -221,27 +221,6 @@ export function showEditTaskModal(e) {
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
     form.addEventListener('submit', editTask);
-}
-
-function setEditProjectModalState(taskElement, form) {
-    const taskElementID = taskElement.dataset.id;
-    const titleInput = form.querySelector('.modal__form-title');
-    const descriptionTextarea = form.querySelector('.modal__form-description');
-    const dueInput = form.querySelector('.modal__form-date');
-
-    for (const task of tasks) {
-        const taskID = task.id;
-
-        if (taskElementID === taskID) {
-            titleInput.value = task.title;
-            descriptionTextarea.value = task.description;
-            dueInput.value = task.due;
-
-            const taskPriority = task.priority;
-            const priorityOption = document.getElementById(taskPriority);
-            priorityOption.selected = true;
-        }
-    }
 }
 
 function createEditProjectModal(e) {
@@ -296,11 +275,32 @@ function createEditProjectModal(e) {
     form.append(titleLabel, descriptionLabel, dueLabel, priorityLabel, controlsContainer);
     modalContent.append(form);
 
-    setEditTaskModalState(taskElement, form);
+    setEditProjectModalState(taskElement, form);
+}
+
+function setEditProjectModalState(taskElement, form) {
+    const taskElementID = taskElement.dataset.id;
+    const titleInput = form.querySelector('.modal__form-title');
+    const descriptionTextarea = form.querySelector('.modal__form-description');
+    const dueInput = form.querySelector('.modal__form-date');
+
+    for (const task of tasks) {
+        const taskID = task.id;
+
+        if (taskElementID === taskID) {
+            titleInput.value = task.title;
+            descriptionTextarea.value = task.description;
+            dueInput.value = task.due;
+
+            const taskPriority = task.priority;
+            const priorityOption = document.getElementById(taskPriority);
+            priorityOption.selected = true;
+        }
+    }
 }
 
 // Exporting this function to pass it as callback for event listener in tasks.js inside of createTaskElement()
-export function showEditProjectModal(e) {
+export function showEditTaskModal(e) {
     e.stopPropagation();
 
     const modal = document.querySelector('.modal');
@@ -308,7 +308,7 @@ export function showEditProjectModal(e) {
     modalTitle.textContent = 'Edit Task';
     
     deleteModalContent();
-    createEditProjectModal(e);
+    createEditTaskModal(e);
     modal.showModal();
     
     const closeBtn = document.querySelector('.modal__close-btn');
@@ -318,6 +318,61 @@ export function showEditProjectModal(e) {
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
     form.addEventListener('submit', editTask);
+}
+
+function createEditTaskModal(e) {
+    const modalContent = document.querySelector('.modal__content');
+    const taskElement = e.target.closest('.main__task-item');
+
+    const form = createElement('form', 'modal__form');
+    form.setAttribute('method', 'dialog');
+    form.setAttribute('data-id', taskElement.dataset.id);
+
+    const titleLabel = createElement('label', null, 'Title');
+    const titleAstrix = createElement('span', 'modal__form-astrix', '*');
+    const titleInput = createElement('input', 'modal__form-title');
+    titleInput.setAttribute('type', 'text');
+    titleInput.required = true;
+    titleLabel.append(titleAstrix, titleInput);
+
+    const descriptionLabel = createElement('label', null, 'Description');
+    const descriptionTextarea = createElement('textarea', 'modal__form-description');
+    descriptionLabel.append(descriptionTextarea);
+    
+    const dueLabel = createElement('label', null, 'Due Data');
+    const dueInput = createElement('input', 'modal__form-date');
+    dueInput.setAttribute('type', 'date');
+    dueLabel.append(dueInput);
+
+    const priorityLabel = createElement('label', null, 'Priority');
+    const prioritySelect = createElement('select', 'modal__form-priority');
+
+    const priorityOptionPlaceholder = createElement('option', 'modal__priority-placeholder', 'How important is this task?');
+    priorityOptionPlaceholder.value = 'placeholder';
+    priorityOptionPlaceholder.disabled = true;
+    priorityOptionPlaceholder.selected = true;
+    const priorityOptionLow = createElement('option', null, '😴 Not important at all..');
+    priorityOptionLow.value = 'low';
+    priorityOptionLow.id = 'low';
+    const priorityOptionMedium = createElement('option', null, '😅 A bit important');
+    priorityOptionMedium.value = 'medium';
+    priorityOptionMedium.id = 'medium';
+    const priorityOptionHigh = createElement('option', null, '😲 Super important!');
+    priorityOptionHigh.value = 'high';
+    priorityOptionHigh.id = 'high';
+
+    prioritySelect.append(priorityOptionPlaceholder, priorityOptionLow, priorityOptionMedium, priorityOptionHigh);
+    priorityLabel.append(prioritySelect);
+
+    const controlsContainer = createElement('div', 'modal__form-controls');
+    const cancelBtn = createElement('button', 'modal__cancel-btn', 'Close');
+    const editBtn = createElement('button', 'modal__edit-btn', 'Edit');
+
+    controlsContainer.append(cancelBtn, editBtn);
+    form.append(titleLabel, descriptionLabel, dueLabel, priorityLabel, controlsContainer);
+    modalContent.append(form);
+
+    setEditTaskModalState(taskElement, form);
 }
 
 function setEditTaskModalState(taskElement, form) {
@@ -336,7 +391,9 @@ function setEditTaskModalState(taskElement, form) {
 
             const taskPriority = task.priority;
             const priorityOption = document.getElementById(taskPriority);
-            priorityOption.selected = true;
+            
+            // If priority has been set to the task, it will select that priority when displaying edit modal
+            if (priorityOption) priorityOption.selected = true;
         }
     }
 }

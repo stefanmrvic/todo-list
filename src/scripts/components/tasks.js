@@ -3,7 +3,7 @@ import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoM
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '../modules/icons.js';
 
-class Todo {
+class Task {
     constructor(title, description, due, priority) {
         this.title = title;
         this.description = description;
@@ -73,7 +73,7 @@ function createTaskElement(task) {
     const textContainer = createElement('div', 'main__text');
 
     const iconWrapper = createElement('div', 'main__task-icon-wrapper');
-    const icon = createElement('i', 'main__task-icon fa-regular fa-circle');
+    const icon = createElement('svg', 'far fa-circle main__task-icon');
     const title = createElement('p', 'main__task-title', task.title);
 
     iconWrapper.append(icon);
@@ -84,15 +84,15 @@ function createTaskElement(task) {
     const date = createElement('p', 'main__task-date', task.due);
 
     const editBtn = createElement('button', 'main__edit-btn');
-    const editBtnIcon = createElement('i', 'btn-icon projects__icon--2 fa-regular fa-pen-to-square');
+    const editBtnIcon = createElement('svg', 'far fa-pen-to-square btn-icon projects__icon--2');
     editBtn.append(editBtnIcon);
 
     const deleteBtn = createElement('button', 'main__delete-btn');
-    const deleteBtnIcon = createElement('i', 'btn-icon projects__icon--3 fa-regular fa-trash-can');
+    const deleteBtnIcon = createElement('svg', 'far fa-trash-can btn-icon projects__icon--3');
     deleteBtn.append(deleteBtnIcon);
 
     const infoBtn = createElement('button', 'main__info-btn');
-    const infoBtnIcon = createElement('i', 'fa-solid fa-circle-info');
+    const infoBtnIcon = createElement('svg', 'fas fa-circle-info');
     infoBtn.append(infoBtnIcon);
 
     controlsContainer.append(date, editBtn, deleteBtn, infoBtn);
@@ -234,7 +234,7 @@ function addTaskToArray() {
     const taskDue = document.querySelector('.modal__form-date').value;
     const taskPriority = document.querySelector('.modal__form-priority').value;
 
-    const newTask = new Todo(taskTitle, taskDescription, taskDue, taskPriority);
+    const newTask = new Task(taskTitle, taskDescription, taskDue, taskPriority);
     tasks.push(newTask);
 }
 
