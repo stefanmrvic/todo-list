@@ -7,6 +7,7 @@
 
     .btn {
         display: flex;
+        justify-content: space-between;
         font-size: 17px;
         color: $light-gray-2;
         display: flex;
@@ -18,10 +19,30 @@
         border-radius: 5px;
         cursor: pointer;
         font-family: inherit;
+    }
+
+    .project-btn-icon {
+        margin-right: 8px;
+    }
+
+    .action-btn {
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .action-btn:hover {
+        transform: scale(1.1);
+    }
     
-        &-icon {
-            margin-right: 8px;
-        }
+    .action-btn:not(:last-child) {
+        margin-right: 8px;
+    }
+
+    .btn-icon {
+        color: $light-gray-2;
+        font-size: 17px;
     }
 
     .btn:hover {
@@ -31,5 +52,9 @@
     .btn.active {
         color: $white;
         background-color: $light-blue;
+    }
+
+    .btn.active svg {
+        color: white;
     }
 }

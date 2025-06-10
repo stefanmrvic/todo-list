@@ -71,22 +71,21 @@ function changeSectionHeader(projectTitle, projectIconClass) {
 
 function createProjectElement(project) {
     const parent = document.querySelector('.projects__list');
-    const projectElement = createElement('button', 'projects__item');
+    const projectElement = createElement('button', 'btn projects__item');
 
     const projectInfo = createElement('div', 'projects__info');
-    const projectIconClass = project.determineIconClass();
-    const projectIcon = createElement('svg', `btn-icon projects__info-icon--1 ${projectIconClass}`);
+    const projectIconClass = project.iconClass;
+    const projectIcon = createElement('svg', `${projectIconClass} btn-icon project-btn-icon`);
     const projectTitle = createElement('span', 'projects__info-title', project.title);
-    console.log(project.title);
     projectInfo.append(projectIcon, projectTitle);
 
     const projectControls = createElement('div', 'projects__controls');
-    const editProjectBtn = createElement('button', 'projects__controls-edit-btn');
-    const editProjectIcon = createElement('button', 'btn-icon projects__controls-edit-icon--2');
+    const editProjectBtn = createElement('button', 'action-btn projects__controls-edit-btn');
+    const editProjectIcon = createElement('svg', 'btn-icon far fa-pen-to-square');
     editProjectBtn.append(editProjectIcon);
 
-    const deleteProjectBtn = createElement('button', 'projects__controls-delete-btn');
-    const deleteProjectIcon = createElement('button', 'btn-icon projects__controls-icon--3');
+    const deleteProjectBtn = createElement('button', 'action-btn projects__controls-delete-btn');
+    const deleteProjectIcon = createElement('svg', 'btn-icon far fa-trash-can btn-icon');
     deleteProjectBtn.append(deleteProjectIcon);
     
     projectControls.append(editProjectBtn, deleteProjectBtn);
