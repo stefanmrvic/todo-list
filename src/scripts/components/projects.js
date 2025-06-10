@@ -36,6 +36,10 @@ projectsList.addEventListener('click', selectProject);
 projectsAddBtn.addEventListener('click', showAddProjectModal);
 
 function selectProject(e) {
+    const projectsContainer = document.querySelector('.projects__list');
+    // If user clicks between the projects buttons, it ends function invocation
+    if (e.target === projectsContainer) return;
+    
     const activeProjectItem = document.querySelector('.projects__item.active');
     const projectItem = e.target.closest('.projects__item');
     const projectTitle = projectItem.textContent;
@@ -44,7 +48,6 @@ function selectProject(e) {
     const iconPrefix = projectIcon.getAttribute('data-prefix');
     const iconName = projectIcon.getAttribute('data-icon');
     const projectIconClass = `${iconPrefix} fa-${iconName}`;
-    console.log(projectIconClass);
 
     if (activeProjectItem) {
         activeProjectItem.classList.remove('active');
@@ -90,6 +93,8 @@ function createProjectElement(project) {
     
     projectControls.append(editProjectBtn, deleteProjectBtn);
     projectElement.append(projectInfo, projectControls);
+    projectElement.setAttribute('data-id', project.id);
+
     parent.append(projectElement);
 
     // editProjectBtn.addEventListener('click', showEditProjectModal);
@@ -102,6 +107,7 @@ function addProjectToArray() {
 
     const newProject = new Project(projectTitle, projectIcon);
     projects.push(newProject);
+
 }
 
 function renderProjects() {
@@ -115,9 +121,10 @@ function renderProjects() {
             const projectElementID = projectElement.getAttribute('data-id');
 
             if (projectID === projectElementID) {
-                duplicateTask = true;
+                duplicateProject = true;
             }
         }
+
         if (!duplicateProject) createProjectElement(project);
     }
 }
