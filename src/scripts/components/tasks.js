@@ -52,8 +52,8 @@ function changeTaskIcon(e) {
     const taskItem = e.target.closest('.main__task-item');
     const taskItemIconWrapper = taskItem.querySelector('.main__text > .main__task-icon-wrapper');
     let taskItemIcon = taskItemIconWrapper.querySelector('.main__task-icon');
-    const taskItemIconInitial = icon(faCircle);
-    const taskItemIconCheck = icon(faCircleCheck);
+    const taskItemIconInitial = icon(faCircle).node[0];
+    const taskItemIconCheck = icon(faCircleCheck).node[0];
     const isInitialIcon = taskItemIcon.classList.contains('fa-circle');
     const iconToUse = isInitialIcon ? taskItemIconCheck : taskItemIconInitial;
 
@@ -61,7 +61,7 @@ function changeTaskIcon(e) {
     const taskItemIconPriority = priorityClassList.find(task => taskItemIcon.classList.contains(task));
 
     taskItemIcon.remove();
-    taskItemIconWrapper.appendChild(iconToUse.node[0]);
+    taskItemIconWrapper.appendChild(iconToUse);
     taskItemIconWrapper.children[0].classList.add('main__task-icon');
     taskItemIcon = taskItemIconWrapper.querySelector('.main__task-icon');
     taskItemIcon.classList.add(taskItemIconPriority);
@@ -73,10 +73,11 @@ function createTaskElement(task) {
     const textContainer = createElement('div', 'main__text');
 
     const iconWrapper = createElement('div', 'main__task-icon-wrapper');
-    const icon = createElement('svg', 'far fa-circle main__task-icon');
+    const taskIcon = icon(faCircle).node[0];
+    taskIcon.classList.add('main__task-icon');
     const title = createElement('p', 'main__task-title', task.title);
 
-    iconWrapper.append(icon);
+    iconWrapper.append(taskIcon); 
     textContainer.append(iconWrapper, title);
 
     const controlsContainer = createElement('div', 'main__controls');
@@ -192,6 +193,7 @@ function editTaskInDOM() {
         if (taskElementID === taskID) {
             const taskElementTitle = taskElement.querySelector('.main__task-title');
             const taskElementPriority = taskElement.querySelector('.main__task-icon');
+            
             const taskElementDue = taskElement.querySelector('.main__task-date');
             const taskElementPriorityClasses = ['low', 'medium', 'high'];
             const activeClass = taskElementPriorityClasses.find(className => taskElementPriority.classList.contains(className));
