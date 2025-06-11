@@ -1,5 +1,6 @@
 import { createElement } from "../utils/dom.js";
 import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
+import { projects } from "./projects.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '../modules/icons.js';
 
@@ -24,10 +25,6 @@ class Task {
         return str;
     }
 }
-
-export const projects = [];
-
-export const tasks = [];
 
 const tasksList = document.querySelector('.main__tasks-list');
 const tasksAddBtn = document.querySelector('.main__add-btn');
@@ -105,7 +102,7 @@ function createTaskElement(task) {
 
     if (priority !== 'placeholder') {
         // Depending of the priority of the task, it will put className of priority value (low, medium, or high) 
-        icon.classList.add(priority);
+        taskIcon.classList.add(priority);
     }
 
     parent.append(taskElement);
@@ -236,14 +233,26 @@ function addTaskToArray() {
     const taskDue = document.querySelector('.modal__form-date').value;
     const taskPriority = document.querySelector('.modal__form-priority').value;
 
+    const projectTitle = document.querySelector('.main__headline').textContent;
+    const project = projects.filter(project => project.title === projectTitle);
     const newTask = new Task(taskTitle, taskDescription, taskDue, taskPriority);
-    tasks.push(newTask);
+    project[0].taskList.push(newTask);
 }
 
-function renderTasks() {
+// Exporting function to be able to render tasks when user clicks on Project name button in projects.js under selectProject()
+export function renderTasks() {
+    const projectTitle = document.querySelector('.main__headline').textContent;
+    const project = projects.filter(project => project.title === projectTitle);
+    console.log(project)
+    const projectTasks = project[0].taskList;
+    console.log(projectTasks)
+    const projectTasksCount = project[0].taskList.length;
+
+    if (!project) return;
+
     const taskElements = document.querySelectorAll('.main__task-item');
-    
-    for (const task of tasks) {
+
+    for (const task of projectTasks) {
         const taskID = task.id;
         let duplicateTask = false;
         
@@ -256,12 +265,12 @@ function renderTasks() {
         }
         if (!duplicateTask) createTaskElement(task);
     }
-    updateTasksCount();
+    updateTasksCount(projectTasksCount);
 }
 
-function updateTasksCount() {
+function updateTasksCount(projectTasksCount) {
     const tasksCountText = document.querySelector('.main__tasks-num');
-    const tasksCount = tasks.length;
+    const tasksCount = projectTasksCount;
     
     tasksCountText.textContent = tasksCount;
 }

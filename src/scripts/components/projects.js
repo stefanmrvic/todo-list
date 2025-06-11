@@ -1,7 +1,8 @@
-import { createElement } from "../utils/dom";
-import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from "./modal.js";
+import { createElement } from '../utils/dom';
+import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from './modal.js';
+import { renderTasks } from '../components/tasks.js'
 import { icon } from '@fortawesome/fontawesome-svg-core';
-import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift} from '../modules/icons.js';
+import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift } from '../modules/icons.js';
 
 class Project {
     constructor(title, icon) {
@@ -44,7 +45,7 @@ function selectProject(e) {
     
     const activeProjectItem = document.querySelector('.projects__item.active');
     const projectItem = e.target.closest('.projects__item');
-    const projectTitle = projectItem.textContent;
+    const projectTitle = projectItem.querySelector('.projects__info-title').textContent;
     const projectIcon = projectItem.querySelector('svg');
 
     const iconPrefix = projectIcon.getAttribute('data-prefix');
@@ -59,6 +60,8 @@ function selectProject(e) {
     }
 
     changeTasksSectionHeader(projectTitle, projectIconClass);
+    deleteTasks();
+    renderTasks();
 }
 
 function changeTasksSectionHeader(projectTitle, projectIconClass) {
@@ -72,6 +75,15 @@ function changeTasksSectionHeader(projectTitle, projectIconClass) {
     sectionTitle.textContent = projectTitle;
     if (sectionIcon) sectionIcon.remove();
     headerContainer.prepend(newIcon);
+}
+
+function deleteTasks() {
+    const tasksContainerNode = document.querySelector('.main__tasks-list');
+
+    while (tasksContainerNode.lastChild) {
+        tasksContainerNode.lastChild.remove();
+    }
+    
 }
 
 function createProjectElement(project) {

@@ -1,7 +1,7 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
 import { addNewProject, editProject, deleteProject, projects } from './projects.js';
-import { addNewTask, editTask, deleteTask, tasks } from './tasks.js';
+import { addNewTask, editTask, deleteTask } from './tasks.js';
 
 // Exporting it to tasks.js & projects.js under deleteTask()
 export function closeModal() {
@@ -229,7 +229,7 @@ function createEditProjectModal(e) {
 
     const form = createElement('form', 'modal__form');
     form.setAttribute('method', 'dialog');
-    
+
     // Sets data-id from Project element to not lose trace when modal is being opened
     form.setAttribute('data-id', projectElement.dataset.id);
 
