@@ -39,55 +39,74 @@ const projectsAddBtn = document.querySelector('.projects__add-btn');
 projectsList.addEventListener('click', selectProject);
 projectsAddBtn.addEventListener('click', showAddProjectModal);
 
-function selectProject(e) {
-    const projectsContainer = document.querySelector('.projects__list');
-    // If user clicks between the projects buttons, it ends function invocation
-    if (e.target === projectsContainer) return;
-    
-    const activeProjectItem = document.querySelector('.projects__item.active');
-    const projectItem = e.target.closest('.projects__item');
-
-    // It captures currently selected Project item so it can referenced when creating new task(s)
-    selectedProject = projects.find(project => project.projectId === projectItem.dataset.projectId);
-
-    const projectTitle = projectItem.querySelector('.projects__info-title').textContent;
-    const projectIcon = projectItem.querySelector('svg');
-
-    const iconPrefix = projectIcon.getAttribute('data-prefix');
-    const iconName = projectIcon.getAttribute('data-icon');
-    const projectIconClass = `${iconPrefix} fa-${iconName}`;
-
-    if (activeProjectItem) {
-        activeProjectItem.classList.remove('active');
-        projectItem.classList.add('active');
-    } else {
-        projectItem.classList.add('active');
-    }
-
-    changeTasksSectionHeader(projectTitle, projectIconClass);
-    renderTasks();
+function changeActiveProject(projectEle) {
+    changeActiveBtn(projectEle);
+    changeTasksSectionHeader(projectEle);
 }
 
-function changeTasksSectionHeader(projectTitle, projectIconClass) {
+function changeActiveBtn(projectEle) {
+    const activeBtn = document.querySelector('.active');
+    const projectElement = projectEle;
+
+    // It removes the .active className from buttons
+    if (activeBtn) {
+        activeBtn.classList.remove('active');
+    }
+
+    projectElement.classList.add('active');
+
+    renderAddTaskBtn();
+}
+
+function changeTasksSectionHeader(projectEle) {
+    const project = projects.find(project => project.projectId === projectEle.dataset.projectId)
+    const projectElement = projectEle;
+    const projectTitle = projectElement.querySelector('.projects__info-title').textContent;
+    const projectIconClass = project.iconClass;
+    
     const sectionTitle = document.querySelector('.main__headline');
     const sectionIcon = document.querySelector('.main__title-icon');
     const headerContainer = document.querySelector('.main__title');
+
     // Creates new <svg> element and sets className of projectIconClass variable
     const newIcon = createElement('svg', projectIconClass);
     newIcon.classList.add('main__title-icon');
 
     sectionTitle.textContent = projectTitle;
-    if (sectionIcon) sectionIcon.remove();
+    sectionIcon.remove();
     headerContainer.prepend(newIcon);
+}
+
+function renderAddTaskBtn() {
+    // It shows add Task button when the Project has been selected
+    const addTaskBtn = document.querySelector('.main__add-btn');
+    addTaskBtn.classList.add('show');
+}
+
+function selectProject(e) {
+    const projectsContainer = document.querySelector('.projects__list');
+
+    // If user clicks between the projects buttons, it ends function invocation
+    if (e.target === projectsContainer) return;
+
+    // It captures Project element in DOM via event arg or via direct Project DOM reference arg
+    const projectElement = e.target.closest('.projects__item');
+
+    // It captures currently selected Project item so it can referenced when creating new task(s)
+    selectedProject = projects.find(project => project.projectId === projectElement.dataset.projectId);
+
+    changeActiveProject(projectElement);
+    renderTasks();
 }
 
 function createProjectElement(project) {
     const parent = document.querySelector('.projects__list');
+
     const projectElement = createElement('button', 'btn projects__item');
 
     const projectInfo = createElement('div', 'projects__info');
     const projectIconClass = project.iconClass;
-    const projectIcon = createElement('svg', `${projectIconClass} btn-icon project-btn-icon`);
+    const projectIcon = createElement('i', `${projectIconClass} btn-icon project-btn-icon`);
     const projectTitle = createElement('span', 'projects__info-title', project.title);
     projectInfo.append(projectIcon, projectTitle);
 
@@ -108,6 +127,8 @@ function createProjectElement(project) {
 
     editProjectBtn.addEventListener('click', showEditProjectModal);
     deleteProjectBtn.addEventListener('click', showDeleteProjectModal);
+    
+    changeActiveProject(projectElement);
 }
 
 function addProjectToArray() {
@@ -116,6 +137,7 @@ function addProjectToArray() {
 
     const newProject = new Project(projectTitle, projectIcon);
     projects.push(newProject);
+    selectedProject = newProject;
 }
 
 function addProjectToDOM() {
@@ -135,6 +157,7 @@ function addProjectToDOM() {
 
         if (!duplicateProject) createProjectElement(project);
     }
+
     updateProjectsCount();
 }
 
@@ -163,7 +186,7 @@ function deleteProjectFromArray(e) {
 }
 
 function deleteProjectFromDOM() {
-    const projectElements = document.querySelectorAll('.projects__item');
+    let projectElements = document.querySelectorAll('.projects__item');
     
     for (const projectElement of projectElements) {
         const projectElementID = projectElement.dataset.projectId;
@@ -178,6 +201,13 @@ function deleteProjectFromDOM() {
         }
         if (!elementExistsInArray) projectElement.remove();
     }
+
+    projectElements = document.querySelectorAll('.projects__item');
+
+    const lastProjectElementIndex = projectElements.length - 1;
+    const lastProjectElement = projectElements[lastProjectElementIndex];
+
+    if (lastProjectElement) changeActiveProject(lastProjectElement);
 }
 
 function editProjectInArray() {
@@ -216,6 +246,7 @@ function editProjectInDOM() {
             projectElementInfoContainer.prepend(newProjectElementIcon);
         }
     }
+    changeTasksSectionHeader(projectElement);
 }
 
 function determineIcon(project) {

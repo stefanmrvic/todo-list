@@ -41,12 +41,17 @@
     }
 
     &__add-btn {
+        display: none;
         position: relative;
         color: $light-gray-2;
         font-size: 17px;
         background-color: transparent;
         border: none;
         cursor: pointer;
+    }
+
+    &__add-btn.show {
+        display: initial;
     }
 
     &__tooltip {
@@ -127,10 +132,10 @@
     &__delete-btn,
     &__info-btn {
         color: $light-gray-2;
-        background-color: transparent;
+        font-size: 17px;
+        background: none;
         border: none;
         cursor: pointer;
-        font-size: 17px;
     }
 
     &__edit-btn:hover,
