@@ -1,16 +1,17 @@
 import { createElement } from "../utils/dom.js";
 import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
-import { projects } from "./projects.js";
+import { projects, selectedProject } from "./projects.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '../modules/icons.js';
 
 class Task {
-    constructor(title, description, due, priority) {
+    constructor(title, description, due, priority, projectId) {
         this.title = title;
         this.description = description;
         this.due = due;
         this.priority = priority;
-        this.id = crypto.randomUUID();
+        this.taskId = crypto.randomUUID();
+        this.projectId = projectId;
     }
 
     parsePriorityToString() {
@@ -95,7 +96,13 @@ function createTaskElement(task) {
 
     controlsContainer.append(date, editBtn, deleteBtn, infoBtn);
     taskElement.append(textContainer, controlsContainer);
-    taskElement.setAttribute('data-id', task.id);
+
+    const project = selectedProject;
+    const projectID = project.projectId;
+
+    // It sets data ID attributes so that DOM elements can be referenced back to the array items in the backend
+    taskElement.setAttribute('data-project-id', projectID);
+    taskElement.setAttribute('data-task-id', task.taskId);
 
     // It captures the key name of the priority property of the task object
     const priority = task.priority;
@@ -126,11 +133,11 @@ export function deleteTask(e) {
 
 function deleteTaskFromArray(e) {
     const taskElement = e.currentTarget.closest('.modal__content').querySelector('.modal__text');
-    const taskElementID = taskElement.getAttribute('data-id');
+    const taskElementID = taskElement.getAttribute('data-task-id');
     let itemFound = false;
     
     for (const task of tasks) {
-        const taskID = task.id;
+        const taskID = task.taskId;
         const taskIndex = tasks.indexOf(task);
         
         if (taskID === taskElementID) {
@@ -145,11 +152,11 @@ function deleteTaskFromDOM() {
     const taskElements = document.querySelectorAll('.main__task-item');
     
     for (const taskElement of taskElements) {
-        const taskElementID = taskElement.dataset.id;
+        const taskElementID = taskElement.dataset.taskId;
         let elementExistsInArray = false;
         
         for (const task of tasks) {
-            const taskID = task.id;
+            const taskID = task.taskId;
             
             if (taskElementID === taskID) {
                 elementExistsInArray = true;
@@ -161,7 +168,7 @@ function deleteTaskFromDOM() {
 
 function editTaskInArray() {
     const taskElement = findTaskElement();
-    const taskElementID = taskElement.getAttribute('data-id');
+    const taskElementID = taskElement.getAttribute('data-task-id');
 
     const taskTitle = document.querySelector('.modal__form-title').value;
     const taskDescription = document.querySelector('.modal__form-description').value;
@@ -169,7 +176,7 @@ function editTaskInArray() {
     const taskPriority = document.querySelector('.modal__form-priority').value;
 
     for (const task of tasks) {
-        const taskID = task.id;
+        const taskID = task.taskId;
 
         if (taskElementID === taskID) {
             task.title = taskTitle;
@@ -182,10 +189,10 @@ function editTaskInArray() {
 
 function editTaskInDOM() {
     const taskElement = findTaskElement();
-    const taskElementID = taskElement.getAttribute('data-id');
+    const taskElementID = taskElement.getAttribute('data-task-id');
 
     for (const task of tasks) {
-        const taskID = task.id;
+        const taskID = task.taskId;
 
         if (taskElementID === taskID) {
             const taskElementTitle = taskElement.querySelector('.main__task-title');
@@ -208,11 +215,11 @@ function editTaskInDOM() {
 function findTaskElement() {
     const form = document.querySelector('.modal__form');
     // To prevent losing the trace of the task item, I stamped task ID onto form so it can be traced back to the task item once the modal is open
-    const formID = form.getAttribute('data-id');
+    const formID = form.getAttribute('data-task-id');
     const taskElements = document.querySelectorAll('.main__task-item');
 
     for (const taskElement of taskElements) {
-        const taskElementID = taskElement.dataset.id;
+        const taskElementID = taskElement.dataset.taskId;
 
         if (formID === taskElementID) {
             return taskElement;
@@ -233,31 +240,31 @@ function addTaskToArray() {
     const taskDue = document.querySelector('.modal__form-date').value;
     const taskPriority = document.querySelector('.modal__form-priority').value;
 
-    const projectTitle = document.querySelector('.main__headline').textContent;
-    const project = projects.filter(project => project.title === projectTitle);
-    const newTask = new Task(taskTitle, taskDescription, taskDue, taskPriority);
-    project[0].taskList.push(newTask);
+    const project = selectedProject;
+    const projectID = project.projectId;
+    const newTask = new Task(taskTitle, taskDescription, taskDue, taskPriority, projectID);
+    project.taskList.push(newTask);
 }
 
 // Exporting function to be able to render tasks when user clicks on Project name button in projects.js under selectProject()
 export function renderTasks() {
     const projectTitle = document.querySelector('.main__headline').textContent;
-    const project = projects.filter(project => project.title === projectTitle);
+    const project = projects.find(project => project.title === projectTitle);
     console.log(project)
-    const projectTasks = project[0].taskList;
+    const projectTasks = project.taskList;
     console.log(projectTasks)
-    const projectTasksCount = project[0].taskList.length;
+    const projectTasksCount = project.taskList.length;
 
     if (!project) return;
 
     const taskElements = document.querySelectorAll('.main__task-item');
 
     for (const task of projectTasks) {
-        const taskID = task.id;
+        const taskID = task.taskId;
         let duplicateTask = false;
         
         for (const taskElement of taskElements) {
-            const taskElementID = taskElement.getAttribute('data-id');
+            const taskElementID = taskElement.getAttribute('data-task-id');
 
             if (taskID === taskElementID) {
                 duplicateTask = true;

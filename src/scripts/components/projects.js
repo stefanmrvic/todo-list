@@ -9,7 +9,7 @@ class Project {
         this.title = title;
         this.icon = icon;
         this.taskList = [];
-        this.id = crypto.randomUUID();
+        this.projectId = crypto.randomUUID();
         this.iconClass = this.determineIconClass();
     }
 
@@ -31,6 +31,7 @@ class Project {
 }
 
 export const projects = [];
+export let selectedProject;
 
 const projectsList = document.querySelector('.projects__list');
 const projectsAddBtn = document.querySelector('.projects__add-btn');
@@ -45,6 +46,10 @@ function selectProject(e) {
     
     const activeProjectItem = document.querySelector('.projects__item.active');
     const projectItem = e.target.closest('.projects__item');
+
+    // It captures currently selected Project item so it can referenced when creating new task(s)
+    selectedProject = projects.find(project => project.projectId === projectItem.dataset.projectId);
+
     const projectTitle = projectItem.querySelector('.projects__info-title').textContent;
     const projectIcon = projectItem.querySelector('svg');
 
@@ -107,7 +112,7 @@ function createProjectElement(project) {
     
     projectControls.append(editProjectBtn, deleteProjectBtn);
     projectElement.append(projectInfo, projectControls);
-    projectElement.setAttribute('data-id', project.id);
+    projectElement.setAttribute('data-project-id', project.projectId);
 
     parent.append(projectElement);
 
@@ -127,11 +132,11 @@ function renderProjects() {
     const projectElements = document.querySelectorAll('.projects__item');
     
     for (const project of projects) {
-        const projectID = project.id;
+        const projectID = project.projectId;
         let duplicateProject = false;
         
         for (const projectElement of projectElements) {
-            const projectElementID = projectElement.getAttribute('data-id');
+            const projectElementID = projectElement.getAttribute('data-project-id');
 
             if (projectID === projectElementID) {
                 duplicateProject = true;
@@ -152,11 +157,11 @@ function updateProjectsCount() {
 
 function deleteProjectFromArray(e) {
     const projectElement = e.currentTarget.closest('.modal__content').querySelector('.modal__text');
-    const projectElementID = projectElement.getAttribute('data-id');
+    const projectElementID = projectElement.getAttribute('data-project-id');
     let itemFound = false;
     
     for (const project of projects) {
-        const projectID = project.id;
+        const projectID = project.projectId;
         const projectIndex = projects.indexOf(project);
         
         if (projectID === projectElementID) {
@@ -171,11 +176,11 @@ function deleteProjectFromDOM() {
     const projectElements = document.querySelectorAll('.projects__item');
     
     for (const projectElement of projectElements) {
-        const projectElementID = projectElement.dataset.id;
+        const projectElementID = projectElement.dataset.projectId;
         let elementExistsInArray = false;
         
         for (const project of projects) {
-            const projectID = project.id;
+            const projectID = project.projectId;
             
             if (projectElementID === projectID) {
                 elementExistsInArray = true;
@@ -187,13 +192,13 @@ function deleteProjectFromDOM() {
 
 function editProjectInArray() {
     const projectElement = findProjectElement();
-    const projectElementID = projectElement.getAttribute('data-id');
+    const projectElementID = projectElement.getAttribute('data-project-id');
 
     const projectTitle = document.querySelector('.modal__form-title').value;
     const projectIcon = document.querySelector('.modal__icons-input:checked').value;
 
     for (const project of projects) {
-        const projectID = project.id;
+        const projectID = project.projectId;
 
         if (projectElementID === projectID) {
             project.title = projectTitle;
@@ -204,10 +209,10 @@ function editProjectInArray() {
 
 function editProjectInDOM() {
     const projectElement = findProjectElement();
-    const projectElementID = projectElement.getAttribute('data-id');
+    const projectElementID = projectElement.getAttribute('data-project-id');
 
     for (const project of projects) {
-        const projectID = project.id;
+        const projectID = project.projectId;
 
         if (projectElementID === projectID) {
             const projectElementInfoContainer = projectElement.querySelector('.projects__info');
@@ -260,11 +265,11 @@ function determineIcon(project) {
 function findProjectElement() {
     const form = document.querySelector('.modal__form');
     // To prevent losing the trace of the task item, I stamped task ID onto form so it can be traced back to the task item once the modal is open
-    const formID = form.getAttribute('data-id');
+    const formID = form.getAttribute('data-project-id');
     const projectElements = document.querySelectorAll('.projects__item');
 
     for (const projectElement of projectElements) {
-        const projectElementID = projectElement.dataset.id;
+        const projectElementID = projectElement.dataset.projectId;
 
         if (formID === projectElementID) {
             return projectElement;
@@ -292,4 +297,3 @@ export function addNewProject() {
     addProjectToArray();
     renderProjects();
 }
-
