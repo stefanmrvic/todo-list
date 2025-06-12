@@ -1,6 +1,6 @@
 import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
-import { addNewProject, editProject, deleteProject, projects } from './projects.js';
+import { selectedProject, addNewProject, editProject, deleteProject, projects } from './projects.js';
 import { addNewTask, editTask, deleteTask } from './tasks.js';
 
 // Exporting it to tasks.js & projects.js under deleteTask()
@@ -230,8 +230,8 @@ function createEditProjectModal(e) {
     const form = createElement('form', 'modal__form');
     form.setAttribute('method', 'dialog');
 
-    // Sets data-id from Project element to not lose trace when modal is being opened
-    form.setAttribute('data-id', projectElement.dataset.id);
+    // Sets data-project-id from Project element to not lose trace when modal is being opened
+    form.setAttribute('data-project-id', projectElement.dataset.projectId);
 
     // Title field Start //
     const titleLabel = createElement('label', null, 'Title');
@@ -331,10 +331,10 @@ function createEditProjectModal(e) {
 }
 
 function setEditProjectModalState(projectElement, form) {
-    const projectElementID = projectElement.dataset.id;
+    const projectElementID = projectElement.dataset.projectId;
 
     for (const project of projects) {
-        const projectID = project.id;
+        const projectID = project.projectId;
 
         if (projectElementID === projectID) {
             const titleInput = form.querySelector('.modal__form-title');
@@ -374,7 +374,7 @@ function createEditTaskModal(e) {
 
     const form = createElement('form', 'modal__form');
     form.setAttribute('method', 'dialog');
-    form.setAttribute('data-id', taskElement.dataset.id);
+    form.setAttribute('data-task-id', taskElement.dataset.taskId);
 
     const titleLabel = createElement('label', null, 'Title');
     const titleAstrix = createElement('span', 'modal__form-astrix', '*');
@@ -424,13 +424,16 @@ function createEditTaskModal(e) {
 }
 
 function setEditTaskModalState(taskElement, form) {
-    const taskElementID = taskElement.dataset.id;
+    const taskElementID = taskElement.dataset.taskId;
     const titleInput = form.querySelector('.modal__form-title');
     const descriptionTextarea = form.querySelector('.modal__form-description');
     const dueInput = form.querySelector('.modal__form-date');
 
-    for (const task of tasks) {
-        const taskID = task.id;
+    const project = selectedProject;
+    const projectTasks = project.taskList;
+
+    for (const task of projectTasks) {
+        const taskID = task.taskId;
 
         if (taskElementID === taskID) {
             titleInput.value = task.title;
@@ -476,7 +479,7 @@ function createDeleteProjectModal(e) {
     const br1 = createElement('br', 'modal__text-br');
     const br2 = createElement('br', 'modal__text-br');
 
-    deleteMessage.setAttribute('data-id', project.dataset.id);
+    deleteMessage.setAttribute('data-project-id', project.dataset.projectId);
 
     deleteMessage.append(br1, br2);
     deleteMessage.append(document.createTextNode('Project '))
@@ -527,7 +530,8 @@ function createDeleteTaskModal(e) {
     const br1 = createElement('br', 'modal__text-br');
     const br2 = createElement('br', 'modal__text-br');
 
-    deleteMessage.setAttribute('data-id', task.dataset.id);
+    // It sets task ID attribute so it can be referenced back to array item when deleting the task from DOM
+    deleteMessage.setAttribute('data-task-id', task.dataset.taskId);
 
     deleteMessage.append(br1, br2);
     deleteMessage.append(document.createTextNode('Task '))
@@ -579,10 +583,13 @@ function createTaskInfoModal(e) {
     const modalContent = document.querySelector('.modal__content');
     
     const taskElement = e.target.closest('.main__task-item');
-    const taskElementID = taskElement.getAttribute('data-id');
+    const taskElementID = taskElement.getAttribute('data-task-id');
+
+    const project = selectedProject;
+    const projectTasks = project.taskList;
     
-    for (const task of tasks) {
-        const taskID = task.id;
+    for (const task of projectTasks) {
+        const taskID = task.taskId;
 
         if (taskID === taskElementID) {
             const infoDiv = createElement('div', 'modal__info');
@@ -622,7 +629,10 @@ function createTaskInfoModal(e) {
 
             const projectDiv = createElement('div', 'modal__info-container');
             const projectH3 = createElement('h3', 'modal__info-due', 'Project:');
-            const projectPara = createElement('p', 'modal__info-projectText', 'Example Project Nigguh');//task.project);
+
+            const projectTitle = selectedProject.title;
+            const projectPara = createElement('p', 'modal__info-projectText', projectTitle);
+
             projectDiv.append(projectH3, projectPara);
 
             infoDiv.append(titleDiv, descriptionDiv, dueDiv, priorityDiv, projectDiv)

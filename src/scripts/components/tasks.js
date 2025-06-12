@@ -1,6 +1,6 @@
 import { createElement } from "../utils/dom.js";
 import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
-import { projects, selectedProject } from "./projects.js";
+import { selectedProject } from "./projects.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '../modules/icons.js';
 
@@ -134,14 +134,17 @@ export function deleteTask(e) {
 function deleteTaskFromArray(e) {
     const taskElement = e.currentTarget.closest('.modal__content').querySelector('.modal__text');
     const taskElementID = taskElement.getAttribute('data-task-id');
+    const project = selectedProject;
+    const projectTasks = project.taskList;
+
     let itemFound = false;
     
-    for (const task of tasks) {
+    for (const task of projectTasks) {
         const taskID = task.taskId;
-        const taskIndex = tasks.indexOf(task);
+        const taskIndex = projectTasks.indexOf(task);
         
         if (taskID === taskElementID) {
-            tasks.splice(taskIndex, 1);
+            projectTasks.splice(taskIndex, 1);
             itemFound = true;
         }
     }
@@ -153,9 +156,12 @@ function deleteTaskFromDOM() {
     
     for (const taskElement of taskElements) {
         const taskElementID = taskElement.dataset.taskId;
+        const project = selectedProject;
+        const projectTasks = project.taskList;
+
         let elementExistsInArray = false;
         
-        for (const task of tasks) {
+        for (const task of projectTasks) {
             const taskID = task.taskId;
             
             if (taskElementID === taskID) {
@@ -175,7 +181,10 @@ function editTaskInArray() {
     const taskDue = document.querySelector('.modal__form-date').value;
     const taskPriority = document.querySelector('.modal__form-priority').value;
 
-    for (const task of tasks) {
+    const project = selectedProject;
+    const projectTasks = project.taskList;
+
+    for (const task of projectTasks) {
         const taskID = task.taskId;
 
         if (taskElementID === taskID) {
@@ -191,7 +200,10 @@ function editTaskInDOM() {
     const taskElement = findTaskElement();
     const taskElementID = taskElement.getAttribute('data-task-id');
 
-    for (const task of tasks) {
+    const project = selectedProject;
+    const projectTasks = project.taskList;
+
+    for (const task of projectTasks) {
         const taskID = task.taskId;
 
         if (taskElementID === taskID) {
@@ -216,10 +228,12 @@ function findTaskElement() {
     const form = document.querySelector('.modal__form');
     // To prevent losing the trace of the task item, I stamped task ID onto form so it can be traced back to the task item once the modal is open
     const formID = form.getAttribute('data-task-id');
+    console.log(formID);
     const taskElements = document.querySelectorAll('.main__task-item');
 
     for (const taskElement of taskElements) {
         const taskElementID = taskElement.dataset.taskId;
+        console.log(taskElementID);
 
         if (formID === taskElementID) {
             return taskElement;
@@ -246,13 +260,9 @@ function addTaskToArray() {
     project.taskList.push(newTask);
 }
 
-// Exporting function to be able to render tasks when user clicks on Project name button in projects.js under selectProject()
-export function renderTasks() {
-    const projectTitle = document.querySelector('.main__headline').textContent;
-    const project = projects.find(project => project.title === projectTitle);
-    console.log(project)
+function addTaskToDOM() {
+    const project = selectedProject;
     const projectTasks = project.taskList;
-    console.log(projectTasks)
     const projectTasksCount = project.taskList.length;
 
     if (!project) return;
@@ -272,10 +282,52 @@ export function renderTasks() {
         }
         if (!duplicateTask) createTaskElement(task);
     }
-    updateTasksCount(projectTasksCount);
 }
 
-function updateTasksCount(projectTasksCount) {
+// Exporting function to be able to render tasks when user clicks on Project name button in projects.js under selectProject()
+export function renderTasks() {
+    deleteTasksFromDOM();
+
+    const project = selectedProject;
+    const projectTasks = project.taskList;
+    const projectTasksCount = project.taskList.length;
+
+    if (!project) return;
+
+    const taskElements = document.querySelectorAll('.main__task-item');
+
+    for (const task of projectTasks) {
+        const taskID = task.taskId;
+        let duplicateTask = false;
+
+
+        
+        for (const taskElement of taskElements) {
+            const taskElementID = taskElement.getAttribute('data-task-id');
+
+            if (taskID === taskElementID) {
+                duplicateTask = true;
+            }
+        }
+        if (!duplicateTask) createTaskElement(task);
+    }
+
+    updateTasksCount();
+}
+
+function deleteTasksFromDOM() {
+    const tasksContainerNode = document.querySelector('.main__tasks-list');
+
+    while (tasksContainerNode.lastChild) {
+        tasksContainerNode.lastChild.remove();
+    }
+}
+
+function updateTasksCount() {
+    const project = selectedProject;
+    const projectTasks = project.taskList;
+    const projectTasksCount = projectTasks.length;
+
     const tasksCountText = document.querySelector('.main__tasks-num');
     const tasksCount = projectTasksCount;
     
@@ -285,5 +337,6 @@ function updateTasksCount(projectTasksCount) {
 // Exporting this function to pass it as callback for form "submit" event of showTasksModal() in modal.js
 export function addNewTask() {
     addTaskToArray();
-    renderTasks();
+    addTaskToDOM();
+    updateTasksCount();
 }

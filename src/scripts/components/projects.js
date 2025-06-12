@@ -65,7 +65,6 @@ function selectProject(e) {
     }
 
     changeTasksSectionHeader(projectTitle, projectIconClass);
-    deleteTasks();
     renderTasks();
 }
 
@@ -80,15 +79,6 @@ function changeTasksSectionHeader(projectTitle, projectIconClass) {
     sectionTitle.textContent = projectTitle;
     if (sectionIcon) sectionIcon.remove();
     headerContainer.prepend(newIcon);
-}
-
-function deleteTasks() {
-    const tasksContainerNode = document.querySelector('.main__tasks-list');
-
-    while (tasksContainerNode.lastChild) {
-        tasksContainerNode.lastChild.remove();
-    }
-    
 }
 
 function createProjectElement(project) {
@@ -128,7 +118,7 @@ function addProjectToArray() {
     projects.push(newProject);
 }
 
-function renderProjects() {
+function addProjectToDOM() {
     const projectElements = document.querySelectorAll('.projects__item');
     
     for (const project of projects) {
@@ -295,5 +285,5 @@ export function deleteProject(e) {
 // Exporting this function to pass it as callback for form "submit" event of showProjectsModal() in modal.js
 export function addNewProject() {
     addProjectToArray();
-    renderProjects();
+    addProjectToDOM();
 }
