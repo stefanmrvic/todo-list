@@ -204,10 +204,17 @@ function deleteProjectFromDOM() {
 
     projectElements = document.querySelectorAll('.projects__item');
 
-    const lastProjectElementIndex = projectElements.length - 1;
-    const lastProjectElement = projectElements[lastProjectElementIndex];
-
-    if (lastProjectElement) changeActiveProject(lastProjectElement);
+    // It checks if there are Projects left, if yes, then it will select the last Project after the previous one was deleted
+    if (projectElements.length > 0) {
+        const lastProjectElementIndex = projectElements.length - 1;
+        const lastProjectElement = projectElements[lastProjectElementIndex];
+        changeActiveProject(lastProjectElement);
+    } else {
+        // It reverts Tasks section title and disables add Task button when there are no Projects left
+        // TODO
+        const addTaskBtn = document.querySelector('.main__add-btn');
+        addTaskBtn.classList.remove('show');
+    }
 }
 
 function editProjectInArray() {
