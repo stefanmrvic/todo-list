@@ -41,21 +41,21 @@ projectsAddBtn.addEventListener('click', showAddProjectModal);
 
 function changeActiveProject(projectEle) {
     changeActiveBtn(projectEle);
+    renderAddTaskBtn();
     changeTasksSectionHeader(projectEle);
 }
 
-function changeActiveBtn(projectEle) {
+// Exporting this function so I can use it in due.js when user clicks on different due filters
+export function changeActiveBtn(ele) {
     const activeBtn = document.querySelector('.active');
-    const projectElement = projectEle;
+    const element = ele;
 
     // It removes the .active className from buttons
     if (activeBtn) {
         activeBtn.classList.remove('active');
     }
 
-    projectElement.classList.add('active');
-
-    renderAddTaskBtn();
+    element.classList.add('active');
 }
 
 function changeTasksSectionHeader(projectEle) {

@@ -1,4 +1,3 @@
-import '../utils/dom.js';
 import { createElement } from '../utils/dom.js';
 import { selectedProject, addNewProject, editProject, deleteProject, projects } from './projects.js';
 import { addNewTask, editTask, deleteTask } from './tasks.js';

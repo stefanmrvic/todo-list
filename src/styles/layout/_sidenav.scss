@@ -12,12 +12,12 @@ aside {
 .sidenav {
     padding: 40px 20px;
 
-    .due {
+    .due__container {
         margin-bottom: 50px;
     }
 
     .projects {
-
+        
         &__header {
             display: flex;
             justify-content: space-between;
