@@ -44,7 +44,7 @@ function changeActiveProject(projectEle) {
     changeActiveBtn(projectEle);
     renderAddTaskBtn();
     changeTasksSectionHeader(projectEle);
-    filterCompleted();
+    renderTasks();
 }
 
 // Exporting this function so I can use it in due.js when user clicks on different due filters
@@ -98,7 +98,6 @@ function selectProject(e) {
     selectedProject = projects.find(project => project.projectId === projectElement.dataset.projectId);
 
     changeActiveProject(projectElement);
-    renderTasks();
 }
 
 function createProjectElement(project) {
@@ -213,7 +212,6 @@ function deleteProjectFromDOM() {
         changeActiveProject(lastProjectElement);
     } else {
         // It reverts Tasks section title and disables add Task button when there are no Projects left
-        // TODO
         const addTaskBtn = document.querySelector('.main__add-btn');
         addTaskBtn.classList.remove('show');
     }
