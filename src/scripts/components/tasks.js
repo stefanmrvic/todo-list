@@ -1,6 +1,6 @@
 import { createElement } from "../utils/dom.js";
 import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
-import { selectedProject } from "./projects.js";
+import { projects, selectedProject } from "./projects.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '../modules/icons.js';
 
@@ -10,6 +10,7 @@ class Task {
         this.description = description;
         this.due = due;
         this.priority = priority;
+        this.completed = false;
         this.taskId = crypto.randomUUID();
         this.projectId = projectId;
     }
@@ -34,35 +35,60 @@ tasksList.addEventListener('click', markTaskDone);
 tasksAddBtn.addEventListener('click', showAddTaskModal);
 
 function markTaskDone(e) {
+    changeTaskStatus(e);
     crossOutTask(e);
     changeTaskIcon(e);
 }
 
-function crossOutTask(e) {
-    const taskItem = e.target.closest('.main__task-item');
-    const taskItemPara = taskItem.querySelector('.main__text > .main__task-title');
+function changeTaskStatus(e) {
+    const taskElement = e.target.closest('.main__task-item');
+    const task = findTaskInArray(taskElement);
+    const isTaskCompleted = task.completed;
 
-    taskItemPara.style.textDecoration = 
-        taskItemPara.style.textDecoration === 'line-through' ? 'none' : 'line-through';
+    if (!isTaskCompleted) task.completed = true;
+    else task.completed = false;
+}
+
+function crossOutTask(e) {
+    const taskElement = e.target.closest('.main__task-item');
+    const taskElementTitle = taskElement.querySelector('.main__text > .main__task-title');
+    const task = findTaskInArray(taskElement);
+    const taskCompleted = task.completed;
+
+    if(taskCompleted) taskElementTitle.classList.add('done');
 }
 
 function changeTaskIcon(e) {
-    const taskItem = e.target.closest('.main__task-item');
-    const taskItemIconWrapper = taskItem.querySelector('.main__text > .main__task-icon-wrapper');
-    let taskItemIcon = taskItemIconWrapper.querySelector('.main__task-icon');
-    const taskItemIconInitial = icon(faCircle).node[0];
-    const taskItemIconCheck = icon(faCircleCheck).node[0];
-    const isInitialIcon = taskItemIcon.classList.contains('fa-circle');
-    const iconToUse = isInitialIcon ? taskItemIconCheck : taskItemIconInitial;
+    const taskElement = e.target.closest('.main__task-item');
+    const taskElementIconWrapper = taskElement.querySelector('.main__text > .main__task-icon-wrapper');
+    const task = findTaskInArray(taskElement);
 
-    const priorityClassList = ['low', 'medium', 'high'];
-    const taskItemIconPriority = priorityClassList.find(task => taskItemIcon.classList.contains(task));
+    let taskElementIcon = taskElementIconWrapper.querySelector('.main__task-icon');
 
-    taskItemIcon.remove();
-    taskItemIconWrapper.appendChild(iconToUse);
-    taskItemIconWrapper.children[0].classList.add('main__task-icon');
-    taskItemIcon = taskItemIconWrapper.querySelector('.main__task-icon');
-    taskItemIcon.classList.add(taskItemIconPriority);
+    const initialIcon = icon(faCircle).node[0];
+    const checkedIcon = icon(faCircleCheck).node[0];
+
+    const taskCompleted = task.completed;
+    const taskPriority = task.priority;
+    const iconToUse = taskCompleted ? checkedIcon : initialIcon;
+
+    taskElementIcon.remove();
+    taskElementIconWrapper.appendChild(iconToUse);
+    taskElementIconWrapper.children[0].classList.add('main__task-icon');
+    taskElementIcon = taskElementIconWrapper.querySelector('.main__task-icon');
+    taskElementIcon.classList.add(taskPriority);
+}
+
+function findTaskInArray(taskElement) {
+    const taskItem = taskElement;
+    const taskItemID = taskItem.dataset.taskId;
+    const taskProjectID = taskItem.dataset.projectId;
+
+    const project = projects.find(project => project.projectId === taskProjectID);
+    const projectTaskList = project.taskList;
+    const taskInArray = projectTaskList.find(task => task.taskId === taskItemID);
+
+    return taskInArray;
 }
 
 function createTaskElement(task) {
@@ -71,12 +97,15 @@ function createTaskElement(task) {
     const textContainer = createElement('div', 'main__text');
 
     const iconWrapper = createElement('div', 'main__task-icon-wrapper');
-    const taskIcon = icon(faCircle).node[0];
+    const taskCompleted = task.completed;
+    const taskIcon = taskCompleted ? icon(faCircleCheck).node[0] : icon(faCircle).node[0];
     taskIcon.classList.add('main__task-icon');
-    const title = createElement('p', 'main__task-title', task.title);
+    const taskTitle = createElement('p', 'main__task-title', task.title);
+
+    if (taskCompleted) taskTitle.classList.add('done');
 
     iconWrapper.append(taskIcon); 
-    textContainer.append(iconWrapper, title);
+    textContainer.append(iconWrapper, taskTitle);
 
     const controlsContainer = createElement('div', 'main__controls');
 
@@ -299,8 +328,6 @@ export function renderTasks() {
     for (const task of projectTasks) {
         const taskID = task.taskId;
         let duplicateTask = false;
-
-
         
         for (const taskElement of taskElements) {
             const taskElementID = taskElement.getAttribute('data-task-id');

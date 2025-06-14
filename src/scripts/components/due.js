@@ -1,5 +1,5 @@
 import { createElement } from '../utils/dom.js';
-import { changeActiveBtn } from './projects.js'
+import { projects, changeActiveBtn } from './projects.js';
 
 const filterContainer = document.querySelector('.due__container');
 
@@ -32,4 +32,42 @@ function changeTasksSectionHeader(filterEle) {
     sectionTitle.textContent = dueTitle;
     sectionIcon.remove();
     headerContainer.prepend(newIcon);
+}
+
+function filterAll() {
+    const allTasks = [];
+
+    for (const project of projects) {
+        const taskList = project.taskList;
+
+        allTasks.push(...taskList);
+    }
+}
+
+function filterDueToday() {
+
+}
+
+function filterDueWeek() {
+    
+}
+
+function filterImportant() {
+    const importantTasks = [];
+
+    for (const project of projects) {
+        const important = project.taskList.filter(task => task.priority === 'high');
+
+        importantTasks.push(...important);
+    }
+}
+
+export function filterCompleted() {
+    const completedTasks = [];
+
+    for (const project of projects) {
+        const completed = project.taskList.filter(task => task.completed === true);
+
+        completedTasks.push(...completed);
+    }
 }

@@ -3,6 +3,7 @@ import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, clos
 import { renderTasks } from '../components/tasks.js'
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift } from '../modules/icons.js';
+import { filterCompleted } from './due.js';
 
 class Project {
     constructor(title, icon) {
@@ -43,6 +44,7 @@ function changeActiveProject(projectEle) {
     changeActiveBtn(projectEle);
     renderAddTaskBtn();
     changeTasksSectionHeader(projectEle);
+    filterCompleted();
 }
 
 // Exporting this function so I can use it in due.js when user clicks on different due filters
