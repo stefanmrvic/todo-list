@@ -3,7 +3,7 @@ import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, clos
 import { renderTasks } from '../components/tasks.js'
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift } from '../modules/icons.js';
-import { filterCompleted } from './due.js';
+import { setSelectedFilter, filterCompleted } from './due.js';
 
 class Project {
     constructor(title, icon) {
@@ -41,6 +41,9 @@ projectsList.addEventListener('click', selectProject);
 projectsAddBtn.addEventListener('click', showAddProjectModal);
 
 function changeActiveProject(projectEle) {
+    // Sets selectedFilter to 'null' to prevent task re-rendering when user marks task as done or change it's properties
+    setSelectedFilter(null);
+
     changeActiveBtn(projectEle);
     renderAddTaskBtn();
     changeTasksSectionHeader(projectEle);

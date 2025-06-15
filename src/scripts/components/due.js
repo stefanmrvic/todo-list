@@ -3,8 +3,24 @@ import { projects, changeActiveBtn } from './projects.js';
 import { createTaskElement, deleteTasksFromDOM } from './tasks.js';
 
 const filterContainer = document.querySelector('.due__container');
+const tasksContainer = document.querySelector('.main__tasks-list');
+//const modalForm = document.querySelector('.modal__form');
+
+let selectedFilter = 'all';
+
+export function setSelectedFilter(value) {
+    const validFilters = ['all', 'completed', 'important', null, undefined];
+    const isValidFilter = validFilters.find(filter => filter === value);
+
+    if (isValidFilter) selectedFilter = value;
+}
+
+
 
 filterContainer.addEventListener('click', selectFilter);
+// Checks if user marks Task as done or if user changes any Task details which would cause it to no longer fit the filter category and then it re-renders all tasks into the selected category
+tasksContainer.addEventListener('click', reRenderFilteredTasks);
+//modalForm.addEventListener('submit', reRenderFilteredTasks);
 
 function selectFilter(e) {
     const target = e.target.closest('.due__btn');
@@ -17,10 +33,16 @@ function selectFilter(e) {
     changeActiveBtn(target);
     changeTasksSectionHeader(target);
 
-
-    if (target === allTasksFilter) filterAll();
-    else if (target === completedTasksFilter) filterCompleted();
-    else if (target === importantTasksFilter) filterImportant();
+    if (target === allTasksFilter) {
+        selectedFilter = 'all';
+        filterAll();
+    } else if (target === completedTasksFilter) {
+        selectedFilter = 'completed';
+        filterCompleted();
+    } else if (target === importantTasksFilter) {
+        selectedFilter = 'important';
+        filterImportant();
+    }
 }
 
 function changeTasksSectionHeader(filterEle) {
@@ -97,6 +119,19 @@ function renderFilteredTasks(taskList) {
     }
 
     updateTasksCount(taskList);
+}
+
+function reRenderFilteredTasks(e) {
+    const tasksContainer = document.querySelector('.main__tasks-list');
+
+    //if (!e.target.closest(tasksContainer)) return;
+    //const modal = 
+
+    if (!selectedFilter) return;
+
+    if (selectedFilter === 'all') filterAll();
+    else if (selectedFilter === 'completed') filterCompleted();
+    else if (selectedFilter === 'important') filterImportant();
 }
 
 function updateTasksCount(taskList) {
