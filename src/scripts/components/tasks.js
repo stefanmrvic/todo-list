@@ -91,7 +91,7 @@ function findTaskInArray(taskElement) {
     return taskInArray;
 }
 
-function createTaskElement(task) {
+export function createTaskElement(task) {
     const parent = document.querySelector('.main__tasks-list');
     const taskElement = createElement('div', 'main__task-item');
     const textContainer = createElement('div', 'main__text');
@@ -126,12 +126,12 @@ function createTaskElement(task) {
     controlsContainer.append(date, editBtn, deleteBtn, infoBtn);
     taskElement.append(textContainer, controlsContainer);
 
-    const project = selectedProject;
-    const projectID = project.projectId;
+    const taskID = task.taskId;
+    const projectID = task.projectId;
 
     // It sets data ID attributes so that DOM elements can be referenced back to the array items in the backend
     taskElement.setAttribute('data-project-id', projectID);
-    taskElement.setAttribute('data-task-id', task.taskId);
+    taskElement.setAttribute('data-task-id', taskID);
 
     // It captures the key name of the priority property of the task object
     const priority = task.priority;
@@ -339,10 +339,10 @@ export function renderTasks() {
         if (!duplicateTask) createTaskElement(task);
     }
 
-    updateTasksCount();
+    updateTasksCount(projectTasksCount);
 }
 
-function deleteTasksFromDOM() {
+export function deleteTasksFromDOM() {
     const tasksContainerNode = document.querySelector('.main__tasks-list');
 
     while (tasksContainerNode.lastChild) {
