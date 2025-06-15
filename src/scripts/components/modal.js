@@ -1,9 +1,10 @@
 import { createElement } from '../utils/dom.js';
 import { selectedProject, addNewProject, editProject, deleteProject, projects } from './projects.js';
-import { addNewTask, editTask, deleteTask } from './tasks.js';
+import { addNewTask, editTask, deleteTask, findTaskInArray } from './tasks.js';
+import { getSelectedFilter, reRenderFilteredTasks } from "./due.js";
 
 // Exporting it to tasks.js & projects.js under deleteTask()
-export function closeModal() {
+export function closeModal(e) {
     const modal = document.querySelector('.modal');
     const modalHeader = document.querySelector('.modal__header');
     const modalHeaderClasses = ['edit', 'delete', 'info'];
@@ -11,7 +12,8 @@ export function closeModal() {
     
     if (activeClass) modalHeader.classList.remove(activeClass);
 
-    modal.close();  
+    modal.close();
+    e.preventDefault();
 }
 
 export function showAddProjectModal() {
@@ -365,6 +367,10 @@ export function showEditTaskModal(e) {
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
     form.addEventListener('submit', editTask);
+ 
+    // It puts event listener when user edits the task to detect if the user changed some property 
+    // which would make the task to fall out of the selected filter category
+    form.addEventListener('submit', reRenderFilteredTasks);
 }
 
 function createEditTaskModal(e) {
@@ -422,13 +428,15 @@ function createEditTaskModal(e) {
     setEditTaskModalState(taskElement, form);
 }
 
-function setEditTaskModalState(taskElement, form) {
+function setEditTaskModalState(taskEle, form) {
+    const taskElement = taskEle;
     const taskElementID = taskElement.dataset.taskId;
+    const task = findTaskInArray(taskElement);
     const titleInput = form.querySelector('.modal__form-title');
     const descriptionTextarea = form.querySelector('.modal__form-description');
     const dueInput = form.querySelector('.modal__form-date');
-
-    const project = selectedProject;
+    
+    const project = projects.find(project => project.projectId === task.projectId);
     const projectTasks = project.taskList;
 
     for (const task of projectTasks) {

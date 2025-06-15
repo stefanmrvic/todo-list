@@ -79,7 +79,7 @@ function changeTaskIcon(e) {
     taskElementIcon.classList.add(taskPriority);
 }
 
-function findTaskInArray(taskElement) {
+export function findTaskInArray(taskElement) {
     const taskItem = taskElement;
     const taskItemID = taskItem.dataset.taskId;
     const taskProjectID = taskItem.dataset.projectId;
@@ -204,13 +204,14 @@ function deleteTaskFromDOM() {
 function editTaskInArray() {
     const taskElement = findTaskElement();
     const taskElementID = taskElement.getAttribute('data-task-id');
+    const task = findTaskInArray(taskElement);
 
     const taskTitle = document.querySelector('.modal__form-title').value;
     const taskDescription = document.querySelector('.modal__form-description').value;
     const taskDue = document.querySelector('.modal__form-date').value;
     const taskPriority = document.querySelector('.modal__form-priority').value;
 
-    const project = selectedProject;
+    const project = projects.find(project => project.projectId === task.projectId);
     const projectTasks = project.taskList;
 
     for (const task of projectTasks) {
@@ -228,8 +229,9 @@ function editTaskInArray() {
 function editTaskInDOM() {
     const taskElement = findTaskElement();
     const taskElementID = taskElement.getAttribute('data-task-id');
+    const task = findTaskInArray(taskElement);
 
-    const project = selectedProject;
+    const project = projects.find(project => project.projectId === task.projectId);
     const projectTasks = project.taskList;
 
     for (const task of projectTasks) {
@@ -257,12 +259,10 @@ function findTaskElement() {
     const form = document.querySelector('.modal__form');
     // To prevent losing the trace of the task item, I stamped task ID onto form so it can be traced back to the task item once the modal is open
     const formID = form.getAttribute('data-task-id');
-    console.log(formID);
     const taskElements = document.querySelectorAll('.main__task-item');
 
     for (const taskElement of taskElements) {
         const taskElementID = taskElement.dataset.taskId;
-        console.log(taskElementID);
 
         if (formID === taskElementID) {
             return taskElement;
@@ -292,7 +292,6 @@ function addTaskToArray() {
 function addTaskToDOM() {
     const project = selectedProject;
     const projectTasks = project.taskList;
-    const projectTasksCount = project.taskList.length;
 
     if (!project) return;
 

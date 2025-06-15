@@ -4,23 +4,25 @@ import { createTaskElement, deleteTasksFromDOM } from './tasks.js';
 
 const filterContainer = document.querySelector('.due__container');
 const tasksContainer = document.querySelector('.main__tasks-list');
-//const modalForm = document.querySelector('.modal__form');
+// const modalForm = document.querySelector('.modal__form');
 
-let selectedFilter = 'all';
+export let selectedFilter = 'all';
+
+
+export const getSelectedFilter = (value) => value = selectedFilter;
 
 export function setSelectedFilter(value) {
     const validFilters = ['all', 'completed', 'important', null, undefined];
-    const isValidFilter = validFilters.find(filter => filter === value);
+    const isValidFilter = validFilters.some(filter => filter === value);
 
     if (isValidFilter) selectedFilter = value;
+    else throw new Error('Invalid filter value!');
 }
-
-
 
 filterContainer.addEventListener('click', selectFilter);
 // Checks if user marks Task as done or if user changes any Task details which would cause it to no longer fit the filter category and then it re-renders all tasks into the selected category
 tasksContainer.addEventListener('click', reRenderFilteredTasks);
-//modalForm.addEventListener('submit', reRenderFilteredTasks);
+// modalForm.addEventListener('submit', reRenderFilteredTasks);
 
 function selectFilter(e) {
     const target = e.target.closest('.due__btn');
@@ -121,17 +123,23 @@ function renderFilteredTasks(taskList) {
     updateTasksCount(taskList);
 }
 
-function reRenderFilteredTasks(e) {
-    const tasksContainer = document.querySelector('.main__tasks-list');
+// Exporting the function so it can be used as a callback for event listener under createElement() in task.js, so that tasks gets re-rendered 
+// if the user changes any of the task properties that would make task fall out of the selected filter category
+export function reRenderFilteredTasks(e) {
+    const selectedFilter = getSelectedFilter();
 
-    //if (!e.target.closest(tasksContainer)) return;
-    //const modal = 
+    if (
+        !e.target.closest('.main__tasks-list') &&
+        !e.target.closest('.modal')
+    ) return;
 
-    if (!selectedFilter) return;
+    //if (!selectedFilter) return;
 
     if (selectedFilter === 'all') filterAll();
     else if (selectedFilter === 'completed') filterCompleted();
     else if (selectedFilter === 'important') filterImportant();
+
+    alert('activated!!');
 }
 
 function updateTasksCount(taskList) {
