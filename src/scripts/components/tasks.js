@@ -281,6 +281,7 @@ function addTaskToArray() {
     const taskTitle = document.querySelector('.modal__form-title').value;
     const taskDescription = document.querySelector('.modal__form-description').value;
     const taskDue = document.querySelector('.modal__form-date').value;
+
     const taskPriority = document.querySelector('.modal__form-priority').value;
 
     const project = selectedProject;

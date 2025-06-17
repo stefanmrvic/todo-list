@@ -1,13 +1,12 @@
 import { createElement } from '../utils/dom.js';
 import { projects, changeActiveBtn } from './projects.js';
 import { createTaskElement, deleteTasksFromDOM } from './tasks.js';
+import { isToday, isThisWeek } from "date-fns";
 
 const filterContainer = document.querySelector('.due__container');
 const tasksContainer = document.querySelector('.main__tasks-list');
-// const modalForm = document.querySelector('.modal__form');
 
 export let selectedFilter = 'all';
-
 
 export const getSelectedFilter = (value) => value = selectedFilter;
 
@@ -22,11 +21,12 @@ export function setSelectedFilter(value) {
 filterContainer.addEventListener('click', selectFilter);
 // Checks if user marks Task as done or if user changes any Task details which would cause it to no longer fit the filter category and then it re-renders all tasks into the selected category
 tasksContainer.addEventListener('click', reRenderFilteredTasks);
-// modalForm.addEventListener('submit', reRenderFilteredTasks);
 
 function selectFilter(e) {
     const target = e.target.closest('.due__btn');
     const allTasksFilter = document.querySelector('.due__btn--all');
+    const dueTodayTasksFilter = document.querySelector('.due__btn--today');
+    const dueThisWeekTasksFilter = document.querySelector('.due__btn--week');
     const completedTasksFilter = document.querySelector('.due__btn--completed');
     const importantTasksFilter = document.querySelector('.due__btn--important');
 
@@ -44,6 +44,12 @@ function selectFilter(e) {
     } else if (target === importantTasksFilter) {
         selectedFilter = 'important';
         filterImportant();
+    } else if (target === dueTodayTasksFilter) {
+        selectedFilter = 'due today';
+        filterDueToday();
+    } else if (target === dueThisWeekTasksFilter) {
+        selectedFilter = 'due this week';
+        filterDueThisWeek();
     }
 }
 
@@ -80,11 +86,31 @@ function filterAll() {
 }
 
 function filterDueToday() {
+    const dueTodayTasks = [];
 
+    for (const project of projects) {
+        const taskList = project.taskList;
+
+        const dueToday = taskList.filter(task => isToday(task.due));
+        
+        dueTodayTasks.push(...dueToday); 
+    }
+
+    renderFilteredTasks(dueTodayTasks); 
 }
 
-function filterDueWeek() {
-    
+function filterDueThisWeek() {
+    const dueThisWeekTasks = [];
+
+    for (const project of projects) {
+        const taskList = project.taskList;
+
+        const dueThisWeek = taskList.filter(task => isThisWeek(task.due));
+        
+        dueThisWeekTasks.push(...dueThisWeek); 
+    }
+
+    renderFilteredTasks(dueThisWeekTasks); 
 }
 
 function filterImportant() {
@@ -133,13 +159,9 @@ export function reRenderFilteredTasks(e) {
         !e.target.closest('.modal')
     ) return;
 
-    //if (!selectedFilter) return;
-
     if (selectedFilter === 'all') filterAll();
     else if (selectedFilter === 'completed') filterCompleted();
     else if (selectedFilter === 'important') filterImportant();
-
-    alert('activated!!');
 }
 
 function updateTasksCount(taskList) {
