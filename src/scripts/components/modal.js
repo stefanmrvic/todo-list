@@ -1,7 +1,7 @@
 import { createElement } from '../utils/dom.js';
-import { selectedProject, addNewProject, editProject, deleteProject, projects } from './projects.js';
+import { addNewProject, editProject, deleteProject, projects } from './projects.js';
 import { addNewTask, editTask, deleteTask, findTaskInArray } from './tasks.js';
-import { getSelectedFilter, reRenderFilteredTasks } from "./due.js";
+import { reRenderFilteredTasks } from "./due.js";
 
 // Exporting it to tasks.js & projects.js under deleteTask()
 export function closeModal(e) {
@@ -479,14 +479,17 @@ export function showDeleteProjectModal(e) {
 
 function createDeleteProjectModal(e) {
     const modalContent = document.querySelector('.modal__content');
+
     const project = e.target.closest('.projects__item');
     const projectTitle = project.querySelector('.projects__info-title'); 
+
+    const form = createElement('form', 'modal__form');
+    form.setAttribute('method', 'dialog');
+    form.setAttribute('data-project-id', project.dataset.projectId);
     
     const deleteMessage = createElement('p', 'modal__text', 'Are you sure?');
     const br1 = createElement('br', 'modal__text-br');
     const br2 = createElement('br', 'modal__text-br');
-
-    deleteMessage.setAttribute('data-project-id', project.dataset.projectId);
 
     deleteMessage.append(br1, br2);
     deleteMessage.append(document.createTextNode('Project '))
@@ -502,7 +505,8 @@ function createDeleteProjectModal(e) {
     const deleteBtn = createElement('button', 'modal__delete-btn btn', 'Delete');
 
     controlsContainer.append(cancelBtn, deleteBtn);
-    modalContent.append(deleteMessage , controlsContainer);
+    form.append(deleteMessage, controlsContainer)
+    modalContent.append(form);
 
     deleteBtn.addEventListener('click', deleteProject);
 }
@@ -532,6 +536,10 @@ function createDeleteTaskModal(e) {
     const modalContent = document.querySelector('.modal__content');
     const task = e.target.closest('.main__task-item');
     const taskTitle = task.querySelector('.main__task-title'); 
+
+    const form = createElement('form', 'modal__form');
+    form.setAttribute('method', 'dialog');
+    form.setAttribute('data-task-id', task.dataset.taskId);
     
     const deleteMessage = createElement('p', 'modal__text', 'Are you sure?');
     const br1 = createElement('br', 'modal__text-br');
@@ -554,7 +562,8 @@ function createDeleteTaskModal(e) {
     const deleteBtn = createElement('button', 'modal__delete-btn btn', 'Delete');
 
     controlsContainer.append(cancelBtn, deleteBtn);
-    modalContent.append(deleteMessage , controlsContainer);
+    form.append(deleteMessage, controlsContainer)
+    modalContent.append(form);
 
     deleteBtn.addEventListener('click', deleteTask);
 }
@@ -591,8 +600,9 @@ function createTaskInfoModal(e) {
     
     const taskElement = e.target.closest('.main__task-item');
     const taskElementID = taskElement.getAttribute('data-task-id');
+    const task = findTaskInArray(taskElement);
 
-    const project = selectedProject;
+    const project = projects.find(project => project.projectId === task.projectId);
     const projectTasks = project.taskList;
     
     for (const task of projectTasks) {
@@ -637,7 +647,7 @@ function createTaskInfoModal(e) {
             const projectDiv = createElement('div', 'modal__info-container');
             const projectH3 = createElement('h3', 'modal__info-due', 'Project:');
 
-            const projectTitle = selectedProject.title;
+            const projectTitle = project.title;
             const projectPara = createElement('p', 'modal__info-projectText', projectTitle);
 
             projectDiv.append(projectH3, projectPara);

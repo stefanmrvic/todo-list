@@ -1,6 +1,6 @@
 import { createElement } from "../utils/dom.js";
 import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
-import { projects, selectedProject } from "./projects.js";
+import { projects, selectedProject, storeProjectToLocalStorage } from "./projects.js";
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faCircleCheck } from '../modules/icons.js';
 
@@ -157,13 +157,16 @@ export function deleteTask(e) {
     deleteTaskFromArray(e);
     deleteTaskFromDOM();
     updateTasksCount();
-    closeModal();
+    closeModal(e);
+    storeProjectToLocalStorage();
 }
 
 function deleteTaskFromArray(e) {
-    const taskElement = e.currentTarget.closest('.modal__content').querySelector('.modal__text');
+    const taskElement = findTaskElement();
     const taskElementID = taskElement.getAttribute('data-task-id');
-    const project = selectedProject;
+    const task = findTaskInArray(taskElement);
+    
+    const project = projects.find(project => project.projectId === task.projectId);
     const projectTasks = project.taskList;
 
     let itemFound = false;
@@ -184,19 +187,16 @@ function deleteTaskFromDOM() {
     const taskElements = document.querySelectorAll('.main__task-item');
     
     for (const taskElement of taskElements) {
-        const taskElementID = taskElement.dataset.taskId;
-        const project = selectedProject;
+        console.log(taskElement)
+        const task = findTaskInArray(taskElement);
+        console.log(task)
+        const taskID = task.taskId;
+
+        const project = projects.find(project => project.projectId === task.projectId);
         const projectTasks = project.taskList;
 
-        let elementExistsInArray = false;
+        let elementExistsInArray = projectTasks.some(task => task.taskId === taskID);
         
-        for (const task of projectTasks) {
-            const taskID = task.taskId;
-            
-            if (taskElementID === taskID) {
-                elementExistsInArray = true;
-            }
-        }
         if (!elementExistsInArray) taskElement.remove();
     }
 }
@@ -275,6 +275,7 @@ function findTaskElement() {
 export function editTask() {
     editTaskInArray();
     editTaskInDOM();
+    storeProjectToLocalStorage();
 }
 
 function addTaskToArray() {
@@ -318,10 +319,12 @@ export function renderTasks() {
     deleteTasksFromDOM();
 
     const project = selectedProject;
+
+    if (!project) return;
+
     const projectTasks = project.taskList;
     const projectTasksCount = project.taskList.length;
 
-    if (!project) return;
 
     const taskElements = document.querySelectorAll('.main__task-item');
 
@@ -366,4 +369,5 @@ export function addNewTask() {
     addTaskToArray();
     addTaskToDOM();
     updateTasksCount();
+    storeProjectToLocalStorage();
 }

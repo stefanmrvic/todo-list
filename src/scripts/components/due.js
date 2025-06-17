@@ -137,7 +137,8 @@ export function filterCompleted() {
     renderFilteredTasks(completedTasks);
 }
 
-function renderFilteredTasks(taskList) {
+// TODO
+export function renderFilteredTasks(taskList) {
     deleteTasksFromDOM();
 
     for (const task of taskList) {

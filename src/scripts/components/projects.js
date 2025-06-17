@@ -1,9 +1,9 @@
 import { createElement } from '../utils/dom';
 import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from './modal.js';
 import { renderTasks } from '../components/tasks.js'
+import { setSelectedFilter, renderFilteredTasks } from './due.js';
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift } from '../modules/icons.js';
-import { setSelectedFilter, filterCompleted } from './due.js';
 
 class Project {
     constructor(title, icon) {
@@ -101,6 +101,11 @@ function selectProject(e) {
     selectedProject = projects.find(project => project.projectId === projectElement.dataset.projectId);
 
     changeActiveProject(projectElement);
+    storeActiveProjectToLocalStorage(selectedProject);
+}
+
+function storeActiveProjectToLocalStorage(selectedProject) {
+    localStorage.setItem("selectedProject", JSON.stringify(selectedProject));
 }
 
 function createProjectElement(project) {
@@ -144,19 +149,16 @@ function addProjectToArray() {
     selectedProject = newProject;
 }
 
-function addProjectToDOM() {
-    const projectElements = document.querySelectorAll('.projects__item');
+function addProjectsToDOM() {
+    const projectElements = [...document.querySelectorAll('.projects__item')];
     
     for (const project of projects) {
         const projectID = project.projectId;
-        let duplicateProject = false;
-        
-        for (const projectElement of projectElements) {
-            const projectElementID = projectElement.getAttribute('data-project-id');
 
-            if (projectID === projectElementID) {
-                duplicateProject = true;
-            }
+        let duplicateProject;
+
+        if (projectElements) {
+            duplicateProject = projectElements.some(projectElement => projectElement.dataset.projectId === projectID);
         }
 
         if (!duplicateProject) createProjectElement(project);
@@ -173,7 +175,7 @@ function updateProjectsCount() {
 }
 
 function deleteProjectFromArray(e) {
-    const projectElement = e.currentTarget.closest('.modal__content').querySelector('.modal__text');
+    const projectElement = e.currentTarget.closest('.modal__content').querySelector('.modal__form');
     const projectElementID = projectElement.getAttribute('data-project-id');
     let itemFound = false;
     
@@ -313,6 +315,7 @@ function findProjectElement() {
 export function editProject() {
     editProjectInArray();
     editProjectInDOM();
+    storeProjectToLocalStorage();
 }
 
 // Exporting this function to pass it as callback for form "submit" event of showProjectsModal() in modal.js
@@ -320,11 +323,37 @@ export function deleteProject(e) {
     deleteProjectFromArray(e);
     deleteProjectFromDOM();
     updateProjectsCount();
-    closeModal();
+    closeModal(e);
+    storeProjectToLocalStorage();
 }
 
 // Exporting this function to pass it as callback for form "submit" event of showProjectsModal() in modal.js
 export function addNewProject() {
     addProjectToArray();
-    addProjectToDOM();
+    addProjectsToDOM();
+    storeProjectToLocalStorage();
+}
+ // Exporting the function so I can call it whenever new Task is being created
+export function storeProjectToLocalStorage() {
+    localStorage.setItem("projects", JSON.stringify(projects));
+}
+
+function initialRender() {
+    const allProjects = JSON.parse(localStorage.getItem("projects"));
+    projects.push(...allProjects);
+
+    const allTasks = [];
+
+    for (const project of allProjects) {
+        const taskList = project.taskList;
+
+        allTasks.push(...taskList);
+    }
+
+    renderFilteredTasks(allTasks);
+    addProjectsToDOM();
+}
+
+if (localStorage.length > 0) {
+    initialRender();
 }
