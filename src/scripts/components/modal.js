@@ -599,8 +599,11 @@ function createTaskInfoModal(e) {
     const modalContent = document.querySelector('.modal__content');
     
     const taskElement = e.target.closest('.main__task-item');
+    console.log(taskElement)
     const taskElementID = taskElement.getAttribute('data-task-id');
     const task = findTaskInArray(taskElement);
+    console.log(task)
+
 
     const project = projects.find(project => project.projectId === task.projectId);
     const projectTasks = project.taskList;

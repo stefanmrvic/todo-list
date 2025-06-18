@@ -1,7 +1,7 @@
 import { createElement } from '../utils/dom';
 import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from './modal.js';
 import { renderTasks } from '../components/tasks.js'
-import { setSelectedFilter, renderFilteredTasks } from './due.js';
+import { setSelectedFilter, renderFilteredTasks, filterAll } from './due.js';
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift } from '../modules/icons.js';
 
@@ -352,6 +352,7 @@ function initialRender() {
 
     renderFilteredTasks(allTasks);
     addProjectsToDOM();
+    filterAll();
 }
 
 if (localStorage.length > 0) {

@@ -73,7 +73,8 @@ function changeTasksSectionHeader(filterEle) {
     headerContainer.prepend(newIcon);
 }
 
-function filterAll() {
+// Exporting the function to use it in projects.js under initialRender()
+export function filterAll() {
     const allTasks = [];
 
     for (const project of projects) {

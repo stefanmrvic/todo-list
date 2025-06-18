@@ -53,9 +53,8 @@ function crossOutTask(e) {
     const taskElement = e.target.closest('.main__task-item');
     const taskElementTitle = taskElement.querySelector('.main__text > .main__task-title');
     const task = findTaskInArray(taskElement);
-    const taskCompleted = task.completed;
 
-    if(taskCompleted) taskElementTitle.classList.add('done');
+    taskElementTitle.classList.toggle('done');
 }
 
 function changeTaskIcon(e) {
@@ -79,15 +78,19 @@ function changeTaskIcon(e) {
     taskElementIcon.classList.add(taskPriority);
 }
 
-export function findTaskInArray(taskElement) {
-    const taskItem = taskElement;
-    const taskItemID = taskItem.dataset.taskId;
-    const taskProjectID = taskItem.dataset.projectId;
+export function findTaskInArray(taskEle) {
+    const taskElement = taskEle;
+    const taskElementID = taskElement.dataset.taskId;
+    console.log(`this is taskElementID: ${taskElementID}`)
+    const taskProjectID = taskElement.dataset.projectId;
+    console.log(`this is taskProjectID: ${taskProjectID}`)
 
     const project = projects.find(project => project.projectId === taskProjectID);
+    //console.log(project)
     const projectTaskList = project.taskList;
-    const taskInArray = projectTaskList.find(task => task.taskId === taskItemID);
+    const taskInArray = projectTaskList.find(task => task.taskId === taskElementID);
 
+    //console.log(taskInArray)
     return taskInArray;
 }
 
@@ -324,7 +327,6 @@ export function renderTasks() {
 
     const projectTasks = project.taskList;
     const projectTasksCount = project.taskList.length;
-
 
     const taskElements = document.querySelectorAll('.main__task-item');
 
