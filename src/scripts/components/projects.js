@@ -1,9 +1,10 @@
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift } from '../modules/icons.js';
+import { fontAwesomeReady } from '../modules/fontAwesome.js';
 import { createElement } from '../utils/dom';
 import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from './modal.js';
 import { renderTasks } from '../components/tasks.js'
-import { setSelectedFilter, renderFilteredTasks, filterAll } from './due.js';
-import { icon } from '@fortawesome/fontawesome-svg-core';
-import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift } from '../modules/icons.js';
+import { setSelectedFilter, renderFilteredTasks, filterAll, changeTasksSectionHeader as changeHeaderFromDue} from './due.js';
 
 class Project {
     constructor(title, icon) {
@@ -339,7 +340,11 @@ export function storeProjectToLocalStorage() {
 }
 
 function initialRender() {
+    const allProjectsBtn = document.querySelector('.due__btn--all');
     const allProjects = JSON.parse(localStorage.getItem("projects"));
+
+    if (allProjects.length < 1) return; 
+    
     projects.push(...allProjects);
 
     const allTasks = [];
@@ -350,10 +355,17 @@ function initialRender() {
         allTasks.push(...taskList);
     }
 
-    renderFilteredTasks(allTasks);
     addProjectsToDOM();
+    changeActiveBtn(allProjectsBtn);
+
+    fontAwesomeReady.then(() => {
+        changeHeaderFromDue(allProjectsBtn);
+    })
+
+    renderFilteredTasks(allTasks);
     filterAll();
 }
+
 
 if (localStorage.length > 0) {
     initialRender();

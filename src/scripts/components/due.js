@@ -52,8 +52,8 @@ function selectFilter(e) {
         filterDueThisWeek();
     }
 }
-
-function changeTasksSectionHeader(filterEle) {
+ // Exporting it to projects.js under initialRender()
+export function changeTasksSectionHeader(filterEle) {
     const dueElement = filterEle;
     const dueTitle = dueElement.textContent;
     const dueIcon = dueElement.querySelector('svg').classList[1];

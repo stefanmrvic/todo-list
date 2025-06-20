@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo</title>
+    <!-- It shows the site/app once the stylesheet has been loaded, thus, avoiding FOUC -->
+    <style>
+        html { visibility: hidden; opacity: 0; }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -18,7 +22,7 @@
         <nav class="sidenav">
             <!-- Sort Section Start -->
             <div class="btn-container due__container">
-                <button class="btn active due__btn due__btn--all">
+                <button class="btn due__btn due__btn--all">
                     <svg class="btn-icon fas fa-calendar-days"></svg>
                     All
                 </button>

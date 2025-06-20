@@ -1,8 +1,8 @@
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faCircle, faCircleCheck } from '../modules/icons.js';
 import { createElement } from "../utils/dom.js";
 import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
 import { projects, selectedProject, storeProjectToLocalStorage } from "./projects.js";
-import { icon } from '@fortawesome/fontawesome-svg-core';
-import { faCircle, faCircleCheck } from '../modules/icons.js';
 
 class Task {
     constructor(title, description, due, priority, projectId) {
@@ -52,7 +52,6 @@ function changeTaskStatus(e) {
 function crossOutTask(e) {
     const taskElement = e.target.closest('.main__task-item');
     const taskElementTitle = taskElement.querySelector('.main__text > .main__task-title');
-    const task = findTaskInArray(taskElement);
 
     taskElementTitle.classList.toggle('done');
 }
@@ -81,16 +80,12 @@ function changeTaskIcon(e) {
 export function findTaskInArray(taskEle) {
     const taskElement = taskEle;
     const taskElementID = taskElement.dataset.taskId;
-    console.log(`this is taskElementID: ${taskElementID}`)
     const taskProjectID = taskElement.dataset.projectId;
-    console.log(`this is taskProjectID: ${taskProjectID}`)
 
     const project = projects.find(project => project.projectId === taskProjectID);
-    //console.log(project)
     const projectTaskList = project.taskList;
     const taskInArray = projectTaskList.find(task => task.taskId === taskElementID);
 
-    //console.log(taskInArray)
     return taskInArray;
 }
 
@@ -190,12 +185,10 @@ function deleteTaskFromDOM() {
     const taskElements = document.querySelectorAll('.main__task-item');
     
     for (const taskElement of taskElements) {
-        console.log(taskElement)
-        const task = findTaskInArray(taskElement);
-        console.log(task)
-        const taskID = task.taskId;
+        const taskID = taskElement.dataset.taskId;
+        const taskProjectID = taskElement.dataset.projectId;
 
-        const project = projects.find(project => project.projectId === task.projectId);
+        const project = projects.find(project => project.projectId === taskProjectID);
         const projectTasks = project.taskList;
 
         let elementExistsInArray = projectTasks.some(task => task.taskId === taskID);
@@ -344,7 +337,7 @@ export function renderTasks() {
         if (!duplicateTask) createTaskElement(task);
     }
 
-    updateTasksCount(projectTasksCount);
+    updateTasksCount();
 }
 
 export function deleteTasksFromDOM() {
@@ -356,6 +349,8 @@ export function deleteTasksFromDOM() {
 }
 
 function updateTasksCount() {
+    if (!selectedProject) throw new Error('selectedProject is null!');
+    
     const project = selectedProject;
     const projectTasks = project.taskList;
     const projectTasksCount = projectTasks.length;

@@ -25,3 +25,5 @@ library.add(
 );
 
 dom.watch();
+
+export const fontAwesomeReady = Promise.resolve();

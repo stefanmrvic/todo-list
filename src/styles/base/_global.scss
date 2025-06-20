@@ -1,0 +1,5 @@
+// It shows the site/app once the stylesheet has been loaded, thus, avoiding FOUC
+html {
+    visibility: visible;
+    opacity: 1;
+}
