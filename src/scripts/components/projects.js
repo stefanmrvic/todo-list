@@ -3,7 +3,7 @@ import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, f
 import { fontAwesomeReady } from '../modules/fontAwesome.js';
 import { createElement } from '../utils/dom';
 import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from './modal.js';
-import { renderTasks } from '../components/tasks.js'
+import { Task, renderTasks } from '../components/tasks.js'
 import { setSelectedFilter, renderFilteredTasks, filterAll, changeTasksSectionHeader as changeHeaderFromDue} from './due.js';
 
 class Project {
@@ -344,16 +344,23 @@ function initialRender() {
     const allProjects = JSON.parse(localStorage.getItem("projects"));
 
     if (allProjects.length < 1) return; 
+
+    // Rehydrating all of the projects so they can preserve their methods from prototype chain
+    const allProjectsRehydrated = allProjects.map(project => Object.assign(new Project(), project));
     
-    projects.push(...allProjects);
+    projects.push(...allProjectsRehydrated);
 
     const allTasks = [];
 
-    for (const project of allProjects) {
+    for (const project of projects) {
+        // Rehydrating all the tasks within the project so they can preserve their methods from prototype chain
+        project.taskList = project.taskList.map(task => Object.assign(new Task(), task));
+
         const taskList = project.taskList;
 
         allTasks.push(...taskList);
     }
+    
 
     addProjectsToDOM();
     changeActiveBtn(allProjectsBtn);

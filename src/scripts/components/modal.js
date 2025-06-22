@@ -599,13 +599,10 @@ function createTaskInfoModal(e) {
     const modalContent = document.querySelector('.modal__content');
     
     const taskElement = e.target.closest('.main__task-item');
-    console.log(taskElement)
     const taskElementID = taskElement.getAttribute('data-task-id');
-    const task = findTaskInArray(taskElement);
-    console.log(task)
+    const taskInArray = findTaskInArray(taskElement);
 
-
-    const project = projects.find(project => project.projectId === task.projectId);
+    const project = projects.find(project => project.projectId === taskInArray.projectId);
     const projectTasks = project.taskList;
     
     for (const task of projectTasks) {
@@ -633,7 +630,7 @@ function createTaskInfoModal(e) {
             const priorityH3 = createElement('h3', 'modal__info-priority', 'Priority:');
 
             let priorityPara;
-
+            
             // It captures the value of priority key of the task object
             const priorityValue = task.priority;
             const priorityString = task.parsePriorityToString();

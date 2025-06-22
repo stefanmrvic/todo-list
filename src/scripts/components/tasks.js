@@ -4,7 +4,7 @@ import { createElement } from "../utils/dom.js";
 import { showAddTaskModal, showEditTaskModal, showDeleteTaskModal, showTaskInfoModal, closeModal } from "./modal.js";
 import { projects, selectedProject, storeProjectToLocalStorage } from "./projects.js";
 
-class Task {
+export class Task {
     constructor(title, description, due, priority, projectId) {
         this.title = title;
         this.description = description;
