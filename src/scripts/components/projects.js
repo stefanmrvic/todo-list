@@ -4,7 +4,7 @@ import { fontAwesomeReady } from '../modules/fontAwesome.js';
 import { createElement } from '../utils/dom';
 import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from './modal.js';
 import { Task, renderTasks } from '../components/tasks.js'
-import { setSelectedFilter, renderFilteredTasks, filterAll, changeTasksSectionHeader as changeHeaderFromDue} from './due.js';
+import { setSelectedFilter, renderFilteredTasks, filterAll, removeAddTaskBtn, changeTasksSectionHeader as changeHeaderFromDue} from './due.js';
 
 class Project {
     constructor(title, icon) {
@@ -42,7 +42,7 @@ projectsList.addEventListener('click', selectProject);
 projectsAddBtn.addEventListener('click', showAddProjectModal);
 
 function changeActiveProject(projectEle) {
-    // Sets selectedFilter to 'null' to prevent task re-rendering when user marks task as done or change it's properties
+    // Sets selectedFilter to 'null' to prevent tasks re-rendering when user marks task as done or change it's properties
     setSelectedFilter(null);
 
     changeActiveBtn(projectEle);
@@ -102,10 +102,10 @@ function selectProject(e) {
     selectedProject = projects.find(project => project.projectId === projectElement.dataset.projectId);
 
     changeActiveProject(projectElement);
-    storeActiveProjectToLocalStorage(selectedProject);
+    storeSelectedProjectToLocalStorage(selectedProject);
 }
 
-function storeActiveProjectToLocalStorage(selectedProject) {
+function storeSelectedProjectToLocalStorage(selectedProject) {
     localStorage.setItem("selectedProject", JSON.stringify(selectedProject));
 }
 
@@ -360,19 +360,18 @@ function initialRender() {
 
         allTasks.push(...taskList);
     }
-    
 
     addProjectsToDOM();
     changeActiveBtn(allProjectsBtn);
-
+    removeAddTaskBtn();
+    
     fontAwesomeReady.then(() => {
         changeHeaderFromDue(allProjectsBtn);
     })
-
+    
     renderFilteredTasks(allTasks);
     filterAll();
 }
-
 
 if (localStorage.length > 0) {
     initialRender();

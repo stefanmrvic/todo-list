@@ -6,6 +6,7 @@ import { isToday, isThisWeek } from "date-fns";
 const filterContainer = document.querySelector('.due__container');
 const tasksContainer = document.querySelector('.main__tasks-list');
 
+// TODO explain what it does
 export let selectedFilter = 'all';
 
 export const getSelectedFilter = (value) => value = selectedFilter;
@@ -19,6 +20,7 @@ export function setSelectedFilter(value) {
 }
 
 filterContainer.addEventListener('click', selectFilter);
+
 // Checks if user marks Task as done or if user changes any Task details which would cause it to no longer fit the filter category and then it re-renders all tasks into the selected category
 tasksContainer.addEventListener('click', reRenderFilteredTasks);
 
@@ -33,6 +35,7 @@ function selectFilter(e) {
     if (!target) return;
 
     changeActiveBtn(target);
+    removeAddTaskBtn();
     changeTasksSectionHeader(target);
 
     if (target === allTasksFilter) {
@@ -52,7 +55,8 @@ function selectFilter(e) {
         filterDueThisWeek();
     }
 }
- // Exporting it to projects.js under initialRender()
+
+// Exporting it to projects.js under initialRender()
 export function changeTasksSectionHeader(filterEle) {
     const dueElement = filterEle;
     const dueTitle = dueElement.textContent;
@@ -172,4 +176,11 @@ function updateTasksCount(taskList) {
 
     const tasksCountText = document.querySelector('.main__tasks-num');
     tasksCountText.textContent = tasksCount;
+}
+
+// Exporting the function so I can import it into projects.js to remove Add Task Btn on initial render of the app
+export function removeAddTaskBtn() {
+    // It shows add Task button when the Project has been selected
+    const addTaskBtn = document.querySelector('.main__add-btn');
+    addTaskBtn.classList.remove('show');
 }
