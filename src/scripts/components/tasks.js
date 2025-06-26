@@ -38,6 +38,7 @@ function markTaskDone(e) {
     changeTaskStatus(e);
     crossOutTask(e);
     changeTaskIcon(e);
+    storeProjectToLocalStorage();
 }
 
 function changeTaskStatus(e) {
