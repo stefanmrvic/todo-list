@@ -154,12 +154,11 @@ export function createTaskElement(task) {
 export function deleteTask(e) {
     deleteTaskFromArray(e);
     deleteTaskFromDOM();
-    updateTasksCount();
     closeModal(e);
     storeProjectToLocalStorage();
 }
 
-function deleteTaskFromArray(e) {
+function deleteTaskFromArray() {
     const taskElement = findTaskElement();
     const taskElementID = taskElement.getAttribute('data-task-id');
     const task = findTaskInArray(taskElement);
@@ -178,6 +177,7 @@ function deleteTaskFromArray(e) {
             itemFound = true;
         }
     }
+
     if (!itemFound) throw new Error('Element not found in the array!');
 }
 
@@ -190,10 +190,14 @@ function deleteTaskFromDOM() {
 
         const project = projects.find(project => project.projectId === taskProjectID);
         const projectTasks = project.taskList;
+        const projectTasksCount = projectTasks.length;
 
         let elementExistsInArray = projectTasks.some(task => task.taskId === taskID);
         
-        if (!elementExistsInArray) taskElement.remove();
+        if (!elementExistsInArray) {
+            taskElement.remove();
+            updateTasksCount(projectTasksCount);
+        }
     }
 }
 
@@ -290,6 +294,7 @@ function addTaskToArray() {
 function addTaskToDOM() {
     const project = selectedProject;
     const projectTasks = project.taskList;
+    const projectTasksCount = projectTasks.length;
 
     if (!project) return;
 
@@ -308,6 +313,7 @@ function addTaskToDOM() {
         }
         if (!duplicateTask) createTaskElement(task);
     }
+    updateTasksCount(projectTasksCount);
 }
 
 // Exporting function to be able to render tasks when user clicks on Project name button in projects.js under selectProject()
@@ -337,7 +343,7 @@ export function renderTasks() {
         if (!duplicateTask) createTaskElement(task);
     }
 
-    updateTasksCount();
+    updateTasksCount(projectTasksCount);
 }
 
 export function deleteTasksFromDOM() {
@@ -348,16 +354,8 @@ export function deleteTasksFromDOM() {
     }
 }
 
-function updateTasksCount() {
-    if (!selectedProject) throw new Error('selectedProject is null!');
-    
-    const project = selectedProject;
-    const projectTasks = project.taskList;
-    const projectTasksCount = projectTasks.length;
-
+function updateTasksCount(tasksCount) {
     const tasksCountText = document.querySelector('.main__tasks-num');
-    const tasksCount = projectTasksCount;
-    
     tasksCountText.textContent = tasksCount;
 }
 
@@ -365,6 +363,5 @@ function updateTasksCount() {
 export function addNewTask() {
     addTaskToArray();
     addTaskToDOM();
-    updateTasksCount();
     storeProjectToLocalStorage();
 }
