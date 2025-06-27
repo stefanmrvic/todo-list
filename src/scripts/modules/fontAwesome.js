@@ -2,6 +2,8 @@ import { library, dom } from '@fortawesome/fontawesome-svg-core';
 import * as icon from "./icons.js";
 
 library.add(
+    icon.faBars,
+    icon.faX,
     icon.faCheckDouble, 
     icon.faCalendarDays, 
     icon.faCalendarWeek, 
@@ -25,5 +27,3 @@ library.add(
 );
 
 dom.watch()
-
-// export const fontAwesomeReady = Promise.resolve();

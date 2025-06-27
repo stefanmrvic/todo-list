@@ -1,6 +1,8 @@
 // Aggregator file for FontAwesome Icons to prevent the import clutter inside of fontAwesome.js, projects.js, and tasks.js files
 
 export { 
+    faBars,               // Mobile Nav Icon - Open
+    faX,                  // Mobile Nav Icon - Close
     faCheckDouble,        // Logo icon
     faCalendarDays,       // Due #1
     faCalendarWeek,       // Due #2

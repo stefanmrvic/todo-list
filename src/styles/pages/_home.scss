@@ -1,7 +1,10 @@
 @use '../abstracts/variables' as *;
 
 .main {
-    margin-left: 300px;
+    
+    @media screen and (min-width: 1000px) {
+        margin-left: 300px;
+    }
 
     &__container {
         display: flex;
@@ -125,10 +128,26 @@
 
     &__task-title {
         display: inline-block;
-        max-width: 650px;
+        max-width: 100px;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
+
+        @media screen and (min-width: 500px) {
+            max-width: 200px;
+        }
+
+        @media screen and (min-width: 800px) {
+            max-width: 400px;
+        } 
+
+        @media screen and (min-width: 1200px) {
+            max-width: 500px;
+        }
+        @media screen and (min-width: 1500px) {
+            max-width: 650px;
+        }
+
     }
 
     &__controls {
