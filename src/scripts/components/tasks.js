@@ -35,6 +35,9 @@ tasksList.addEventListener('click', markTaskDone);
 tasksAddBtn.addEventListener('click', showAddTaskModal);
 
 function markTaskDone(e) {
+    // If the user clicks between the tasks it will return function early
+    if (e.target === tasksList) return;
+
     changeTaskStatus(e);
     crossOutTask(e);
     changeTaskIcon(e);
