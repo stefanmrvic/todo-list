@@ -60,9 +60,7 @@ function changeTasksSectionHeader(filterEle) {
     const dueElement = filterEle;
     const dueTitle = dueElement.textContent;
     const dueIcon = dueElement.querySelector('svg').classList[1];
-    console.log(dueIcon)
     const dueIconPrefix = dueElement.querySelector('svg').dataset.prefix;
-    console.log(dueIconPrefix)
     const dueIconClass = `${dueIconPrefix} ${dueIcon}`;
     
     const sectionTitle = document.querySelector('.main__headline');
@@ -78,7 +76,7 @@ function changeTasksSectionHeader(filterEle) {
     headerContainer.prepend(newIcon);
 }
 
-// Exporting it to projects.js under initialRender()
+// Exporting it to projects.js under initialRender() because it sets the headline to "All" and put an icon on the left side
 export function initialTasksHeaderTitle() {
     const dueElement = document.querySelector('.due__btn--all');
     const dueTitle = dueElement.textContent;
@@ -186,6 +184,8 @@ export function reRenderFilteredTasks(e) {
     if (selectedFilter === 'all') filterAll();
     else if (selectedFilter === 'completed') filterCompleted();
     else if (selectedFilter === 'important') filterImportant();
+    else if (selectedFilter === 'due today') filterDueToday();
+    else if (selectedFilter === 'due this week') filterDueThisWeek();
 }
 
 function updateTasksCount(taskList) {
