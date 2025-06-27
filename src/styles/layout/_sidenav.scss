@@ -70,17 +70,20 @@ aside {
             opacity: 1;
         }
 
-        &__icon--2 {
-            margin-left: auto;
+        &__info {
+            display: flex;
+            align-items: center;
         }
 
-        &__icon--3 {
-            margin-right: 0;
+        &__info-title {
+            display: inline-block;
+            max-width: 138px;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
-        
-        &__icon--2:hover,
-        &__icon--3:hover {
-            transform: scale(1.1);
+
+        &__controls {
+            display: flex;
         }
 
         &__list {
