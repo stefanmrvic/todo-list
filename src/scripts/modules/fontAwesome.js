@@ -24,6 +24,6 @@ library.add(
     icon.faGift
 );
 
-dom.watch();
+dom.watch()
 
-export const fontAwesomeReady = Promise.resolve();
+// export const fontAwesomeReady = Promise.resolve();

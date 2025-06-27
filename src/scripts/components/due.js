@@ -56,13 +56,33 @@ function selectFilter(e) {
     }
 }
 
-// Exporting it to projects.js under initialRender()
-export function changeTasksSectionHeader(filterEle) {
+function changeTasksSectionHeader(filterEle) {
     const dueElement = filterEle;
     const dueTitle = dueElement.textContent;
     const dueIcon = dueElement.querySelector('svg').classList[1];
+    console.log(dueIcon)
     const dueIconPrefix = dueElement.querySelector('svg').dataset.prefix;
+    console.log(dueIconPrefix)
     const dueIconClass = `${dueIconPrefix} ${dueIcon}`;
+    
+    const sectionTitle = document.querySelector('.main__headline');
+    const sectionIcon = document.querySelector('.main__title-icon');
+    const headerContainer = document.querySelector('.main__title');
+
+    // Creates new <svg> element and sets className of dueIconClass variable
+    const newIcon = createElement('svg', dueIconClass);
+    newIcon.classList.add('main__title-icon');
+
+    sectionTitle.textContent = dueTitle;
+    sectionIcon.remove();
+    headerContainer.prepend(newIcon);
+}
+
+// Exporting it to projects.js under initialRender()
+export function initialTasksHeaderTitle() {
+    const dueElement = document.querySelector('.due__btn--all');
+    const dueTitle = dueElement.textContent;
+    const dueIconClass = 'fas fa-calendar-days';
     
     const sectionTitle = document.querySelector('.main__headline');
     const sectionIcon = document.querySelector('.main__title-icon');
@@ -147,8 +167,6 @@ export function renderFilteredTasks(taskList) {
     deleteTasksFromDOM();
 
     for (const task of taskList) {
-        const taskID = task.taskId;
-
         createTaskElement(task);
     }
 
