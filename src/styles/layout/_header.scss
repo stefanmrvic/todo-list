@@ -1,13 +1,37 @@
 @use '../abstracts/variables' as *;
 
 header {
+    display: flex;
+    align-items: center;
     position: relative;
     height: 60px;
     background-color: $light-blue;
+    padding: 20px 40px;
+    gap: 30px;
+
+    @media screen and (min-width: 1000px) {
+        display: block;
+        gap: 0;
+    }
+
+    .hamburger {
+
+        @media screen and (min-width: 1000px) {
+            display: none;
+        }
+    }
+
+    .mobile__menu {
+        color: white;
+        font-size: 20px;
+        height: 27px;
+        background-color: $dark-blue;
+        border: none;
+        border-radius: 2px;
+    }
 
     .logo {
         display: flex;
-        padding: 20px 40px;
 
         &__icon {
             color: $white;
