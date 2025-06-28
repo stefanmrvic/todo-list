@@ -4,8 +4,9 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);    
-    min-width: 400px;
+    transform: translate(-50%, -50%);
+    min-width: 400px;    
+    max-width: 400px;
     box-shadow: rgba(46, 46, 46, 0.2) 0px 2px 8px 0px;
     border: none;
     border-radius: 5px;
@@ -63,7 +64,7 @@
 
     &__info-container > p {
         color: $light-gray-2;
-        word-wrap: break-word;
+        word-break: break-all;
         flex-basis: calc(100% - 110px);
         overflow-y: auto;
     }
@@ -220,6 +221,7 @@
     }
 
     &__text {
+        word-break: break-all;
         margin-bottom: 25px;
     }
 
