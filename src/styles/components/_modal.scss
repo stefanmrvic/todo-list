@@ -9,7 +9,7 @@
     box-shadow: rgba(46, 46, 46, 0.2) 0px 2px 8px 0px;
     border: none;
     border-radius: 5px;
-    overflow: hidden;
+    overflow-y: auto;
 
     &__header {
         position: relative;

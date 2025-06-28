@@ -1,9 +1,8 @@
 import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faPagelines, faBook, faScrewdriverWrench, faVolleyball, faSackDollar, faPizzaSlice, faSuitcaseRolling, faGift } from '../modules/icons.js';
-import { fontAwesomeReady } from '../modules/fontAwesome.js';
 import { createElement } from '../utils/dom';
 import { showAddProjectModal, showEditProjectModal, showDeleteProjectModal, closeModal } from './modal.js';
-import { Task, renderTasks } from '../components/tasks.js'
+import { Task, renderTasks } from '../components/tasks.js';
 import { setSelectedFilter, renderFilteredTasks, filterAll, removeAddTaskBtn, initialTasksHeaderTitle} from './due.js';
 
 class Project {

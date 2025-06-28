@@ -73,10 +73,10 @@ function changeTaskIcon(e) {
     const taskCompleted = task.completed;
     const taskPriority = task.priority;
     const iconToUse = taskCompleted ? checkedIcon : initialIcon;
+    iconToUse.classList.add('main__task-icon');
 
     taskElementIcon.remove();
     taskElementIconWrapper.appendChild(iconToUse);
-    taskElementIconWrapper.children[0].classList.add('main__task-icon');
     taskElementIcon = taskElementIconWrapper.querySelector('.main__task-icon');
     taskElementIcon.classList.add(taskPriority);
 }
